@@ -18,4 +18,6 @@ Route::get('/', function () {
 
 Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();
+    // 覆盖了原先的登陆，添加了自定义的本身认证
+    Route::post('login', 'LoginController@postLogin');
 });

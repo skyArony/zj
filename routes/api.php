@@ -22,4 +22,18 @@ $api = app('Dingo\Api\Routing\Router');
 $api->version('v1', ['namespace' => 'App\Http\Controllers'], function ($api) {
     // token 相关
     $api->get('/login', 'LoginController@loginCheck');
+
+    // test
+    $api->post('/test', 'CourseTreeController@setTag');
+    
+    
+    // 获取课程信息
+    $api->get('/course', 'SpiderController@getCourseInfo');
+
+    // 获取课程树
+    $api->get('/courseTree', 'SpiderController@getCourseTree');
+
+
+
 });
+

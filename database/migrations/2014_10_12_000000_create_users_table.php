@@ -17,11 +17,11 @@ class CreateUsersTable extends Migration
             $table->increments('id');
             $table->integer('user_id')->unique()->comment("用户ID");
             $table->string('name');
-            $table->string('user_avatar')->comment("用户头像");
             $table->string('email')->unique();
             $table->string('org_id')->comment("所属组织id");
             $table->string('org_avatar')->comment("组织头像");
             $table->string('password');
+            $table->text('cookies')->comment("上一次登陆获取的 cookies");
             $table->rememberToken();
             $table->timestamps();
         });

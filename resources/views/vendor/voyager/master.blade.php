@@ -111,7 +111,7 @@ if (starts_with(Auth::user()->avatar, 'http://') || starts_with(Auth::user()->av
 <!-- Javascript Libs -->
 
 <!-- VUE -->
-<script src="{{ asset('js/app.js') }}"></script>
+<script src="{{ mix('js/app.js') }}"></script>
 
 <script type="text/javascript" src="{{ voyager_asset('js/app.js') }}"></script>
 

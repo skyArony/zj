@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\DB\Tag;
 
-class TagController extends Controller
+class TagController extends ApiController
 {
     // 新建 tag
     public function addTag(Request $request) {
@@ -14,7 +14,6 @@ class TagController extends Controller
         $courseId = $request->courseId;
         $tags = $request->tags;
 
-        $tags = explode(',', $tags);
         foreach ($tags as $value) {
             Tag::firstOrCreate(
                 ['course_id' => $courseId, 'value' => $value."-easy"]
@@ -26,8 +25,7 @@ class TagController extends Controller
                 ['course_id' => $courseId, 'value' => $value."-hard"]
             );
         }
-        $res = Tag::where("value", "like", "$value-%");
-        return self::setResponse($res, 200, 0);
+        return self::setResponse(null, 200, 0);
     }
 
     // 删除 tag
@@ -35,12 +33,29 @@ class TagController extends Controller
         // TODO 增加validate,try catch
 
         $courseId = $request->courseId;
-        $tag = $request->tag;
+        $tags = $request->tags;
 
-        // 删除 tag
-        Tag::where("value", "like", "$tag-%")->delete();
-
+        foreach ($tags as $value) {
+            // 删除 tag
+            Tag::where("value", "like", "$value-%")->delete();
+        }
         return self::setResponse(null, 200, 0);
+    }
+
+    // list all tags
+    public function listTags(Request $request) {
+        // TODO validate
+
+        $courseId = $request->courseId;
+        $tags = Tag::all();
+
+        $tagName = array();
+        foreach ($tags as $value) {
+            $tagName[] =  explode('-', $value->value)[0];
+        }
+
+        $data = json_encode(array_values(array_unique($tagName)));
+        return self::setResponse($data, 200, 0);
     }
 
 }

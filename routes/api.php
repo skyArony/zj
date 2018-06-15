@@ -33,7 +33,13 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'], function ($api) {
     // 获取课程树
     $api->get('/courseTree', 'SpiderController@getCourseTree');
 
-
-
+    ///////////////////////
+    
+    // 增加 tag
+    $api->post('/tag', 'TagController@addTag');
+    // 删除 tag
+    $api->delete('/tag', 'TagController@removeTag');
+    // 获取 tag
+    $api->get('/tag', 'TagController@listTags');
 });
 

@@ -15,8 +15,19 @@ window.Vue = require('vue');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
+// 单文件组件
 Vue.component('example-component', require('./components/ExampleComponent.vue'));
+Vue.component('worlduc-coursetree', require('./components/CourseTree.vue'));
+Vue.component('worlduc-coursetag', require('./components/CourseTag.vue'));
+
+// element ui
+// import App from './App.vue';
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
+
+Vue.use(ElementUI);
 
 const app = new Vue({
-    el: '#app'
+    el: '#app',
+    // render: h => h(App)
 });

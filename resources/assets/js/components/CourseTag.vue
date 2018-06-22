@@ -1,25 +1,26 @@
 <template>
-    <div>
-        <el-tag
-            :key="tag"
+  <div>
+    <el-tag :key="tag"
             v-for="tag in dynamicTags"
             closable
             :disable-transitions="false"
             @close="handleClose(tag)">
-            {{tag}}
-        </el-tag>
-        <el-input
-            class="input-new-tag"
-            v-if="inputVisible"
-            v-model="inputValue"
-            ref="saveTagInput"
-            size="small"
-            @keyup.enter.native="handleInputConfirm"
-            @blur="handleInputConfirm"
-        >
-        </el-input>
-        <el-button v-else class="button-new-tag" size="small" @click="showInput" ref="myBtn">+ New Tag</el-button>
-    </div>
+      {{tag}}
+    </el-tag>
+    <el-input class="input-new-tag"
+              v-if="inputVisible"
+              v-model="inputValue"
+              ref="saveTagInput"
+              size="small"
+              @keyup.enter.native="handleInputConfirm"
+              @blur="handleInputConfirm">
+    </el-input>
+    <el-button v-else
+               class="button-new-tag"
+               size="small"
+               @click="showInput"
+               ref="myBtn">+ New Tag</el-button>
+  </div>
 </template>
 
 <script>
@@ -28,7 +29,8 @@ export default {
     return {
       dynamicTags: "",
       inputVisible: false, // 是否显示输入的表单，false 时显示文字，true 时显示表单
-      inputValue: ""
+      inputValue: "",
+      courseId: ""
     };
   },
   methods: {
@@ -85,7 +87,7 @@ export default {
             this.error(response.data.errcode + ":" + response.data.errmsg);
           }
         } else this.warning("重复的标签");
-      } else{
+      } else {
         this.inputVisible = false;
       }
     },
@@ -96,11 +98,8 @@ export default {
         baseURL: "http://zj.yfree.ccc/api/",
         headers: { "Content-Type": "application/json" }
       });
-      const { search } = window.location;
-      let searchParams = new URLSearchParams(search);
-      let courseId = searchParams.get("courseId");
       return MyAxios.post("/tag", {
-        courseId: courseId,
+        courseId: this.courseId,
         tags: [tag]
       });
     },
@@ -111,12 +110,9 @@ export default {
         baseURL: "http://zj.yfree.ccc/api/",
         headers: { "Content-Type": "application/json" }
       });
-      const { search } = window.location;
-      let searchParams = new URLSearchParams(search);
-      let courseId = searchParams.get("courseId");
       return MyAxios.delete("/tag", {
-        params:{
-          courseId: courseId,
+        params: {
+          courseId: this.courseId,
           tags: [tag]
         }
       });
@@ -125,23 +121,21 @@ export default {
     // 获取 tag 的 ajax
     listTags() {
       var that = this;
-      const { search } = window.location;
-      let searchParams = new URLSearchParams(search);
-      let courseId = searchParams.get("courseId");
       let MyAxios = axios.create({
         baseURL: "http://zj.yfree.ccc/api/",
         headers: { "Content-Type": "application/json" }
       });
 
-      MyAxios.get("/tag", {
-        courseId: courseId
-      }).then(function(response) {
-        if (response.data.errcode == 0)
-          that.dynamicTags = JSON.parse(response.data.data);
-      });
+      MyAxios.get("/tag", { params: { courseId: this.courseId } }).then(
+        function(response) {
+          if (response.data.errcode == 0)
+            that.dynamicTags = JSON.parse(response.data.data);
+        }
+      );
     }
-  }, 
-  mounted: function () {
+  },
+  mounted: function() {
+    this.courseId = document.querySelector("#courseId").value;
     this.listTags();
   }
 };

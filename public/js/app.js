@@ -52094,8 +52094,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
     addTag: function addTag(tag) {
       var MyAxios = axios.create({
         baseURL: "http://zj.yfree.ccc/api/",
-        headers: { "Content-Type": "application/json" },
-        timeout: 1000
+        headers: { "Content-Type": "application/json" }
       });
       var search = window.location.search;
 

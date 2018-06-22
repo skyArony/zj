@@ -70,23 +70,9 @@ class SpiderController extends ApiController
         $courseTreeData = json_decode($response->getBody()->getContents(), 1)['DirList'];
 
         $courseTreeInfo = array();
-        // foreach ($courseTreeData as $chapterItem) {
-        //     $courseTreeChapter = array();
-        //     $courseTreeChapter['chapter_name'] = $chapterItem['SectionName'];
-        //     $courseTreeChapter['chapter_id'] = $chapterItem['SectionId'];
-        //     $courseTreePeriod = array();
-        //     foreach ($chapterItem['Hours'] as $periodItem) {
-        //         $courseTreePeriodInfo = array();
-        //         $courseTreePeriodInfo['period_title'] = $periodItem['HourName'];
-        //         $courseTreePeriodInfo['period_summary'] = $periodItem['HourAbstract'];
-        //         $courseTreePeriodInfo['period_video_id'] = $periodItem['HourID'];
-        //         $courseTreePeriod[] = $courseTreePeriodInfo;
-        //     }
-        //     $courseTreeChapter['period'] = $courseTreePeriod;
-        //     $courseTreeInfo[] = $courseTreeChapter;
-        // }
 
         foreach ($courseTreeData as $chapterItem) {
+            $courseTreeChapter = [];
             foreach ($chapterItem['Hours'] as $periodItem) {
                 $courseTreeChapter[$periodItem['HourID']] = array(
                     'period_title' => $periodItem['HourName'],

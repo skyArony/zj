@@ -37,7 +37,7 @@ class TagController extends ApiController
 
         foreach ($tags as $value) {
             // 删除 tag
-            Tag::where("value", "like", "$value-%")->delete();
+            Tag::where("value", "like", "$value-%")->where("course_id", $courseId)->delete();
         }
         return self::setResponse(null, 200, 0);
     }
@@ -47,8 +47,7 @@ class TagController extends ApiController
         // TODO validate
 
         $courseId = $request->courseId;
-        $tags = Tag::all();
-
+        $tags = Tag::where("course_id", $courseId)->get();
         $tagName = array();
         foreach ($tags as $value) {
             $tagName[] =  explode('-', $value->value)[0];

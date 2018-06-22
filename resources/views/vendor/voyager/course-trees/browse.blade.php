@@ -6,6 +6,7 @@
     <div class="container-fluid">
         <h1 class="page-title">
             <i class="{{ $dataType->icon }}"></i> 算法设计与分析-邹娟
+            <input type="hidden" value="@php echo '2597' @endphp" id="courseId" />
         </h1>
     </div>
 @stop
@@ -28,7 +29,8 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="panel panel-bordered">
-                    <div class="panel-body">
+                    <div class="panel-body" style="padding-top:20px;">
+                        <h3 style="color:#1f2f3d;padding-bottom:10px;"> 编辑 CourseTree </h1>
                         <worlduc-coursetree></worlduc-coursetree>
                     </div>
                 </div>

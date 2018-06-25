@@ -27,13 +27,13 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'], function ($api) {
     $api->post('/test', 'CourseTreeController@setTag');
     
     
-    // 爬取课程信息
-    $api->post('/course', 'SpiderController@getCourseInfo');
+
 
 
 
     ///////////////////////
-    
+    // 爬取课程信息
+    $api->post('/course', 'SpiderController@getCourseInfo');
     // 增加 tag
     $api->post('/tag', 'TagController@addTag');
     // 删除 tag
@@ -44,4 +44,6 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'], function ($api) {
     $api->post('/courseTree', 'SpiderController@getCourseTree');
     // 获取课程树
     $api->get('/courseTree', 'CourseTreeController@getCourseTree');
+    // 更新课程树
+    $api->put('/courseTree', 'CourseTreeController@setCourseTree');
 });

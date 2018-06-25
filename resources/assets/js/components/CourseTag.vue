@@ -67,7 +67,8 @@ export default {
     async handleClose(tag) {
       let response = await this.removeTag(tag);
       if (response.data.errcode == 0) {
-        this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
+        this.$store.commit("removeTag", tag);
+        // this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
       } else {
         this.error(response.data.errcode + ":" + response.data.errmsg);
       }
@@ -80,7 +81,8 @@ export default {
         if (this.dynamicTags.indexOf(inputValue) == -1) {
           let response = await this.addTag(inputValue);
           if (response.data.errcode == 0) {
-            this.dynamicTags.push(inputValue);
+            this.$store.commit("addTag", inputValue);
+            // this.dynamicTags.push(inputValue);
             this.inputVisible = false;
             this.inputValue = "";
           } else {
@@ -128,8 +130,10 @@ export default {
 
       MyAxios.get("/tag", { params: { courseId: this.courseId } }).then(
         function(response) {
-          if (response.data.errcode == 0)
+          if (response.data.errcode == 0) {
             that.dynamicTags = JSON.parse(response.data.data);
+            that.$store.commit("setTag", that.dynamicTags);
+          }
         }
       );
     }

@@ -21,13 +21,16 @@ Vue.component('worlduc-coursetree', require('./components/CourseTree.vue'));
 Vue.component('worlduc-coursetag', require('./components/CourseTag.vue'));
 
 // element ui
-// import App from './App.vue';
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
+
+// vuex
+import store from './store';
 
 Vue.use(ElementUI);
 
 const app = new Vue({
     el: '#app',
-    // render: h => h(App)
+    store,
+    // render: h => h(App)s
 });

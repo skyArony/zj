@@ -22,44 +22,20 @@ class CourseTreeController extends ApiController
         return self::setResponse($courseTreeDataArr, 200, 0);
     }
 
-    // 给章节打 tag
-    public function setTag(Request $request) {
-        $tagSetInfoArr = $request->tagSetInfo;
+    // 更新 courseTree
+    public function setCourseTree(Request $request) {
+        // TODO validat
+
         $courseId = $request->courseId;
-        $chapterId = $request->chapterId;
-
         $courseTree = CourseTree::where("course_id", $courseId)->first();
-        $courseTreeDataJson = $courseTree['data'];
-        $courseTreeDataArr = json_decode($courseTree['data'], 1);
-
-        foreach ($tagSetInfoArr as $key => $value) {
-            $courseTreeDataArr[$chapterId][$key]['tags'] = $value;
+        if ($courseTree) {
+            $courseTree->data = json_encode($request->data) ;
+            $courseTree->save();
+            return self::setResponse($courseTree, 200, 0);
+        } else {
+            return self::setResponse(null, 400, -4005);
         }
-
-        $courseTree['data'] = json_encode($courseTreeDataArr);
-        $courseTree->save();
-
-        return self::setResponse($courseInfo, 200, 0);
-    }
-    
-    // 给章节设置教学要求
-    public function setReq(Request $request) {
-        $reqSetInfoArr = $request->reqSetInfo;
-        $courseId = $request->courseId;
-        $chapterId = $request->chapterId;
-
-        $courseTree = CourseTree::where("course_id", $courseId)->first();
-        $courseTreeDataJson = $courseTree['data'];
-        $courseTreeDataArr = json_decode($courseTree['data'], 1);
-
-        foreach ($reqSetInfoArr as $key => $value) {
-            $courseTreeDataArr[$chapterId][$key]['reqs'] = $value;
-        }
-
-        $courseTree['data'] = json_encode($courseTreeDataArr);
-        $courseTree->save();
-
-        return self::setResponse($courseInfo, 200, 0);
+        
     }
 
 }

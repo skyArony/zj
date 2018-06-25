@@ -15,6 +15,7 @@ use App\Models\DB\CourseTree;
 class SpiderController extends ApiController
 {
     // api：爬取课程信息-这个必须登录才能获取到
+    // 这个接口会获取当前大学城上的课程数据并覆盖现有的
     public function getCourseInfo(Request $request){
         $mooc_course = 'http://worlduc.com/APP/OnlineCourse/teaching/pubcourse.aspx';
         $mooc_course_detail = "http://worlduc.com/APP/OnlineCourse/teaching/base.aspx?op=getmodel&courseID=";
@@ -24,10 +25,6 @@ class SpiderController extends ApiController
         elseif(Cookie::get('email')) $email = Crypt::decrypt(Cookie::get('email'));
         else return self::setResponse(null, 400, -4004);
         $cookieJar = unserialize(User::where('email', $email)->first()->cookies);
-
-        // $goutteClient = new Client();
-        // $goutteClient->setClient($guzzleClient);
-        // $response = $goutteClient->request('GET', $mooc_course, ['cookies' => $cookieJar]);
         
         $guzzleClient = new GuzzleClient(['cookies' => true]);
         $response = $guzzleClient->request('GET', $mooc_course, ['cookies' => $cookieJar]);
@@ -48,13 +45,14 @@ class SpiderController extends ApiController
             $course['teacher_id'] = $response_arr['PublishID'];
             $course['intro'] = $response_arr['Description'];
 
-            $course = Course::firstOrCreate($course);
+            $course = Course::updateOrCreate(['course_id' => $value], $course);
             $courseInfo[] = $course;
         }
         return self::setResponse($courseInfo, 200, 0);
     }
     
     // api：爬取课程树信息-无需登录
+    // 这个接口会获取当前大学城上的课程树数据并覆盖现有的
     public function getCourseTree(Request $request) {
         $mooc_course_tree = "http://worlduc.com/APP/OnlineCourse/course/course.aspx?courseID=";
         $mooc_course_tree_detail = 'http://worlduc.com/APP/OnlineCourse/course/Ajax_CourseHour.ashx?op=GetCourseHour&courseHourID=';
@@ -83,7 +81,7 @@ class SpiderController extends ApiController
             $courseTreeInfo[$chapterItem['SectionId']]['chapter_name'] = $chapterItem['SectionName'];
         }
 
-        $courseTree = CourseTree::firstOrCreate(
+        $courseTree = CourseTree::updateOrCreate(
             ['course_id' => $courseId], ['data' => json_encode($courseTreeInfo)]
         );
         return self::setResponse($courseTreeInfo, 200, 0);

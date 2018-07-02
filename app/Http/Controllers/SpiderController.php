@@ -14,9 +14,13 @@ use App\Models\DB\CourseTree;
 
 class SpiderController extends ApiController
 {
-    // api：爬取课程信息-这个必须登录才能获取到
+    // api：爬取课程信息
+    // 这个必须数据库存在有效的 cookies 才能正常使用
     // 这个接口会获取当前大学城上的课程数据并覆盖现有的
+    // 这个不仅作为接口（POST 方式）还作为一个可以带 cookie 访问的页面（GET 方式），只是不会展示内容，直接重定向
     public function getCourseInfo(Request $request){
+        // TODO validate
+
         $mooc_course = 'http://worlduc.com/APP/OnlineCourse/teaching/pubcourse.aspx';
         $mooc_course_detail = "http://worlduc.com/APP/OnlineCourse/teaching/base.aspx?op=getmodel&courseID=";
 
@@ -48,12 +52,18 @@ class SpiderController extends ApiController
             $course = Course::updateOrCreate(['course_id' => $value], $course);
             $courseInfo[] = $course;
         }
-        return self::setResponse($courseInfo, 200, 0);
+        if(Cookie::get('email')) {
+            return redirect('admin/courses');
+        } elseif($request->has('email')) {
+            return self::setResponse($courseInfo, 200, 0);
+        }
     }
     
     // api：爬取课程树信息-无需登录
     // 这个接口会获取当前大学城上的课程树数据并覆盖现有的
     public function getCourseTree(Request $request) {
+        // TODO validate 有 has 是否还有必要
+
         $mooc_course_tree = "http://worlduc.com/APP/OnlineCourse/course/course.aspx?courseID=";
         $mooc_course_tree_detail = 'http://worlduc.com/APP/OnlineCourse/course/Ajax_CourseHour.ashx?op=GetCourseHour&courseHourID=';
         if($request->has('courseId')) $courseId = $request->courseId;
@@ -80,6 +90,21 @@ class SpiderController extends ApiController
             $courseTreeInfo[$chapterItem['SectionId']] = $courseTreeChapter;
             $courseTreeInfo[$chapterItem['SectionId']]['chapter_name'] = $chapterItem['SectionName'];
         }
+
+        // 是否是增量更新
+        if($request->has('isAdd'))
+            if($request->isAdd == 'true') {
+                $courseTreeOldJson = CourseTree::where('course_id', $courseId)->first();
+                $courseTreeOldArray = json_decode($courseTreeOldJson->data, 1);
+                foreach ($courseTreeOldArray as $chapter_id => $chapter) {
+                    foreach ($chapter as $section_id => $section) {
+                        if(isset($section['tags']))
+                            $courseTreeInfo[$chapter_id][$section_id]['tags'] = $section['tags'];
+                        if(isset($section['claims']))    
+                            $courseTreeInfo[$chapter_id][$section_id]['claims'] = $section['claims'];
+                    }
+                }
+            }
 
         $courseTree = CourseTree::updateOrCreate(
             ['course_id' => $courseId], ['data' => json_encode($courseTreeInfo)]

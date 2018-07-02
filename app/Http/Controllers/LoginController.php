@@ -6,6 +6,7 @@ use App\Models\Login;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Validation\ValidationException;
+// use Illuminate\Support\Facades\Cookie;
 
 
 class LoginController extends ApiController
@@ -35,7 +36,14 @@ class LoginController extends ApiController
         $thirdStatus = Login::loginCheck($request->email, $request->password);
 
         if ($thirdStatus == 0) {
-            // 两次校验都通过，放行
+            // 校验通过，放行
+
+            // 设置 token
+            // $customClaims = ['email' => $request->email];
+            // $credentials = request(['email', 'password']);
+            // $token = auth('api')->claims($customClaims)->attempt($credentials);
+            // Cookie::queue('token', $token);
+
             return $this->sendLoginResponse($request);
         } elseif ($thirdStatus == -4001) {
             // 用户改过密码，但是还是用旧密码在登陆

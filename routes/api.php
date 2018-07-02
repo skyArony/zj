@@ -17,23 +17,20 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::group([
+    'prefix' => 'auth'
+], function ($router) {
+    Route::post('login', 'AuthController@login');
+    Route::post('logout', 'AuthController@logout');
+    Route::post('refresh', 'AuthController@refresh');
+    Route::post('me', 'AuthController@me');
+});
+
 
 $api = app('Dingo\Api\Routing\Router');
 $api->version('v1', ['namespace' => 'App\Http\Controllers'], function ($api) {
-    // token 相关
-    $api->get('/login', 'LoginController@loginCheck');
-
-    // test
-    $api->post('/test', 'CourseTreeController@setTag');
-    
-    
-
-
-
-
-    ///////////////////////
     // 爬取课程信息
-    $api->post('/course', 'SpiderController@getCourseInfo');
+    $api->match(['get', 'post'] ,'/course', 'SpiderController@getCourseInfo');
     // 增加 tag
     $api->post('/tag', 'TagController@addTag');
     // 删除 tag
@@ -47,3 +44,5 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'], function ($api) {
     // 更新课程树
     $api->put('/courseTree', 'CourseTreeController@setCourseTree');
 });
+
+

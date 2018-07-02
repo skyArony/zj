@@ -7,22 +7,7 @@
         <h1 class="page-title">
             <i class="{{ $dataType->icon }}"></i> {{ $dataType->display_name_plural }}
         </h1>
-        @can('add',app($dataType->model_name))
-            <a href="{{ route('voyager.'.$dataType->slug.'.create') }}" class="btn btn-success btn-add-new">
-                <i class="voyager-plus"></i> <span>{{ __('voyager::generic.add_new') }}</span>
-            </a>
-        @endcan
-        @can('delete',app($dataType->model_name))
-            @include('voyager::partials.bulk-delete')
-        @endcan
-        @can('edit',app($dataType->model_name))
-        @if(isset($dataType->order_column) && isset($dataType->order_display_column))
-            <a href="{{ route('voyager.'.$dataType->slug.'.order') }}" class="btn btn-primary">
-                <i class="voyager-list"></i> <span>{{ __('voyager::bread.order') }}</span>
-            </a>
-        @endif
-        @endcan
-        @include('voyager::multilingual.language-selector')
+        <a class="btn btn-warning" id="courseSync" href="@php echo env('APP_URL').'/api/course' @endphp"><i class="voyager-refresh"></i> <span>同步课程</span></a>
     </div>
 @stop
 
@@ -87,6 +72,11 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    @php
+                                        for($i = 0, $len = count($dataTypeContent); $i < $len; $i++)
+                                            if($dataTypeContent[$i]->teacher_id != Cookie::get('teacher_id'))
+                                                unset($dataTypeContent[$i]);
+                                    @endphp
                                     @foreach($dataTypeContent as $data)
                                     <tr>
                                         @can('delete',app($dataType->model_name))
@@ -184,9 +174,12 @@
                                             </td>
                                         @endforeach
                                         <td class="no-sort no-click" id="bread-actions">
-                                            @foreach(Voyager::actions() as $action)
+                                            <!-- @foreach(Voyager::actions() as $action)
                                                 @include('voyager::bread.partials.actions', ['action' => $action])
-                                            @endforeach
+                                            @endforeach -->
+                                            <a href="@php echo route('voyager.dashboard')."/course-trees?courseId=".$data->course_id; @endphp" title="查看课程目录" class="btn btn-sm btn-primary pull-right edit">
+                                                <i class="voyager-people"></i> <span class="hidden-xs hidden-sm">查看课程目录</span>
+                                            </a>
                                         </td>
                                     </tr>
                                     @endforeach
@@ -246,7 +239,6 @@
 @endif
 @stop
 
-
 @section('javascript')
     <!-- DataTables -->
     @if(!$dataType->server_side && config('dashboard.data_tables.responsive'))
@@ -288,4 +280,8 @@
             $('#delete_modal').modal('show');
         });
     </script>
+    <!-- <script>
+        var xmlhttp = new XMLHttpRequest();
+        
+    </script> -->
 @stop

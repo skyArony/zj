@@ -6,8 +6,17 @@
     <div class="container-fluid">
         <h1 class="page-title">
             <i class="{{ $dataType->icon }}"></i> 算法设计与分析-邹娟
-            <input type="hidden" value="@php echo '2597' @endphp" id="courseId" />
+            @php
+                $courseId = data_get($_GET, 'courseId', -1);
+                if($courseId == -1 || $courseId == '') {
+                    $host = env('APP_URL');
+                    header("Location: $host/api/course");   
+                }
+            @endphp
+            <input type="hidden" value="@php echo $courseId @endphp" id="courseId" />
         </h1>
+        <a class="btn btn-warning" id="courseTreeAllSync"  url=@php echo env('APP_URL').'/api/courseTree?courseId='.$courseId @endphp><i class="voyager-refresh"></i> <span>覆盖同步</span></a>
+        <a class="btn btn-primary" id="courseTreeAddSync" url=@php echo env('APP_URL').'/api/courseTree?isAdd=true&courseId='.$courseId @endphp><i class="voyager-refresh"></i> <span>增量同步</span></a>
     </div>
 @stop
 
@@ -87,5 +96,45 @@
             $('#delete_form')[0].action = '{{ route('voyager.'.$dataType->slug.'.destroy', ['id' => '__id']) }}'.replace('__id', $(this).data('id'));
             $('#delete_modal').modal('show');
         });
+    </script>
+    <script>
+        // 覆盖同步
+        document.getElementById("courseTreeAllSync").onclick = function() {
+            if(confirm("『覆盖同步』会从世界大学城同步以更新你的 CourseTree，你设置 Tag 和课程目标都将消失，确定同步吗？")){
+                var xmlhttp = new XMLHttpRequest();
+                var url = document.getElementById("courseTreeAllSync").attributes["url"].value;  
+                xmlhttp.open("POST", url, true);
+                xmlhttp.send();
+                xmlhttp.onreadystatechange = function() {
+                    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                        console.log("覆盖同步获取成功")
+                        alert("覆盖同步获取成功!")
+                        location.reload()
+                    } else if(xmlhttp.readyState == 4 && xmlhttp.status != 200) {
+                        console.log("覆盖同步获取失败")
+                        alert("覆盖同步获取失败!")
+                    }
+                }
+            } 
+        };
+
+        document.getElementById("courseTreeAddSync").onclick = function() {
+            if(confirm("『增量同步』会从世界大学城同步以更新你的 CourseTree，并保留你设置 Tag 和课程目标，确定同步吗？")){  
+                var xmlhttp = new XMLHttpRequest();
+                var url = document.getElementById("courseTreeAddSync").attributes["url"].value;  
+                xmlhttp.open("POST", url, true);
+                xmlhttp.send();
+                xmlhttp.onreadystatechange = function() {
+                    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                        console.log("增量同步获取成功")
+                        alert("增量同步获取成功!")
+                        location.reload()
+                    } else if(xmlhttp.readyState == 4 && xmlhttp.status != 200) {
+                        console.log("增量同步获取失败")
+                        alert("增量同步获取失败!")
+                    }
+                }
+            } 
+        };
     </script>
 @stop

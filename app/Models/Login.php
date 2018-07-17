@@ -84,8 +84,9 @@ class Login extends Model
             }
             
             // 存储 email 到 cookies
-            Cookie::queue('email', $email);
-            Cookie::queue('teacher_id', $resArr['link1']['userid']);
+            Cookie::queue('email', $email, null, null, null, false, false);
+            Cookie::queue('teacher_id', $resArr['link1']['userid'], null, null, null, false, false);
+            Cookie::queue('name', $resArr['link1']['username'], null, null, null, false, false);
             return true;
         } else {
             return false;

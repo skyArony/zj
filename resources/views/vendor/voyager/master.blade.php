@@ -65,7 +65,7 @@ if (starts_with(Auth::user()->avatar, 'http://') || starts_with(Auth::user()->av
 }
 ?>
 
-<div class="app-container">
+<div class="app-container" style="min-height: auto;">
     <div class="fadetoblack visible-xs"></div>
     <div class="row content-container">
         @include('voyager::dashboard.navbar')
@@ -106,7 +106,7 @@ if (starts_with(Auth::user()->avatar, 'http://') || starts_with(Auth::user()->av
         </div>
     </div>
 </div>
-@include('voyager::partials.app-footer')
+<!-- @include('voyager::partials.app-footer') -->
 
 <!-- Javascript Libs -->
 

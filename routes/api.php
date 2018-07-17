@@ -43,6 +43,14 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'], function ($api) {
     $api->get('/courseTree', 'CourseTreeController@getCourseTree');
     // 更新课程树
     $api->put('/courseTree', 'CourseTreeController@setCourseTree');
+    // 新建问卷
+    $api->post('/survey', 'SurveyController@addSurvey');
+    // 修改问卷
+    $api->put('/survey', 'SurveyController@updateSurvey');
+    // 查看一个问卷的数据
+    $api->get('/survey', 'SurveyController@getSurvey');
+    // 查看一个用户的所有课程
+    $api->get('/course', 'CourseController@getAllCourse');
 });
 
 

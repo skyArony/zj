@@ -39,6 +39,7 @@
                            v-model="selectedOptions"
                            class="input-new-tag"
                            :options="waittingTags"
+                           :placeholder="placeholder"
                            size="small"
                            @change="handleInputConfirm"
                            filterable></el-cascader>
@@ -130,6 +131,7 @@ export default {
       dialogVisible: false, // 课时的编辑
       unityDialogVisible: false, // 章节的编辑
       dialogId: "", // dialog Id
+      placeholder: "请选择",
       /* coursetree */
       treeData: [],
       courseTree: "",
@@ -185,6 +187,7 @@ export default {
           if (response.data.errcode == 0) {
             that.courseTree = response.data.data;
             let child = [];
+            that.treeData = [];
             for (let i in response.data.data) {
               child = [];
               for (let j in response.data.data[i]) {
@@ -205,7 +208,7 @@ export default {
           }
         }
       );
-      a; /////////////////???????
+      //a; /////////////////???????
     },
     // 显示章节和课时的 tag 和 claim
     dialogDataSet(isChapter, id) {
@@ -306,6 +309,8 @@ export default {
     waittingTags: function() {
       let options = [];
       let len = this.$store.state.dynamicTags.length;
+      if(len == 0) this.placeholder = "请先设置 tag"
+      else this.placeholder = "请选择"
       for (let j = 0; j < len; j++) {
         options.push({
           value: this.$store.state.dynamicTags[j],

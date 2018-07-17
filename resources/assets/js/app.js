@@ -19,6 +19,11 @@ window.Vue = require('vue');
 Vue.component('example-component', require('./components/ExampleComponent.vue'));
 Vue.component('worlduc-coursetree', require('./components/CourseTree.vue'));
 Vue.component('worlduc-coursetag', require('./components/CourseTag.vue'));
+Vue.component('worlduc-survey', require('./components/Survey.vue'));
+Vue.component('worlduc-question', require('./components/Question.vue'));
+Vue.component('worlduc-questionList', require('./components/QuestionList.vue'));
+Vue.component('worlduc-option', require('./components/Option.vue'));
+Vue.component('worlduc-questionDetail', require('./components/QuestionDetail.vue'));
 
 // element ui
 import ElementUI from 'element-ui';

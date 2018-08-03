@@ -33,6 +33,7 @@
         <li>添加问题,点击右侧&nbsp;<i class="el-icon-edit"></i>&nbsp;图标开始编辑问题细节</li>
         <li>左侧: 添加问题选项, 修改问题标题</li>
         <li>右侧: 删减问题选项, 设置选项的增删 Tag</li>
+        <li>Tag 统计规则: 添加到 remove 的 tag 永远不会出现在最后的计算结果中</li>
       </ul>
     </div>
   </div>

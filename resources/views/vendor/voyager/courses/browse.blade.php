@@ -7,7 +7,7 @@
         <h1 class="page-title">
             <i class="{{ $dataType->icon }}"></i> {{ $dataType->display_name_plural }}
         </h1>
-        <a class="btn btn-warning" id="courseSync" href="@php echo env('APP_URL').'/api/course' @endphp"><i class="voyager-refresh"></i> <span>同步课程</span></a>
+        <button class="btn btn-warning" id="courseSync" url="@php echo '/api/course' @endphp"><i class="voyager-refresh"></i> <span>同步课程</span></button>
     </div>
 @stop
 
@@ -74,9 +74,13 @@
                                 <tbody>
                                     <!-- 过滤 -->
                                     @php
-                                        for($i = 0, $len = count($dataTypeContent); $i < $len; $i++)
-                                            if($dataTypeContent[$i]->teacher_id != Cookie::get('teacher_id'))
-                                                unset($dataTypeContent[$i]);
+                                        if (Cookie::get('role') == 3) {
+                                            for ($i = 0, $len = count($dataTypeContent); $i < $len; $i++) {
+                                                    if ($dataTypeContent[$i]->teacher_id != Cookie::get('user_id')) {
+                                                        unset($dataTypeContent[$i]);
+                                                    }
+                                                }
+                                        }
                                     @endphp
                                     <!-- /过滤 -->
                                     @foreach($dataTypeContent as $data)
@@ -179,8 +183,8 @@
                                             <!-- @foreach(Voyager::actions() as $action)
                                                 @include('voyager::bread.partials.actions', ['action' => $action])
                                             @endforeach -->
-                                            <a href="@php echo route('voyager.dashboard')."/course-trees?courseId=".$data->course_id; @endphp" title="查看课程目录" class="btn btn-sm btn-primary pull-right edit">
-                                                <i class="voyager-people"></i> <span class="hidden-xs hidden-sm">查看课程目录</span>
+                                            <a href="@php echo route('voyager.dashboard')."/course-trees?courseId=".$data->course_id; @endphp" title="查看课程目录" class="btn btn-sm btn-success pull-right edit">
+                                                <i class="voyager-eye"></i> <span class="hidden-xs hidden-sm">查看课程目录</span>
                                             </a>
                                         </td>
                                     </tr>
@@ -282,8 +286,24 @@
             $('#delete_modal').modal('show');
         });
     </script>
-    <!-- <script>
-        var xmlhttp = new XMLHttpRequest();
-        
-    </script> -->
+    <script>
+        document.getElementById("courseSync").onclick = function() {
+            if ($("#courseSync").hasClass('disabled')) return false
+            $("#courseSync").addClass("disabled")
+            $("#courseSync").removeClass("btn-warning")
+            var xmlhttp = new XMLHttpRequest();
+            var url = document.getElementById("courseSync").attributes["url"].value;  
+            xmlhttp.open("POST", url, true);
+            xmlhttp.send();
+            xmlhttp.onreadystatechange = function() {
+                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                    console.log("同步成功!")
+                    location.reload()
+                } else if(xmlhttp.readyState == 4 && xmlhttp.status != 200) {
+                    console.log("同步失败!")
+                    alert("同步失败!")
+                }
+            }
+        };
+    </script>
 @stop

@@ -48,8 +48,7 @@ export default {
         title: "警告",
         message: msg,
         type: "warning",
-        duration: "2000",
-        response: ""
+        duration: "2000"
       });
     },
 
@@ -96,46 +95,42 @@ export default {
 
     // 添加 tag 的 ajax
     addTag(tag) {
+      let that = this
       let MyAxios = axios.create({
-        baseURL: "http://zj.yfree.ccc/api/",
         headers: { "Content-Type": "application/json" }
       });
-      return MyAxios.post("/tag", {
-        courseId: this.courseId,
-        tags: [tag]
+      return MyAxios.post("/api/tag/" + this.courseId, {
+        tag: tag
+      }).catch(function(error) {
+        console.log(error);
+        alert("没有操作权限!")
+        that.inputValue = "";
       });
     },
 
     // 删除 tag 的 ajax
     removeTag(tag) {
-      let MyAxios = axios.create({
-        baseURL: "http://zj.yfree.ccc/api/",
-        headers: { "Content-Type": "application/json" }
-      });
-      return MyAxios.delete("/tag", {
+      let MyAxios = axios.create();
+      return MyAxios.delete("/api/tag/" + this.courseId, {
         params: {
-          courseId: this.courseId,
-          tags: [tag]
+          tag: tag
         }
+      }).catch(function(error) {
+        console.log(error);
+        alert("没有操作权限!")
       });
     },
 
     // 获取 tag 的 ajax
     listTags() {
       var that = this;
-      let MyAxios = axios.create({
-        baseURL: "http://zj.yfree.ccc/api/",
-        headers: { "Content-Type": "application/json" }
-      });
-
-      MyAxios.get("/tag", { params: { courseId: this.courseId } }).then(
-        function(response) {
-          if (response.data.errcode == 0) {
-            that.dynamicTags = JSON.parse(response.data.data);
-            that.$store.commit("setTag", that.dynamicTags);
-          }
+      let MyAxios = axios.create();
+      MyAxios.get("/api/tag/" + this.courseId).then(function(response) {
+        if (response.data.errcode == 0) {
+          that.dynamicTags = response.data.data;
+          that.$store.commit("setTag", that.dynamicTags);
         }
-      );
+      });
     }
   },
   mounted: function() {

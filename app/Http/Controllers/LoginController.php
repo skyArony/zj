@@ -2,26 +2,38 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use App\Models\Login;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Validation\ValidationException;
-// use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Auth;
 
 
 class LoginController extends ApiController
 {
     use AuthenticatesUsers;
 
-    // API: 登录检查：同时检查本身和大学城
-    public function loginCheck(Request $request){
-        $errcode = Login::loginCheck($request->email, $request->pass);
-        if($errcode == 0) return self::setResponse(null, 200, 0);
-        else return self::setResponse(null, 400, $errcode);
+    protected $redirectUrl = '';
+
+    // 获取当前登录的用户信息
+    public function me(Request $request) {
+        if (Cookie::get('user_id')) {
+            $user_id = Crypt::decrypt(Cookie::get('user_id'));
+            $user = User::where("user_id", $user_id)->first();
+            return self::setResponse($user, 200, 0);
+        } else {
+            return self::setResponse(null, 400, -4007);
+        }
     }
 
-    // session:登陆检查，并设置 cookie
+    // session方式: 登录，并设置 cookie
     public function postLogin(Request $request){
+        // 设置回调
+        if($request->has("redirectUrl")) $this->redirectUrl = $request->redirectUrl;
+
         $this->validateLogin($request);
 
         // If the class is using the ThrottlesLogins trait, we can automatically throttle
@@ -35,7 +47,7 @@ class LoginController extends ApiController
         $credentials = $this->credentials($request);
         $thirdStatus = Login::loginCheck($request->email, $request->password);
 
-        if ($thirdStatus == 0) {
+        if ($thirdStatus['code'] == 0) {
             // 校验通过，放行
 
             // 设置 token
@@ -45,17 +57,23 @@ class LoginController extends ApiController
             // Cookie::queue('token', $token);
 
             return $this->sendLoginResponse($request);
-        } elseif ($thirdStatus == -4001) {
-            // 用户改过密码，但是还是用旧密码在登陆
+        } elseif ($thirdStatus['code'] == -4001) {
+            // 用户改过密码，但是还是用旧密码在登录
             $this->guard()->logout();
             throw ValidationException::withMessages([
-                $this->username() => '你近期修改过密码，请用新密码登陆',
+                $this->username() => '你近期修改过密码，请用新密码登录',
             ]);
-        }  elseif ($thirdStatus == -4002) {
+        } elseif ($thirdStatus['code'] == -4002) {
             // 用户名或密码错误
             $this->guard()->logout();
             throw ValidationException::withMessages([
                 $this->username() => "用户名或密码错误！",
+            ]);
+        } elseif ($thirdStatus['code'] == -4008) {
+            // 用户名或密码错误
+            $this->guard()->logout();
+            throw ValidationException::withMessages([
+                $this->username() => "大学城系统暂时不可用！",
             ]);
         }
 
@@ -67,8 +85,25 @@ class LoginController extends ApiController
         return $this->sendFailedLoginResponse($request);
     }
 
+    // 注销
+    public function postLogout()
+    {
+        Auth::logout();
+
+        foreach ($_COOKIE as $key => $value) {
+            setcookie($key, "", time()-3600, '/');
+        }
+
+        return redirect()->route('voyager.login');
+    }
+
+    // 回调：如果给定 redirectUrl 参数则跳转到指定路由,否则跳转到首页
     public function redirectTo()
     {
+        if ($this->redirectUrl) {
+            $url = env('APP_URL').$this->redirectUrl;
+            return $url;
+        }
         return config('voyager.user.redirect', route('voyager.dashboard'));
     }
 

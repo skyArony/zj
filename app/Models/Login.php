@@ -20,20 +20,39 @@ class Login extends Model
         $myCheck = self::myCheck($email, $pass);
 
         // 通过
-        if ($myCheck && $thirdCheck) {
-            return 0;
+        if ($myCheck && $thirdCheck['code'] == 0) {
+            return [
+                "code" => 0,
+                'msg' => $thirdCheck['msg']
+            ];
         }
         // 用户改了新密码
-        elseif (!$myCheck && $thirdCheck) {
-            return 0;
+        elseif (!$myCheck && $thirdCheck['code'] == 0) {
+            return [
+                "code" => 0,
+                'msg' => $thirdCheck['msg']
+            ];
         }
         // 最近改过密码
-        elseif ($myCheck && !$thirdCheck) {
-            return -4001;
+        elseif ($myCheck && $thirdCheck['code'] == -2) {
+            return [
+                "code" => -4001,
+                'msg' => $thirdCheck['msg']
+            ];
         }
         // 密码错误
-        elseif (!$myCheck && !$thirdCheck) {
-            return -4002;
+        elseif (!$myCheck && $thirdCheck['code'] == -2) {
+            return [
+                "code" => -4002,
+                'msg' => $thirdCheck['msg']
+            ];
+        }
+        // 大学城方面的错误
+        elseif ($thirdCheck['code'] == -1) {
+            return [
+                "code" => -4008,
+                'msg' => $thirdCheck['msg']
+            ];
         }
     }
 
@@ -47,16 +66,37 @@ class Login extends Model
         }
     }
 
-    // 第二步检查：大学城登陆
+    // 第二步检查：大学城登录
     protected static function thirdCheck($email, $pass)
     {
         $worlduc_login = 'http://worlduc.com/index.aspx?op=Login&email=' . $email . '&pass=' . $pass;
         $guzzleClient = new GuzzleClient(['cookies' => true]);
-        $response = $guzzleClient->request('POST', $worlduc_login);
+        $response = $guzzleClient->request('POST', $worlduc_login, ['http_errors' => false]);
+        if ($response->getStatusCode() != 200) {
+            return [
+                "code" => -1,
+                "msg" => $response->getStatusCode()
+            ];
+        }
+
+        // 爬取用户基础信息
         $resJson = $response->getBody()->getContents();
         $resArr = json_decode($resJson, true);
-        // 模拟登陆的到的 cookies
         $cookieJar = serialize($guzzleClient->getConfig()['cookies']);
+
+        // 获取用户身份
+        $userInfoUrl = "http://worlduc.com/SpaceManage/Space/UserBase.aspx";
+        $response = $guzzleClient->request('GET', $userInfoUrl, ['http_errors' => false]);
+        if ($response->getStatusCode() != 200) {
+            return [
+                "code" => -1,
+                "msg" => $response->getStatusCode()
+            ];
+        }
+        $bodyInfo = $response->getBody()->getContents();
+        preg_match('/<span id="ctl00_ContentPlaceHolderMain_ShenFen">(.*?)<\/span>/', $bodyInfo, $matches);
+        if ($matches[1] == "非教师") $role = 4;
+        else if( $matches[1] == "教师") $role = 3;
 
         if ($resArr['flag'] == 1) {
             // 更新数据库
@@ -78,18 +118,26 @@ class Login extends Model
                 $user->password = Hash::make($pass);
                 $user->org_id = $resArr['link2']['userid'];
                 $user->org_avatar = 'http://www.worlduc.com'.$resArr['link2']['headpic'];
-                $user->role_id = 2;
+                $user->role_id = $role;
                 $user->cookies = $cookieJar;
                 $user->save();
             }
             
             // 存储 email 到 cookies
-            Cookie::queue('email', $email, null, null, null, false, false);
-            Cookie::queue('teacher_id', $resArr['link1']['userid'], null, null, null, false, false);
-            Cookie::queue('name', $resArr['link1']['username'], null, null, null, false, false);
-            return true;
+            Cookie::queue('email', $email, null, null, null, false, true);
+            Cookie::queue('user_id', $resArr['link1']['userid'], null, null, null, false, true);
+            Cookie::queue('user_p_id', $user->id, null, null, null, false, true);
+            Cookie::queue('role', $user->role_id, null, null, null, false, true);
+            Cookie::queue('name', $resArr['link1']['username'], null, null, null, false, true);
+            return [
+                "code" => 0,
+                "msg" => "success"
+            ];
         } else {
-            return false;
+            return [
+                "code" => -2,
+                "msg" => "fail"
+            ];
         }
     }
 }

@@ -28,7 +28,7 @@
     <div class="page-content edit-add container-fluid">
         <div class="col-md-12">
             <div id="app">
-                <worlduc-survey></worlduc-survey>
+                <worlduc-surveyedit></worlduc-surveyedit>
             </div>
         </div>
     </div>

@@ -19,7 +19,7 @@ return [
         // Otherwise `php artisan voyager:install` will fail with class not found error.
         'namespace'                    => null,
         'default_avatar'               => 'users/default.png',
-        'redirect'                     => '/admin',
+        'redirect'                     => '/admin/profile',
     ],
 
     /*
@@ -147,13 +147,13 @@ return [
     'dashboard' => [
         // Add custom list items to navbar's dropdown
         'navbar_items' => [
-            'Profile' => [
+            '个人信息' => [
                 'route'      => 'voyager.profile',
                 'classes'    => 'class-full-of-rum',
                 'icon_class' => 'voyager-person',
             ],
-            'Home' => [
-                'route'        => '/',
+            '我的大学城' => [
+                'route'        => 'http://worlduc.com/SpaceManage/default.aspx',
                 'icon_class'   => 'voyager-home',
                 'target_blank' => true,
             ],

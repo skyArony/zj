@@ -2,6 +2,92 @@
 <template>
   <div class="custom-tree-container">
     <div class="block">
+      <!-- 章节编辑 -->
+      <el-dialog title="编辑章节 tag 和课程目标"
+                 :visible.sync="unityDialogVisible"
+                 width="70%">
+        <div class="tagsContainer">
+          <el-tag :key="index"
+                  closable
+                  v-for="(tag, index) in selectedTags"
+                  :disable-transitions="false"
+                  @close="tagClose(index)">
+            {{tag}}
+          </el-tag>
+          <el-cascader expand-trigger="hover"
+                       v-model="selectedOptions"
+                       class="input-new-tag"
+                       :options="waittingTags"
+                       :placeholder="placeholder"
+                       size="small"
+                       @change="handleInputConfirm"
+                       filterable></el-cascader>
+        </div>
+        <hr />
+        <el-input class="claimInput"
+                  placeholder="请输入课程目标，一次一条，无需序号，Enter 确认"
+                  v-model="claimsText"
+                  @keyup.enter.native="claimsInputConfirm">
+        </el-input>
+        <ul class="claim-list"
+            ref="claim_list">
+          <div v-for="(claim, index)  in claims"
+               class="claim"
+               :key="index">
+            <span @click="removeClaim(index)">&nbsp;&nbsp;✕&nbsp;&nbsp;</span>
+            <label>{{ claim }}</label>
+          </div>
+        </ul>
+        <span slot="footer"
+              class="dialog-footer">
+          <el-button type="text"
+                     disabled>编辑章节会覆盖其下所有课时的属性，请注意。</el-button>
+          <el-button @click="unityDialogVisible = false">取 消</el-button>
+          <el-button type="primary"
+                     @click="ensureCourseTree(true)">确 定</el-button>
+        </span>
+      </el-dialog>
+      <!-- 课时编辑 -->
+      <el-dialog title="编辑课时 tag 和课程目标"
+                 :visible.sync="dialogVisible"
+                 width="70%">
+        <div class="tagsContainer">
+          <el-tag :key="index"
+                  closable
+                  v-for="(tag, index) in selectedTags"
+                  @close="tagClose(index)">
+            {{tag}}
+          </el-tag>
+          <el-cascader expand-trigger="hover"
+                       v-model="selectedOptions"
+                       class="input-new-tag"
+                       :options="waittingTags"
+                       size="small"
+                       @change="handleInputConfirm"
+                       filterable></el-cascader>
+        </div>
+        <hr />
+        <el-input class="claimInput"
+                  placeholder="请输入课程目标，一次一条，无需序号，Enter 确认"
+                  v-model="claimsText"
+                  @keyup.enter.native="claimsInputConfirm">
+        </el-input>
+        <ul class="claim-list"
+            ref="claim_list">
+          <div v-for="(claim, index)  in claims"
+               class="claim"
+               :key="index">
+            <span @click="removeClaim(index)">&nbsp;&nbsp;✕&nbsp;&nbsp;</span>
+            <label>{{ claim }}</label>
+          </div>
+        </ul>
+        <span slot="footer"
+              class="dialog-footer">
+          <el-button @click="dialogVisible = false">取 消</el-button>
+          <el-button type="primary"
+                     @click="ensureCourseTree(false)">确 定</el-button>
+        </span>
+      </el-dialog>
       <el-tree :data="treeData"
                node-key="mytree"
                default-expand-all
@@ -10,8 +96,7 @@
               slot-scope="{ node, data }">
           <span v-if="data.children">{{ node.label }} </span>
           <span v-else>
-            <a target="_blank"
-               :href="'http://worlduc.com/APP/OnlineCourse/course/courselearn.aspx?courseHourID=' + data.id">{{ node.label }}</a>
+            {{ node.label }}
           </span>
           <el-button v-if="data.children"
                      type="text"
@@ -23,93 +108,6 @@
                      @click="dialogDataSet(false, data.id)">
             编辑
           </el-button>
-          <!-- 章节编辑 -->
-          <el-dialog title="编辑章节 tag 和课程目标"
-                     :visible.sync="unityDialogVisible"
-                     width="70%">
-            <div class="tagsContainer">
-              <el-tag :key="index"
-                      closable
-                      v-for="(tag, index) in selectedTags"
-                      :disable-transitions="false"
-                      @close="tagClose(index)">
-                {{tag}}
-              </el-tag>
-              <el-cascader expand-trigger="hover"
-                           v-model="selectedOptions"
-                           class="input-new-tag"
-                           :options="waittingTags"
-                           :placeholder="placeholder"
-                           size="small"
-                           @change="handleInputConfirm"
-                           filterable></el-cascader>
-            </div>
-            <hr />
-            <el-input class="claimInput"
-                      placeholder="请输入课程目标，一次一条，无需序号，Enter 确认"
-                      v-model="claimsText"
-                      @keyup.enter.native="claimsInputConfirm">
-            </el-input>
-            <ul class="claim-list"
-                ref="claim_list">
-              <div v-for="(claim, index)  in claims"
-                   class="claim"
-                   :key="index">
-                <span @click="removeClaim(index)">&nbsp;&nbsp;✕&nbsp;&nbsp;</span>
-                <label>{{ claim }}</label>
-              </div>
-            </ul>
-            <span slot="footer"
-                  class="dialog-footer">
-              <el-button type="text"
-                         disabled>编辑章节会覆盖其下所有课时的属性，请注意。</el-button>
-              <el-button @click="unityDialogVisible = false">取 消</el-button>
-              <el-button type="primary"
-                         @click="ensureCourseTree(true)">确 定</el-button>
-            </span>
-          </el-dialog>
-          <!-- 课时编辑 -->
-          <el-dialog title="编辑课时 tag 和课程目标"
-                     :visible.sync="dialogVisible"
-                     width="70%">
-            <div class="tagsContainer">
-              <el-tag :key="index"
-                      closable
-                      v-for="(tag, index) in selectedTags"
-                      :disable-transitions="false"
-                      @close="tagClose(index)">
-                {{tag}}
-              </el-tag>
-              <el-cascader expand-trigger="hover"
-                           v-model="selectedOptions"
-                           class="input-new-tag"
-                           :options="waittingTags"
-                           size="small"
-                           @change="handleInputConfirm"
-                           filterable></el-cascader>
-            </div>
-            <hr />
-            <el-input class="claimInput"
-                      placeholder="请输入课程目标，一次一条，无需序号，Enter 确认"
-                      v-model="claimsText"
-                      @keyup.enter.native="claimsInputConfirm">
-            </el-input>
-            <ul class="claim-list"
-                ref="claim_list">
-              <div v-for="(claim, index)  in claims"
-                   class="claim"
-                   :key="index">
-                <span @click="removeClaim(index)">&nbsp;&nbsp;✕&nbsp;&nbsp;</span>
-                <label>{{ claim }}</label>
-              </div>
-            </ul>
-            <span slot="footer"
-                  class="dialog-footer">
-              <el-button @click="dialogVisible = false">取 消</el-button>
-              <el-button type="primary"
-                         @click="ensureCourseTree(false)">确 定</el-button>
-            </span>
-          </el-dialog>
         </span>
       </el-tree>
     </div>
@@ -134,13 +132,42 @@ export default {
       placeholder: "请选择",
       /* coursetree */
       treeData: [],
-      courseTree: "",
+      courseTree: {},
       /* tag */
       selectedTags: [], // dialog 中已选择的 tag
       selectedOptions: [] // cascader 中已选择的内容
     };
   },
-
+  watch: {
+    // 在页面上方删除课程的 tags 时,这个函数会执行,把已选择的该 tag 删除
+    dynamicTags: function(val) {
+      for (let key in this.courseTree) {
+        for (let key2 in this.courseTree[key]) {
+          if (this.courseTree[key][key2].tags) {
+            let tempTags = [];
+            for (let index in this.courseTree[key][key2].tags) {
+              let tag = this.courseTree[key][key2].tags[index].split("-");
+              tempTags.push(tag[0]);
+            }
+            let pos = tempTags.indexOf(this.$store.state.removeTag);
+            if (pos != -1) {
+              this.courseTree[key][key2].tags.splice(pos, 1);
+              let MyAxios = axios.create({
+                headers: { "Content-Type": "application/json" }
+              });
+              MyAxios.put("/api/courseTree/" + this.courseId, {
+                data: this.courseTree
+              }).catch(function(error) {
+                console.log(error);
+                alert("没有操作权限!");
+                location.reload();
+              });
+            }
+          }
+        }
+      }
+    }
+  },
   methods: {
     /* 组件 */
     // 警告提示
@@ -153,7 +180,6 @@ export default {
         response: ""
       });
     },
-
     /* tag 选择输入相关 */
     // 增加一个 tag
     handleInputConfirm(value) {
@@ -177,38 +203,34 @@ export default {
       const { search } = window.location;
       let searchParams = new URLSearchParams(search);
       let courseId = searchParams.get("courseId");
-      let MyAxios = axios.create({
-        baseURL: "http://zj.yfree.ccc/api/",
-        headers: { "Content-Type": "application/json" }
-      });
+      let MyAxios = axios.create();
 
-      MyAxios.get("/courseTree", { params: { courseId: this.courseId } }).then(
-        function(response) {
-          if (response.data.errcode == 0) {
-            that.courseTree = response.data.data;
-            let child = [];
-            that.treeData = [];
-            for (let i in response.data.data) {
-              child = [];
-              for (let j in response.data.data[i]) {
-                let obj2 = {
-                  id: j,
-                  label: response.data.data[i][j].period_title
-                };
-                child.push(obj2);
-              }
-              let obj = {
-                id: i,
-                label: response.data.data[i].chapter_name,
-                children: child
+      MyAxios.get("/api/courseTree" + "/" + this.courseId).then(function(
+        response
+      ) {
+        if (response.data.errcode == 0) {
+          that.courseTree = response.data.data;
+          let child = [];
+          that.treeData = [];
+          for (let i in response.data.data) {
+            child = [];
+            for (let j in response.data.data[i]) {
+              let obj2 = {
+                id: j,
+                label: response.data.data[i][j].period_title
               };
-              child.pop(); // 去掉一个不必要的干扰元素
-              that.treeData.push(obj);
+              child.push(obj2);
             }
+            let obj = {
+              id: i,
+              label: response.data.data[i].chapter_name,
+              children: child
+            };
+            child.pop(); // 去掉一个不必要的干扰元素
+            that.treeData.push(obj);
           }
         }
-      );
-      //a; /////////////////???????
+      });
     },
     // 显示章节和课时的 tag 和 claim
     dialogDataSet(isChapter, id) {
@@ -226,10 +248,10 @@ export default {
         tags = Array.from(new Set(tags));
         claims = Array.from(new Set(claims));
         // 修正 waittingtags
-        let tagTemp = []
-        for(let item of tags) {
+        let tagTemp = [];
+        for (let item of tags) {
           let tag = item.split("-");
-          tagTemp.push(tag[0])
+          tagTemp.push(tag[0]);
         }
         for (let item of this.waittingTags) {
           if (tagTemp.indexOf(item.value) != -1) {
@@ -240,7 +262,6 @@ export default {
             this.waittingTags[index].disabled = false;
           }
         }
-        
         this.claims = claims;
         this.selectedTags = tags;
       } else {
@@ -259,6 +280,21 @@ export default {
         }
         tags = Array.from(new Set(tags));
         claims = Array.from(new Set(claims));
+        // 修正 waittingtags
+        let tagTemp = [];
+        for (let item of tags) {
+          let tag = item.split("-");
+          tagTemp.push(tag[0]);
+        }
+        for (let item of this.waittingTags) {
+          if (tagTemp.indexOf(item.value) != -1) {
+            let index = this.$store.state.dynamicTags.indexOf(item.value);
+            this.waittingTags[index].disabled = true;
+          } else {
+            let index = this.$store.state.dynamicTags.indexOf(item.value);
+            this.waittingTags[index].disabled = false;
+          }
+        }
         this.claims = claims;
         this.selectedTags = tags;
       }
@@ -296,21 +332,26 @@ export default {
         }
       }
       let MyAxios = axios.create({
-        baseURL: "http://zj.yfree.ccc/api/",
         headers: { "Content-Type": "application/json" }
       });
-      MyAxios.put("/courseTree", {
-        courseId: this.courseId,
+      MyAxios.put("/api/courseTree/" + this.courseId, {
         data: this.courseTree
+      }).catch(function(error) {
+        console.log(error);
+        alert("没有操作权限!");
+        location.reload();
       });
     }
   },
   computed: {
+    dynamicTags: function() {
+      return this.$store.state.dynamicTags;
+    },
     waittingTags: function() {
       let options = [];
       let len = this.$store.state.dynamicTags.length;
-      if(len == 0) this.placeholder = "请先设置 tag"
-      else this.placeholder = "请选择"
+      if (len == 0) this.placeholder = "请先设置 tag";
+      else this.placeholder = "请选择";
       for (let j = 0; j < len; j++) {
         options.push({
           value: this.$store.state.dynamicTags[j],
@@ -341,7 +382,7 @@ export default {
 };
 </script>
 
-<style scope>
+<style>
 /* tree */
 .custom-tree-container {
   font-size: 20px;

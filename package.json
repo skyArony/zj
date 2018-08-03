@@ -22,7 +22,9 @@
     "vue": "^2.5.7"
   },
   "dependencies": {
+    "clipboard": "^2.0.1",
     "element-ui": "^2.4.1",
+    "flv.js": "^1.4.2",
     "vue-slicksort": "^0.1.8",
     "vuex": "^3.0.1"
   }

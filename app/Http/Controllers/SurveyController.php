@@ -20,7 +20,7 @@ class SurveyController extends ApiController
         $survey->title = $request->title;
         $survey->desc = $request->desc;
         $survey->course_id = $request->course_id;
-        $survey->creater_id = Crypt::decrypt(Cookie::get('teacher_id'));
+        $survey->creater_id = Crypt::decrypt(Cookie::get('user_id'));
         $survey->creater = Crypt::decrypt(Cookie::get('name'));
         $survey->course = $request->course;
         $survey->questions = json_encode($request->questions, JSON_UNESCAPED_UNICODE);
@@ -34,6 +34,19 @@ class SurveyController extends ApiController
     // 修改问卷
     public function updateSurvey(Request $request) {
         // TODO validate
+
+        // 登录检查
+        if (Cookie::get('user_id') && Cookie::get('role')) {
+            $userId = Crypt::decrypt(Cookie::get('user_id'));
+            $role = Crypt::decrypt(Cookie::get('role'));
+        } 
+        else return self::setResponse(null, 400, -4007);    // 未登录
+
+        // 权限检验
+        if ($role != 1) {
+            $survey = Survey::where("id", $request->id)->first();
+            if ($survey->creater_id != $userId) return self::setResponse(null, 400, -4009);    // 越权操作    
+        }
         
         $survey = Survey::find($request->id);
         $survey->title = $request->title;
@@ -46,7 +59,7 @@ class SurveyController extends ApiController
         }
     }
 
-    // 查看制定问卷的数据
+    // 查看指定问卷的数据
     public function getSurvey(Request $request) {
         // TODO validate
 
@@ -54,51 +67,5 @@ class SurveyController extends ApiController
             return self::setResponse($survey, 200, 0);
         else 
             return self::setResponse(null, 400, -4005);
-    }
-
-    // 新建问题
-    public function addQuestion(Request $request)
-    {
-        // TODO validate
-
-        $question = new Question;
-        $question->desc = $request->desc;
-        $question->survey_id = $request->surveyId;
-        $question->isMulti = $request->isMulti;
-        $question->option = $request->option;
-        $question->save();
-
-        return self::setResponse($question, 200, 0);
-    }
-
-    // 修改问题
-    public function updateQuestion(Request $request)
-    {
-        // TODO validate
-
-        $question = Question::find($request->id);
-        $question->desc = $request->desc;
-        $question->isMulti = $request->isMulti;
-        $question->option = $request->option;
-        $question->save();
-
-        return self::setResponse($question, 200, 0);
-    }
-
-    // 删除问题
-    public function deleteQuestion(Request $request)
-    {
-        // TODO validate
-
-        Question::find($request->id)->delete();
-
-        return self::setResponse(null, 200, 0);
-    }
-
-    // 查看所有的问题
-    public function listQuestion(Request $request)
-    {
-        $questions = Question::all();
-        return self::setResponse($questions, 200, 0);
     }
 }

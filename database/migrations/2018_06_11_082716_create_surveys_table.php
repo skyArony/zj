@@ -25,6 +25,7 @@ class CreateSurveysTable extends Migration
             $table->foreign('course_id')->references('course_id')->on('courses')->onDelete('cascade');
             $table->foreign('creater_id')->references('user_id')->on('users')->onDelete('cascade');
             $table->timestamps();
+            $table->softDeletesTz();    // 软删除
         });
     }
 

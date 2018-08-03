@@ -17,7 +17,7 @@ class SpiderController extends ApiController
     // api：爬取课程信息
     // 这个必须数据库存在有效的 cookies 才能正常使用
     // 这个接口会获取当前大学城上的课程数据并覆盖现有的
-    // 这个不仅作为接口（POST 方式）还作为一个可以带 cookie 访问的页面（GET 方式），只是不会展示内容，直接重定向
+    // 必须携带有效 cookies 才能正常访问
     public function getCourseInfo(Request $request){
         // TODO validate
 
@@ -25,13 +25,12 @@ class SpiderController extends ApiController
         $mooc_course_detail = "http://worlduc.com/APP/OnlineCourse/teaching/base.aspx?op=getmodel&courseID=";
 
         $cookieJar = new CookieJar;
-        if($request->has('email')) $email = $request->email;
-        elseif(Cookie::get('email')) $email = Crypt::decrypt(Cookie::get('email'));
-        else return self::setResponse(null, 400, -4004);
-        $cookieJar = unserialize(User::where('email', $email)->first()->cookies);
-        
+        if (Cookie::get('user_id')) $userId = Crypt::decrypt(Cookie::get('user_id'));
+        else return self::setResponse(null, 400, -4007);    // 未登录
+
+        $cookieJar = unserialize(User::where('user_id', $userId)->first()->cookies);
         $guzzleClient = new GuzzleClient(['cookies' => true]);
-        $response = $guzzleClient->request('GET', $mooc_course, ['cookies' => $cookieJar]);
+        $response = $guzzleClient->request('GET', $mooc_course, ['cookies' => $cookieJar, 'http_errors' => false]);
         preg_match_all('/\/APP\/OnlineCourse\/course\/course.aspx\?courseID=(\d+)/', $response->getBody()->getContents(), $matches);
         $matches = array_unique($matches[1]);
 
@@ -39,7 +38,8 @@ class SpiderController extends ApiController
 
         foreach ($matches as $value) {
             $course = array();
-            $response = $guzzleClient->request('POST', $mooc_course_detail.$value, ['cookies' => $cookieJar]);
+            $response = $guzzleClient->request('POST', $mooc_course_detail.$value, ['cookies' => $cookieJar, 'http_errors' => false]);
+            if ($response->getStatusCode() != 200) return self::setResponse(null, 400, -4008);    // 大学城系统不可用
             $response_arr = json_decode($response->getBody()->getContents(), 1);
 
             $course['course_id'] = $value;
@@ -52,29 +52,35 @@ class SpiderController extends ApiController
             $course = Course::updateOrCreate(['course_id' => $value], $course);
             $courseInfo[] = $course;
         }
-        if(Cookie::get('email')) {
-            return redirect('admin/courses');
-        } elseif($request->has('email')) {
-            return self::setResponse($courseInfo, 200, 0);
-        }
+        return self::setResponse(null, 200, 0);
     }
     
-    // api：爬取课程树信息-无需登录
+    // api：爬取课程树信息
     // 这个接口会获取当前大学城上的课程树数据并覆盖现有的
     public function getCourseTree(Request $request) {
         // TODO validate 有 has 是否还有必要
 
         $mooc_course_tree = "http://worlduc.com/APP/OnlineCourse/course/course.aspx?courseID=";
         $mooc_course_tree_detail = 'http://worlduc.com/APP/OnlineCourse/course/Ajax_CourseHour.ashx?op=GetCourseHour&courseHourID=';
-        if($request->has('courseId')) $courseId = $request->courseId;
-        else return self::setResponse(null, 400, -4004);
+        if($request->courseId) $courseId = $request->courseId;
+        else return self::setResponse(null, 400, -4004);    // 缺失必要参数
+
+        // 非法操作检验
+        if (Cookie::get('user_id')) $userId = Crypt::decrypt(Cookie::get('user_id'));
+        else return self::setResponse(null, 400, -4007);    // 未登录
+        $course = Course::where("course_id", $courseId)->first();
+        if ($course->teacher_id != $userId) return self::setResponse(null, 400, -4009);    // 非法操作
 
         $guzzleClient = new GuzzleClient(['cookies' => true]);
-        $response = $guzzleClient->request('GET', $mooc_course_tree.$courseId);
+        $response = $guzzleClient->request('GET', $mooc_course_tree.$courseId, ['http_errors' => false]);
+        if ($response->getStatusCode() != 200) return self::setResponse(null, 400, -4008);    // 大学城系统不可用
         preg_match('/courselearn.aspx\?courseHourID=(\d+)/', $response->getBody()->getContents(), $matches);
+
+        if (!$matches) return self::setResponse(null, 200, 0);    // 未设置课时
         $periodId = $matches[1];
         
-        $response = $guzzleClient->request('GET', $mooc_course_tree_detail.$periodId);
+        $response = $guzzleClient->request('GET', $mooc_course_tree_detail.$periodId, ['http_errors' => false]);
+        if ($response->getStatusCode() != 200) return self::setResponse(null, 400, -4008);    // 大学城系统不可用
         $courseTreeData = json_decode($response->getBody()->getContents(), 1)['DirList'];
 
         $courseTreeInfo = array();

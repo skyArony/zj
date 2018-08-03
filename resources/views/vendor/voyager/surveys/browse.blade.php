@@ -89,9 +89,13 @@
                                 <tbody>
                                     <!-- 过滤 -->
                                     @php
-                                        for($i = 0, $len = count($dataTypeContent); $i < $len; $i++)
-                                            if($dataTypeContent[$i]->creater_id != Cookie::get('teacher_id'))
-                                                unset($dataTypeContent[$i]);
+                                        if (Cookie::get('role') == 3) {
+                                            for ($i = 0, $len = count($dataTypeContent); $i < $len; $i++) {
+                                                    if ($dataTypeContent[$i]->creater_id != Cookie::get('user_id')) {
+                                                        unset($dataTypeContent[$i]);
+                                                    }
+                                                }
+                                        }
                                     @endphp
                                     <!-- /过滤 -->
                                     @foreach($dataTypeContent as $data)
@@ -191,10 +195,17 @@
                                             </td>
                                         @endforeach
                                         <td class="no-sort no-click" id="bread-actions">
-                                            <a href="/survey?id=@php echo $data->id;  @endphp" title="查看问卷" class="btn btn-sm btn-primary pull-right edit">
-                                                <i class="voyager-file-text"></i> <span class="hidden-xs hidden-sm">查看问卷</span>
+                                            <a href="/survey/@php echo $data->id;  @endphp" target="_blank" title="查看问卷" class="btn btn-sm btn-success pull-right edit">
+                                                <i class="voyager-eye"></i> <span class="hidden-xs hidden-sm">查看问卷</span>
+                                            </a>
+                                            <a href="/admin/answer-records?survey_id=@php echo $data->id;  @endphp" title="查看填写记录" class="btn btn-sm btn-success pull-right edit">
+                                                <i class="voyager-eye"></i> <span class="hidden-xs hidden-sm">查看填写记录</span>
                                             </a>
                                             @foreach(Voyager::actions() as $action)
+                                                @php
+                                                    if ($action == 'TCG\Voyager\Actions\ViewAction')
+                                                        continue;
+                                                @endphp                                            
                                                 @include('voyager::bread.partials.actions', ['action' => $action])
                                             @endforeach
                                         </td>

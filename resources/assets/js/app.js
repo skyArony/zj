@@ -19,11 +19,18 @@ window.Vue = require('vue');
 Vue.component('example-component', require('./components/ExampleComponent.vue'));
 Vue.component('worlduc-coursetree', require('./components/CourseTree.vue'));
 Vue.component('worlduc-coursetag', require('./components/CourseTag.vue'));
-Vue.component('worlduc-survey', require('./components/Survey.vue'));
-Vue.component('worlduc-question', require('./components/Question.vue'));
+Vue.component('worlduc-surveyedit', require('./components/SurveyEdit.vue'));
+Vue.component('worlduc-questionedit', require('./components/QuestionEdit.vue'));
 Vue.component('worlduc-questionList', require('./components/QuestionList.vue'));
 Vue.component('worlduc-option', require('./components/Option.vue'));
 Vue.component('worlduc-questionDetail', require('./components/QuestionDetail.vue'));
+Vue.component('worlduc-survey', require('./components/Survey.vue'));
+Vue.component('worlduc-question', require('./components/Question.vue'));
+Vue.component('worlduc-customcourse', require('./components/CustomCourse.vue'));
+Vue.component('worlduc-video', require('./components/Video.vue'));
+Vue.component('worlduc-profile', require('./components/Profile.vue'));
+Vue.component('worlduc-404', require('./components/404.vue'));
+Vue.component('worlduc-readme', require('./components/Readme.vue'));
 
 // element ui
 import ElementUI from 'element-ui';

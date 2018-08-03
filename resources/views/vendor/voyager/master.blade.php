@@ -6,7 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}"/>
 
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
+    <link href="/css/font-css.css" rel="stylesheet">
 
     <!-- Favicon -->
     <link rel="shortcut icon" href="{{ voyager_asset('images/logo-icon.png') }}" type="image/x-icon">
@@ -18,7 +18,7 @@
 
     @yield('css')
     @if(config('voyager.multilingual.rtl'))
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-rtl/3.4.0/css/bootstrap-rtl.css">
+        <link rel="stylesheet" href="/css/bootstrap-rtl.css">
         <link rel="stylesheet" href="{{ voyager_asset('css/rtl.css') }}">
     @endif
 
@@ -36,6 +36,12 @@
         }
         .voyager .breadcrumb a{
             color:{{ config('voyager.primary_color','#22A7F0') }};
+        }
+        .readm-link {
+            display: none;
+        }
+        th + th {
+            min-width: 2.5rem;
         }
     </style>
 

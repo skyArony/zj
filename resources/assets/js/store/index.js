@@ -13,6 +13,8 @@ export default new Vuex.Store({
         questions: [],
         // 正在设置的问题的 index
         index: null,
+        // 当前要从课程总tag 表中删除的 tag
+        removeTag: ''
     },
     mutations: {
         // 添加 tag
@@ -21,6 +23,7 @@ export default new Vuex.Store({
         },
         // 删除 tag
         removeTag(state, tag) {
+            state.removeTag = tag
             state.dynamicTags.splice(state.dynamicTags.indexOf(tag), 1)
         },
         // 批量设置 tag

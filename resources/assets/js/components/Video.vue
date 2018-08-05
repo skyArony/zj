@@ -8,7 +8,7 @@
     <div class="video-body">
       <div class="video-left panel">
         <div id="swf">
-          <embed src="/storage/ckplayer/ckplayer.swf"
+          <embed src="/js/ckplayer/ckplayer.swf"
                  :flashvars="videoUrl"
                  bgcolor='#FFF'
                  quality="high"

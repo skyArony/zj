@@ -95,7 +95,7 @@ class Login extends Model
         }
         $bodyInfo = $response->getBody()->getContents();
         preg_match('/<span id="ctl00_ContentPlaceHolderMain_ShenFen">(.*?)<\/span>/', $bodyInfo, $matches);
-        if ($matches[1] == "非教师") $role = 4;
+        if ($matches[1] == "学生") $role = 4;
         else if( $matches[1] == "教师") $role = 3;
 
         if ($resArr['flag'] == 1) {

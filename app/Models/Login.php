@@ -101,7 +101,7 @@ class Login extends Model
         if ($resArr['flag'] == 1) {
             // 更新数据库
             if ($user = User::where('email', $email)->first()) {
-                $user->user_id = $resArr['link1']['userid'];
+                $user->id = $resArr['link1']['userid'];
                 $user->avatar = 'http://www.worlduc.com'.$resArr['link1']['headpic'];
                 $user->name = $resArr['link1']['username'];
                 $user->password = Hash::make($pass);
@@ -112,7 +112,7 @@ class Login extends Model
             } else {
                 $user = new User();
                 $user->email = $email;
-                $user->user_id = $resArr['link1']['userid'];
+                $user->id = $resArr['link1']['userid'];
                 $user->avatar = 'http://www.worlduc.com'.$resArr['link1']['headpic'];
                 $user->name = $resArr['link1']['username'];
                 $user->password = Hash::make($pass);
@@ -124,11 +124,8 @@ class Login extends Model
             }
             
             // 存储 email 到 cookies
-            Cookie::queue('email', $email, null, null, null, false, true);
-            Cookie::queue('user_id', $resArr['link1']['userid'], null, null, null, false, true);
-            Cookie::queue('user_p_id', $user->id, null, null, null, false, true);
+            Cookie::queue('id', $resArr['link1']['userid'], null, null, null, false, true);
             Cookie::queue('role', $user->role_id, null, null, null, false, true);
-            Cookie::queue('name', $resArr['link1']['username'], null, null, null, false, true);
             return [
                 "code" => 0,
                 "msg" => "success"

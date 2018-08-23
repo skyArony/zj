@@ -19,15 +19,15 @@ class TagController extends ApiController
         $tag = $request->tag;
 
         // 登录检查
-        if (Cookie::get('user_id') && Cookie::get('role')) {
-            $userId = Crypt::decrypt(Cookie::get('user_id'));
+        if (Cookie::get('id') && Cookie::get('role')) {
+            $userId = Crypt::decrypt(Cookie::get('id'));
             $role = Crypt::decrypt(Cookie::get('role'));
         } 
         else return self::setResponse(null, 400, -4007);    // 未登录
 
         // 权限检验
         if ($role != 1) {
-            $course = Course::where("course_id", $courseId)->first();
+            $course = Course::where("id", $courseId)->first();
             if ($course->teacher_id != $userId) {
                 return self::setResponse(null, 400, -4009);    // 越权操作  
             }
@@ -54,15 +54,15 @@ class TagController extends ApiController
         $tag = $request->tag;
 
         // 登录检查
-        if (Cookie::get('user_id') && Cookie::get('role')) {
-            $userId = Crypt::decrypt(Cookie::get('user_id'));
+        if (Cookie::get('id') && Cookie::get('role')) {
+            $userId = Crypt::decrypt(Cookie::get('id'));
             $role = Crypt::decrypt(Cookie::get('role'));
         } 
         else return self::setResponse(null, 400, -4007);    // 未登录
 
         // 权限检验
         if ($role != 1) {
-            $course = Course::where("course_id", $courseId)->first();
+            $course = Course::where("id", $courseId)->first();
             if ($course->teacher_id != $userId) return self::setResponse(null, 400, -4009);    // 越权操作  
         }
 

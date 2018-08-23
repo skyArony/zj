@@ -60388,7 +60388,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         if (roleId == 1) that.role = "超级管理员";else if (roleId == 2) that.role = "管理员";
         if (roleId == 3) that.role = "教师";
         if (roleId == 4) that.role = "学生";
-        that.userId = response.data.data.user_id;
+        that.userId = response.data.data.id;
       } else {
         console.log(response.data.errmsg);
       }

@@ -16,12 +16,10 @@ class CreateAnswerRecordsTable extends Migration
     {
         Schema::create('answer_records', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('user_id')->comment("问卷填写者");
-            $table->unsignedinteger('user_primary_id')->comment("主键联系 ID- 关系绑定用");
+            $table->unsignedinteger('creater_id')->comment("问卷填写者");
             $table->unsignedinteger('survey_id')->comment("问卷 ID");
             $table->json('tags')->comment("问卷结果记录");
-            $table->foreign('user_id')->references('user_id')->on('users')->onDelete('cascade');
-            $table->foreign('user_primary_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('creater_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('survey_id')->references('id')->on('surveys')->onDelete('cascade');
             $table->timestamps();
         });

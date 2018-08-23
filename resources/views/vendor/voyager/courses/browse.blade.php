@@ -76,7 +76,7 @@
                                     @php
                                         if (Cookie::get('role') == 3) {
                                             for ($i = 0, $len = count($dataTypeContent); $i < $len; $i++) {
-                                                    if ($dataTypeContent[$i]->teacher_id != Cookie::get('user_id')) {
+                                                    if ($dataTypeContent[$i]->teacher_id != Cookie::get('id')) {
                                                         unset($dataTypeContent[$i]);
                                                     }
                                                 }
@@ -183,7 +183,7 @@
                                             <!-- @foreach(Voyager::actions() as $action)
                                                 @include('voyager::bread.partials.actions', ['action' => $action])
                                             @endforeach -->
-                                            <a href="@php echo route('voyager.dashboard')."/course-trees?courseId=".$data->course_id; @endphp" title="查看课程目录" class="btn btn-sm btn-success pull-right edit">
+                                            <a href="@php echo route('voyager.dashboard')."/course-trees?courseId=".$data->id; @endphp" title="查看课程目录" class="btn btn-sm btn-success pull-right edit">
                                                 <i class="voyager-eye"></i> <span class="hidden-xs hidden-sm">查看课程目录</span>
                                             </a>
                                         </td>

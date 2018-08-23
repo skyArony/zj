@@ -21,7 +21,7 @@ class UsersTableSeeder extends Seeder
             array (
                 'id' => 3,
                 'role_id' => 1,
-                'user_id' => 2708895,
+                'id' => 2708895,
                 'name' => '杨帆',
                 'email' => '436495146022@worlduc.com',
                 'avatar' => 'http://www.worlduc.com/uploadImage/head/x0/2017118224142HNEeP.jpg',

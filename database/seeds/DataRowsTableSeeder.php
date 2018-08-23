@@ -773,7 +773,7 @@ class DataRowsTableSeeder extends Seeder
             array (
                 'id' => 57,
                 'data_type_id' => 10,
-                'field' => 'user_id',
+                'field' => 'id',
                 'type' => 'text',
                 'display_name' => 'User Id',
                 'required' => 1,

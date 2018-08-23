@@ -25,10 +25,10 @@ class SpiderController extends ApiController
         $mooc_course_detail = "http://worlduc.com/APP/OnlineCourse/teaching/base.aspx?op=getmodel&courseID=";
 
         $cookieJar = new CookieJar;
-        if (Cookie::get('user_id')) $userId = Crypt::decrypt(Cookie::get('user_id'));
+        if (Cookie::get('id')) $userId = Crypt::decrypt(Cookie::get('id'));
         else return self::setResponse(null, 400, -4007);    // 未登录
 
-        $cookieJar = unserialize(User::where('user_id', $userId)->first()->cookies);
+        $cookieJar = unserialize(User::where('id', $userId)->first()->cookies);
         $guzzleClient = new GuzzleClient(['cookies' => true]);
         $response = $guzzleClient->request('GET', $mooc_course, ['cookies' => $cookieJar, 'http_errors' => false]);
         preg_match_all('/\/APP\/OnlineCourse\/course\/course.aspx\?courseID=(\d+)/', $response->getBody()->getContents(), $matches);
@@ -42,14 +42,13 @@ class SpiderController extends ApiController
             if ($response->getStatusCode() != 200) return self::setResponse(null, 400, -4008);    // 大学城系统不可用
             $response_arr = json_decode($response->getBody()->getContents(), 1);
 
-            $course['course_id'] = $value;
+            $course['id'] = $value;
             $course['name'] = $response_arr['CourseName'];
             $course['pic'] = 'http://worlduc.com'.$response_arr['CoursePic'];
-            $course['teacher'] = $response_arr['Publisher'];
             $course['teacher_id'] = $response_arr['PublishID'];
             $course['intro'] = $response_arr['Description'];
 
-            $course = Course::updateOrCreate(['course_id' => $value], $course);
+            $course = Course::updateOrCreate(['id' => $value], $course);
             $courseInfo[] = $course;
         }
         return self::setResponse(null, 200, 0);
@@ -66,9 +65,9 @@ class SpiderController extends ApiController
         else return self::setResponse(null, 400, -4004);    // 缺失必要参数
 
         // 非法操作检验
-        if (Cookie::get('user_id')) $userId = Crypt::decrypt(Cookie::get('user_id'));
+        if (Cookie::get('id')) $userId = Crypt::decrypt(Cookie::get('id'));
         else return self::setResponse(null, 400, -4007);    // 未登录
-        $course = Course::where("course_id", $courseId)->first();
+        $course = Course::where("id", $courseId)->first();
         if ($course->teacher_id != $userId) return self::setResponse(null, 400, -4009);    // 非法操作
 
         $guzzleClient = new GuzzleClient(['cookies' => true]);

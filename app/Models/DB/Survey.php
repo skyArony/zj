@@ -11,11 +11,11 @@ class Survey extends Model
 
     protected $dates = ['deleted_at'];
     protected $table = 'surveys';
-    protected $fillable = ['course_id', 'course', 'creater_id', 'creater', 'title', 'desc', 'questions'];
+    protected $fillable = ['course_id', 'creater_id', 'title', 'desc', 'questions'];
 
     // 关联到 course
     public function belongsToCourse()
     {
-        return $this->belongsTo('App\Models\DB\Course', 'course_id', 'course_id');
+        return $this->belongsTo('App\Models\DB\Course', 'course_id', 'id');
     }
 }

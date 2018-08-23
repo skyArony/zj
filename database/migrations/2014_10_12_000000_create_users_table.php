@@ -14,8 +14,7 @@ class CreateUsersTable extends Migration
     public function up()
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('user_id')->unique()->comment("用户ID");
+            $table->unsignedinteger('id')->unique()->comment("用户ID");
             $table->string('name');
             $table->string('email')->unique();
             $table->string('org_id')->comment("所属组织id");
@@ -24,6 +23,7 @@ class CreateUsersTable extends Migration
             $table->text('cookies')->comment("上一次登录获取的 cookies");
             $table->rememberToken();
             $table->timestamps();
+            $table->primary('id');
         });
     }
 

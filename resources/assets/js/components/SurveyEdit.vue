@@ -232,7 +232,7 @@ export default {
             for (index in courses) {
               data.push({
                 label: courses[index].name,
-                value: courses[index].course_id + "$" + courses[index].name
+                value: courses[index].id + "$" + courses[index].name
               });
             }
             that.courses = data;

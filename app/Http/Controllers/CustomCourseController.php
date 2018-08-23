@@ -48,6 +48,8 @@ class CustomCourseController extends ApiController
         $pdf->SetAutoPageBreak(true, PDF_MARGIN_BOTTOM);
         // 添加一页
         $pdf->AddPage();
+        $pdf->setCellHeightRatio(1.5);
+
         // 设置数据
         $html = '
 <style>
@@ -103,6 +105,7 @@ p {
         $survey = $answerRecord->belongsToSurvey;
         $course = $survey->belongsToCourse;
         $courseTree = $course->hasOneCourseTree;
+        $user = $course->belongsToUser;
 
         // coursetag 和 问卷标记的 tag
         $courseTreeTags = json_decode($courseTree->data, 1);
@@ -133,8 +136,8 @@ p {
         $courseName = $course->name;
         $courseDesc = $course->intro;
         $courseImg = $course->pic;
-        $courseTeacher = $course->teacher;
-        $courseId = $course->course_id;
+        $courseTeacher = $user->name;
+        $courseId = $course->id;
         // 问卷信息
         $surveyName = $survey->title;
 

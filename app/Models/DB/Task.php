@@ -4,6 +4,7 @@ namespace App\Models\DB;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Cookie;
 
 class Task extends Model
 {
@@ -11,4 +12,9 @@ class Task extends Model
     
     protected $dates = ['deleted_at'];
     protected $table = 'tasks';
+
+    public function setCreaterIdAttribute($value)
+    {
+        $this->attributes['creater_id'] = Cookie::get('id');
+    }
 }

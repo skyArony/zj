@@ -14,15 +14,14 @@ class CreateCoursesTable extends Migration
     public function up()
     {
         Schema::create('courses', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('course_id')->unique()->comment("课程ID");
+            $table->unsignedinteger('id')->unique()->comment("课程ID");
+            $table->unsignedinteger('teacher_id')->comment("教师ID");
             $table->string('name')->comment("课程名");
             $table->text('intro')->comment("课程介绍");
             $table->string('pic')->comment("课程图");
-            $table->string('teacher')->comment("课程教师");
-            $table->integer('teacher_id')->comment("教师ID");
-            $table->foreign('teacher_id')->references('user_id')->on('users')->onDelete('cascade');
+            $table->foreign('teacher_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
+            $table->primary('id');
         });
     }
 

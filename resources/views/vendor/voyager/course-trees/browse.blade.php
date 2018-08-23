@@ -5,7 +5,7 @@
 @section('page_header')
     <div class="container-fluid">
         <h1 class="page-title">
-            <i class="{{ $dataType->icon }}"></i> <font>课程名 | 课程教师</font>
+            <i class="{{ $dataType->icon }}"></i> <font>课程名</font>
             @php
                 $courseId = data_get($_GET, 'courseId', -1);
                 if($courseId == -1 || $courseId == '') {
@@ -106,7 +106,7 @@
                 url: "/api/course/" + courseId,
                 success: function(data) {
                     // console.log(data)
-                    $(".page-title font").text(data.data.name + " | " + data.data.teacher)
+                    $(".page-title font").text(data.data.name)
                 },
                 error: function(data) {
                     console.log("发生了错误!")

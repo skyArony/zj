@@ -15,9 +15,9 @@ class CreateCourseTreesTable extends Migration
     {
         Schema::create('course_trees', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('course_id')->comment("所属课程ID");
+            $table->unsignedinteger('course_id')->comment("所属课程ID");
             $table->json("data")->comment("课程信息");
-            $table->foreign('course_id')->references('course_id')->on('courses')->onDelete('cascade');
+            $table->foreign('course_id')->references('id')->on('courses')->onDelete('cascade');
             $table->timestamps();
         });
     }

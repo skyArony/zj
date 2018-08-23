@@ -4,6 +4,7 @@ namespace App\Models\DB;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Cookie;
 
 class Team extends Model
 {
@@ -11,4 +12,10 @@ class Team extends Model
     
     protected $dates = ['deleted_at'];
     protected $table = 'teams';
+
+    public function setTeamNameAttribute($value)
+    {
+        $this->attributes['team_name'] = $value;
+        $this->attributes['creater_id'] = Cookie::get('id');
+    }
 }

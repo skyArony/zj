@@ -91,7 +91,7 @@
                                     @php
                                         if (Cookie::get('role') == 3) {
                                             for ($i = 0, $len = count($dataTypeContent); $i < $len; $i++) {
-                                                    if ($dataTypeContent[$i]->creater_id != Cookie::get('user_id')) {
+                                                    if ($dataTypeContent[$i]->creater_id != Cookie::get('id')) {
                                                         unset($dataTypeContent[$i]);
                                                     }
                                                 }

@@ -8,7 +8,7 @@ class AnswerRecord extends Model
 {
     //
     protected $table = 'answer_records';
-    protected $fillable = ['user_id', 'survey_id', 'tags', 'user_primary_id'];
+    protected $fillable = ['id', 'survey_id', 'tags', 'creater_id'];
 
     // 关联到 survey
     public function belongsToSurvey()

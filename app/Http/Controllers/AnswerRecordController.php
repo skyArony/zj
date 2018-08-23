@@ -13,17 +13,16 @@ class AnswerRecordController extends ApiController
     public function addRecord(Request $request) {
         // TODO validata
 
-        if (Cookie::get('user_id') && Cookie::get('user_p_id')) {
-            $userId = Crypt::decrypt(Cookie::get('user_id'));
-            $user_p_id = Crypt::decrypt(Cookie::get('user_p_id'));
+        if (Cookie::get('id')) {
+            $userId = Crypt::decrypt(Cookie::get('id'));
         } else return self::setResponse(null, 400, -4007);    // 未登录
 
         $surveyId = $request->surveyId;
         $tags = json_encode($request->tags, JSON_UNESCAPED_UNICODE);
 
         $answerRecord = AnswerRecord::updateOrCreate(
-            ['user_id' => $userId],
-            ['survey_id' => $surveyId, 'tags' => $tags, 'user_primary_id' => $user_p_id]
+            ['creater_id' => $userId],
+            ['survey_id' => $surveyId, 'tags' => $tags]
         );
         if ($answerRecord) {
             return self::setResponse($answerRecord, 200, 0);
@@ -46,10 +45,10 @@ class AnswerRecordController extends ApiController
     public function checkRecord(Request $request) {
         // TODO validate
 
-        if (Cookie::get('user_id')) $userId = Crypt::decrypt(Cookie::get('user_id'));
+        if (Cookie::get('id')) $userId = Crypt::decrypt(Cookie::get('id'));
         else return self::setResponse(null, 400, -4007);    // 未登录
 
-        $answerRecord = AnswerRecord::where("user_id", $userId)->where("survey_id", $request->surveyId)->get();
+        $answerRecord = AnswerRecord::where("id", $userId)->where("survey_id", $request->surveyId)->get();
         if (count($answerRecord))
             return self::setResponse(true, 200, 0);
         else

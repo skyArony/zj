@@ -46,6 +46,11 @@ class User extends \TCG\Voyager\Models\User implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
-    }   
+    }
+
+    public function hasManyTeams()
+    {
+        return $this->hasMany('App\Models\DB\Team', 'creater_id', 'id');
+    }
 
 }

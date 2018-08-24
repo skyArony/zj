@@ -8,6 +8,7 @@ class CreateTeamMemberTable extends Migration
 {
     /**
      * Run the migrations.
+     * 只存队员
      *
      * @return void
      */

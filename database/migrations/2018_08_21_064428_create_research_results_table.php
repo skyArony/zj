@@ -20,7 +20,7 @@ class CreateResearchResultsTable extends Migration
             $table->string('title')->comment("成果标题");
             $table->string('desc')->comment("成果简介");
             $table->text('detail')->comment("成果详情");
-            $table->text('file')->coment("附件");
+            $table->text('file')->nullable()->coment("附件");
             $table->foreign('team_id')->references('id')->on('teams')->onDelete('cascade');
             $table->foreign('task_id')->references('id')->on('tasks')->onDelete('cascade');
             $table->timestamps();

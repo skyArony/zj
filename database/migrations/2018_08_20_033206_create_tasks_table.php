@@ -20,7 +20,7 @@ class CreateTasksTable extends Migration
             $table->string('title')->comment("课程标题");
             $table->string('desc')->comment("课程简介");
             $table->text('detail')->comment("课程详情");
-            $table->text('file')->coment("附件");
+            $table->text('file')->nullable()->coment("附件");
             $table->timestamp('team_end_at')->coment("组队截止时间");
             $table->timestamp('end_at')->coment("终止时间");
             $table->foreign('creater_id')->references('id')->on('users')->onDelete('cascade');

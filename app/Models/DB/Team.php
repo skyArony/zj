@@ -18,4 +18,14 @@ class Team extends Model
         $this->attributes['team_name'] = $value;
         $this->attributes['creater_id'] = Cookie::get('id');
     }
+
+    public function belongsToUser()
+    {
+        return $this->belongsTo('App\User', 'creater_id', 'id');
+    }
+
+    public function belongsToManyTasks()
+    {
+        return $this->belongsToMany('App\Models\DB\Task', 'team_task', 'team_id', 'task_id');
+    }
 }

@@ -17,4 +17,9 @@ class Task extends Model
     {
         $this->attributes['creater_id'] = Cookie::get('id');
     }
+
+    public function belongsToManyTeams()
+    {
+        return $this->belongsToMany('App\Models\DB\Team', 'team_task', 'task_id', 'team_id');
+    }
 }

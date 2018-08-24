@@ -61,4 +61,11 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'], function ($api) {
     $api->get('/customCourse/{id}', 'CustomCourseController@getCustomCourse');
     // 获取已经登录的用户信息[需要带 cookie 访问]
     $api->get('/me', 'LoginController@me');
+
+
+
+    // 根据用户 ID 返回其创建的所有队伍[需要带 cookie 访问]
+    $api->get('/userId/team', 'ResearchResultsController@getTeamsByUserId');
+    // 根据队伍 ID 返回其所参加的所有课题
+    $api->get('/{teamId}/task', 'ResearchResultsController@getTasksByTeamId');
 });

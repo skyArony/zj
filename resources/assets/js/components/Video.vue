@@ -1,10 +1,11 @@
 <template>
   <div class="video-outer">
-    <div class="video-nav">
+    <!-- <div class="video-nav">
       <img :src="userImg"
            class="userImg" />
       <a href="/admin/profile">{{userName}}</a>
-    </div>
+    </div> -->
+    <worlduc-topnav></worlduc-topnav>
     <div class="video-body">
       <div class="video-left panel">
         <div id="swf">
@@ -301,7 +302,7 @@ export default {
   text-decoration: none;
 }
 .video-body {
-  padding: 70px 10.7% 40px 10.7%;
+  padding: 25px 10.7% 40px 10.7%;
   box-sizing: border-box;
   display: flex;
   background-color: #f6f9fa;

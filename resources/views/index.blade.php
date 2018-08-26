@@ -12,11 +12,11 @@
       background-color: #f6f9fa;
     }
   </style>
-  <title>课程视频</title>
+  <title>教育信息化</title>
 </head>
 <body>
   <div id="app" style="width:100%;height:100%;">
-    <worlduc-video></worlduc-video>
+    <worlduc-index></worlduc-index>
   </div>
   <script src="{{ mix('js/app.js') }}"></script>
 </body>

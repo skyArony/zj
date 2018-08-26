@@ -49,3 +49,6 @@ Route::get('pdf/{id}', 'CustomCourseController@getPDF');
 
 // 404
 Route::view("404", "404");
+
+// 首页
+Route::view('index', 'index');

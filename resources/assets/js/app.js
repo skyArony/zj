@@ -31,6 +31,12 @@ Vue.component('worlduc-video', require('./components/Video.vue'));
 Vue.component('worlduc-profile', require('./components/Profile.vue'));
 Vue.component('worlduc-404', require('./components/404.vue'));
 Vue.component('worlduc-readme', require('./components/Readme.vue'));
+Vue.component('worlduc-topnav', require('./components/TopNav.vue'));
+Vue.component('worlduc-index', require('./components/Index.vue'));
+Vue.component('worlduc-coursepage', require('./components/Index-CoursePage.vue'));
+Vue.component('worlduc-taskpage', require('./components/Index-TaskPage.vue'));
+Vue.component('worlduc-teampage', require('./components/Index-TeamPage.vue'));
+Vue.component('worlduc-teampageitem', require('./components/TeamPageItem.vue'));
 
 // element ui
 import ElementUI from 'element-ui';

@@ -116,6 +116,92 @@ export default {
 }
 </script>
 
+<style lang="stylus" scoped>
+@media screen and (min-width: 1200px)
+  .card
+    width 25%
+
+@media screen and (max-width: 1200px) and (min-width: 992px)
+  .card
+    width 33.333%
+
+@media screen and (max-width: 992px) and (min-width: 768px)
+  .card
+    width 50%
+
+@media screen and (max-width: 768px)
+  .card
+    width 100%
+
+.card
+  padding 10px
+  box-sizing border-box
+
+  .el-card
+    .card-image
+      width 100%
+      height 163px
+      object-fit cover
+
+    .card-info
+      padding 14px
+
+      .card-info-title
+        width 100%
+        overflow hidden
+        text-overflow ellipsis
+        white-space nowrap
+
+      .card-info-desc2
+        width 100%
+        display -webkit-box
+        overflow hidden
+        text-overflow ellipsis
+        word-break break-all
+        -webkit-box-orient vertical
+        -webkit-line-clamp 10
+        font-size 14px
+        color #757575
+        margin-top 10px
+
+      .card-info-desc
+        width 100%
+        display -webkit-box
+        overflow hidden
+        text-overflow ellipsis
+        word-break break-all
+        -webkit-box-orient vertical
+        -webkit-line-clamp 2
+        font-size 14px
+        color #757575
+        margin-top 10px
+
+      .card-info-bottom
+        display flex
+        justify-content space-between
+        align-items center
+        margin-top 10px
+
+        .teacher
+          display flex
+          align-items center
+          flex-grow 1
+          overflow hidden
+
+          .teacher-img
+            width 30px
+            height 30px
+            border-radius 15px
+            object-fit cover
+
+          .teacher-name
+            font-size 13px
+            margin-left 5px
+            overflow hidden
+            text-overflow ellipsis
+            white-space nowrap
+</style>
+
 <style>
 .page-container {
   width: 100%;

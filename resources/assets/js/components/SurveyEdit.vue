@@ -221,7 +221,7 @@ export default {
       this.pageType = window.location.href.match(/.*\/(.*?)$/)[1];
       if (this.pageType == "create") {
         // 获取所有的课程
-        MyAxios.get("/api/course")
+        MyAxios.get("/api/userCourse")
           .catch(function(error) {
             console.log(error);
           })

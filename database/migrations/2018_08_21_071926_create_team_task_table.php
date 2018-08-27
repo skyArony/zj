@@ -18,6 +18,7 @@ class CreateTeamTaskTable extends Migration
             $table->unsignedinteger('task_id');
             $table->foreign('team_id')->references('id')->on('teams')->onDelete('cascade');
             $table->foreign('task_id')->references('id')->on('tasks')->onDelete('cascade');
+            $table->primary(['team_id', 'task_id']);
         });
     }
 

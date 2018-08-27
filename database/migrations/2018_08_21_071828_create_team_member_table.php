@@ -19,6 +19,7 @@ class CreateTeamMemberTable extends Migration
             $table->unsignedinteger('student_id');
             $table->foreign('team_id')->references('id')->on('teams')->onDelete('cascade');
             $table->foreign('student_id')->references('id')->on('users')->onDelete('cascade');
+            $table->primary(['team_id', 'student_id']);
         });
     }
 

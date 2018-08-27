@@ -9,8 +9,8 @@ use Illuminate\Support\Facades\Cookie;
 
 class CourseController extends ApiController
 {
-    //获取所有的课程
-    public function getAllCourse(Request $request) {
+    // 通过 cookie 中的 userid 获取用户所有的课程
+    public function getAllCourseByUserId(Request $request) {
         // TODO validate
 
         if (Cookie::get('id')) $userId = Crypt::decrypt(Cookie::get('id'));
@@ -34,5 +34,11 @@ class CourseController extends ApiController
         } else {
             return self::setResponse(null, 500, -4005);
         }
+    }
+
+    // 获取系统中所有的课程
+    public function getAllCourse(Request $request) {
+        $courses = Course::all();
+        return self::setResponse($courses, 200, 0);
     }
 }

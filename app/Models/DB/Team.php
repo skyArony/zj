@@ -28,4 +28,9 @@ class Team extends Model
     {
         return $this->belongsToMany('App\Models\DB\Task', 'team_task', 'team_id', 'task_id');
     }
+
+    public function belongsToManyUsers()
+    {
+        return $this->belongsToMany('App\User', 'team_member', 'team_id', 'student_id');
+    }
 }

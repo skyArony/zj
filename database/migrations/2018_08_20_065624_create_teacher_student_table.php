@@ -9,6 +9,7 @@ class CreateTeacherStudentTable extends Migration
     /**
      * Run the migrations.
      * 教师\学生联系表
+     * 暂时没用上
      *
      * @return void
      */
@@ -19,6 +20,7 @@ class CreateTeacherStudentTable extends Migration
             $table->unsignedinteger('student_id');
             $table->foreign('teacher_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('student_id')->references('id')->on('users')->onDelete('cascade');
+            $table->primary(['teacher_id', 'student_id']);
         });
     }
 

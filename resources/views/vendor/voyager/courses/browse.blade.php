@@ -7,7 +7,7 @@
         <h1 class="page-title">
             <i class="{{ $dataType->icon }}"></i> {{ $dataType->display_name_plural }}
         </h1>
-        <button class="btn btn-warning" id="courseSync" url="@php echo '/api/course' @endphp"><i class="voyager-refresh"></i> <span>同步课程</span></button>
+        <button class="btn btn-warning" id="courseSync" url="@php echo '/api/userCourse' @endphp"><i class="voyager-refresh"></i> <span>同步课程</span></button>
     </div>
 @stop
 

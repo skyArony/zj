@@ -23,10 +23,12 @@ class TeamController extends ApiController
 
         if ($team = Team::find($teamId)) {
             $leaderId = $team->creater_id;
+            $leaderInfo = User::find($leaderId, ['id', 'name', 'phone', 'QQ', 'avatar']);
+            $leaderInfo->isLeader = true;
             $members = $team->belongsToManyUsers();
             $membersId = $members->pluck('id')->toArray();
-            array_unshift($membersId, $leaderId);
             $membersInfo = User::find($membersId, ['id', 'name', 'phone', 'QQ', 'avatar']);
+            $membersInfo->prepend($leaderInfo);
             return self::setResponse($membersInfo, 200, 0);
         } else {
             return self::setResponse(null, 500, -4005);

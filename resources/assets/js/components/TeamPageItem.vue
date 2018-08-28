@@ -3,13 +3,13 @@
     <el-card shadow="hover"
              :body-style="{ padding: '0px' }">
       <div class="card-top">
-        <img src="/storage/img/nologin.jpg"
+        <img :src="'/storage/' + data.avatar"
              class="card-image" />
         <div class="card-info">
-          <div class="card-info-title">猫猫队</div>
-          <div class="card-info-desc">猫猫超级可爱猫猫超级可爱猫猫超级可爱猫猫超级可爱猫猫超级可爱猫猫超级可爱</div>
+          <div class="card-info-title">{{data.team_name}}</div>
+          <div class="card-info-desc">{{data.team_desc}}</div>
           <div class="card-info-bottom"
-               @click="cardBottomVisible">
+               @click="cardBottomVisible(data.id)">
             <i v-if="cardBottom"
                class="el-icon-arrow-up"></i>
             <i v-else
@@ -21,59 +21,36 @@
         <div v-show="cardBottom"
              class="card-bottom">
           <div class="card-bootom-content">
-            <div class="member">
-              <el-popover ref="leader"
-                          placement="top"
+            <div class="member"
+                 v-for="(item, index) in members"
+                 :key="index">
+              <el-popover placement="top"
                           width="200"
                           trigger="click">
                 <div class="leader-info">
                   <div class="info-item">
                     <img width="19px"
                          height="19px"
-                         src="/storage/img/user.png">杨帆&nbsp;
-                    <el-tag size="mini"
+                         src="/storage/img/user.png">{{item.name}}&nbsp;
+                    <el-tag v-if="item.isLeader"
+                            size="mini"
                             type="info">队长</el-tag>
                   </div>
                   <div class="info-item">
                     <img width="19px"
                          height="19px"
-                         src="/storage/img/phone.png">18890336732</div>
+                         src="/storage/img/phone.png">{{item.phone}}</div>
                   <div class="info-item">
                     <img width="19px"
                          height="19px"
-                         src="/storage/img/QQ.png">1450872874</div>
+                         src="/storage/img/QQ.png">{{item.QQ}}</div>
                 </div>
+                <img slot="reference"
+                     class="member-img"
+                     :class="{'member-leader' : item.isLeader}"
+                     :src="item.avatar" />
               </el-popover>
-              <img v-popover="ll"
-                   class="member-img member-leader"
-                   src="/storage/img/nologin.jpg" />
-            </div>
-            <div class="member">
-              <el-popover ref="leader"
-                          placement="top"
-                          width="200"
-                          trigger="click">
-                <div class="leader-info">
-                  <div class="info-item">
-                    <img width="19px"
-                         height="19px"
-                         src="/storage/img/user.png">杨帆&nbsp;
-                    <el-tag size="mini"
-                            type="info">队长</el-tag>
-                  </div>
-                  <div class="info-item">
-                    <img width="19px"
-                         height="19px"
-                         src="/storage/img/phone.png">18890336732</div>
-                  <div class="info-item">
-                    <img width="19px"
-                         height="19px"
-                         src="/storage/img/QQ.png">1450872874</div>
-                </div>
-              </el-popover>
-              <img v-popover="ll"
-                   class="member-img"
-                   src="/storage/img/nologin.jpg" />
+
             </div>
           </div>
         </div>
@@ -84,15 +61,40 @@
 
 <script>
 export default {
+  props: {
+    data: Object
+  },
   data() {
     return {
+      MyAxios: axios.create({
+        headers: { "Content-Type": "application/json" }
+      }),
+      members: [
+        {
+          avatar:
+            "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACIAAAAiCAYAAAA6RwvCAAABDWlDQ1BJQ0MgUHJvZmlsZQAAKJFjYGCSSCwoyGESYGDIzSspCnJ3UoiIjFJgf8TAwSDDIMjAyWCSmFxc4BgQ4MMABDAaFXy7xsAIoi/rgszClMcLuFJSi5OB9B8gTkkuKCphYGBMALKVy0sKQOwWIFskKRvMngFiFwEdCGSvAbHTIewDYDUQ9hWwmpAgZyD7BZDNlwRh/wCx08FsJg4QG2ov2A2OQHenKgB9T6LjCYGS1IoSEO2cX1BZlJmeUaIAsckzL1lPR8HIwNCCgQEU3hDVnwPB4cgodgYhhgAIscq9wJgIYmBg2YkQCwP6b40+A4MsM0JMTYmBQaiegWFjQXJpURnUGEbGswwMhPgAgfZLpC0QFk8AAAAJcEhZcwAAFiUAABYlAUlSJPAAAABOSURBVFgJ7dKxEQAQFAVB9N8zRrgVCE72sj/r5r5vfPDWBze8EzrEn0gkEQXcNZKIAu4aSUQBd40kooC7RhJRwF0jiSjgrpFEFHDXiCIH9m4EQPWRytQAAAAASUVORK5CYII=",
+          isLeader: true
+        }
+      ],
       cardBottom: false,
       ll: "leader"
     }
   },
   methods: {
-    cardBottomVisible() {
+    cardBottomVisible(teamId) {
+      let that = this
+      // 显示
       this.cardBottom = !this.cardBottom
+      // 数据获取
+      if (this.members.length == 1 && !this.members.id) {
+        this.MyAxios.get("/api/team/member/" + teamId)
+          .catch(function(error) {
+            alert("数据获取发生了错误,请联系管理员 QQ:1450872874")
+          })
+          .then(function(response) {
+            that.members = response.data.data
+          })
+      }
     }
   }
 }
@@ -115,6 +117,7 @@ export default {
 
       .card-info
         padding 14px 14px 5px 14px
+        flex-grow 1
 
         .card-info-title
           width 100%

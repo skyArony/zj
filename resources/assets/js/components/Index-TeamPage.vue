@@ -7,8 +7,10 @@
       </el-input>
     </div>
     <div class="index-body-container">
-      <div class="team-card">
-        <worlduc-teampageitem></worlduc-teampageitem>
+      <div class="team-card"
+           v-for="(item, index) in data"
+           :key="index">
+        <worlduc-teampageitem :data="item"></worlduc-teampageitem>
       </div>
     </div>
   </div>
@@ -16,11 +18,45 @@
 
 <script>
 export default {
+  props: {
+    data: Array
+  },
   data() {
     return {
-    };
+      test: "",
+      options: [
+        {
+          label: "江苏",
+          cities: []
+        },
+        {
+          label: "浙江",
+          cities: []
+        }
+      ],
+      pps: {
+        value: "label",
+        children: "cities"
+      },
+      resData: [
+        {
+          label: "网络",
+          cities: []
+        },
+        {
+          label: "获取",
+          cities: []
+        },
+        {
+          label: "的菜单",
+          cities: []
+        }
+      ],
+      indexStack: []
+    }
   },
   methods: {
+    
   }
 }
 </script>
@@ -41,7 +77,6 @@ export default {
 @media screen and (max-width: 768px)
   .team-card
     width 100%
-
 </style>
 
 <style>

@@ -38,7 +38,15 @@ class CourseController extends ApiController
 
     // 获取系统中所有的课程
     public function getAllCourse(Request $request) {
-        $courses = Course::all();
+        $courses = Course::with('belongsToUser')->get(['id', 'teacher_id', 'name', 'intro', 'pic']);
+        $courses = $courses->map(function($item, $key) {
+            $teacher = $item->belongsToUser;
+            $item['teacher'] = ['name' => $teacher->name, 'avatar' => $teacher->avatar];
+            return $item;
+        })->toArray();
+        foreach ($courses as $key => $value) {
+            array_forget($courses[$key], 'belongs_to_user');
+        } 
         return self::setResponse($courses, 200, 0);
     }
 }

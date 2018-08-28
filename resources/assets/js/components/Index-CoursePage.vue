@@ -7,95 +7,22 @@
       </el-input>
     </div>
     <div class="index-body-container">
-      <div class="card">
-        <el-card shadow="hover"
-                 :body-style="{ padding: '0px' }">
-          <img src="/storage/img/nologin.jpg"
-               class="card-image" />
-          <div class="card-info">
-            <div class="card-info-title">好吃的汉堡-好吃的汉堡-好吃的汉堡</div>
-            <div class="card-info-desc">好吃汉堡的介绍好吃汉堡的介绍好吃汉堡的介绍好吃汉堡的介绍好吃汉堡的介绍</div>
-            <div class="card-info-bottom">
-              <div class="teacher">
-                <img class="teacher-img"
-                     src="/storage/img/nologin.jpg" />
-                <div class="teacher-name">湘潭大学-邹娟湘潭大学-邹娟湘潭大学-邹娟湘潭大学-邹娟</div>
-              </div>
-            </div>
-          </div>
-        </el-card>
-      </div>
 
-      <div class="card">
+      <div class="card"
+           v-for="(item, index) in data"
+           :key="index">
         <el-card shadow="hover"
                  :body-style="{ padding: '0px' }">
-          <img src="/storage/img/bg2018.png"
+          <img :src="item.pic"
                class="card-image" />
           <div class="card-info">
-            <div class="card-info-title">好吃的汉堡-好吃的汉堡-好吃的汉堡</div>
-            <div class="card-info-desc">好吃汉堡的介绍好吃汉堡的介绍好吃汉堡的介绍好吃汉堡的介绍好吃汉堡的介绍</div>
+            <div class="card-info-title">{{item.name}}</div>
+            <div class="card-info-desc">{{item.intro}}</div>
             <div class="card-info-bottom">
               <div class="teacher">
                 <img class="teacher-img"
-                     src="/storage/img/nologin.jpg" />
-                <div class="teacher-name">湘潭大学-邹娟湘潭大学-邹娟湘潭大学-邹娟湘潭大学-邹娟</div>
-              </div>
-            </div>
-          </div>
-        </el-card>
-      </div>
-
-      <div class="card">
-        <el-card shadow="hover"
-                 :body-style="{ padding: '0px' }">
-          <img src="/storage/img/nologin.jpg"
-               class="card-image" />
-          <div class="card-info">
-            <div class="card-info-title">好吃的汉堡-好吃的汉堡-好吃的汉堡</div>
-            <div class="card-info-desc">好吃汉堡的介绍好吃汉堡的介绍好吃汉堡的介绍好吃汉堡的介绍好吃汉堡的介绍</div>
-            <div class="card-info-bottom">
-              <div class="teacher">
-                <img class="teacher-img"
-                     src="/storage/img/nologin.jpg" />
-                <div class="teacher-name">湘潭大学-邹娟湘潭大学-邹娟湘潭大学-邹娟湘潭大学-邹娟</div>
-              </div>
-            </div>
-          </div>
-        </el-card>
-      </div>
-
-      <div class="card">
-        <el-card shadow="hover"
-                 :body-style="{ padding: '0px' }">
-          <img src="http://worlduc.com/UploadFiles/OnlineCourse/upload/9f159cad-b94a-4aab-9a60-784acf9d7195.png"
-               class="card-image" />
-          <div class="card-info">
-            <div class="card-info-title">好吃的汉堡-好吃的汉堡-好吃的汉堡</div>
-            <div class="card-info-desc">好吃汉堡的介绍好吃汉堡的介绍好吃汉堡的介绍好吃汉堡的介绍好吃汉堡的介绍</div>
-            <div class="card-info-bottom">
-              <div class="teacher">
-                <img class="teacher-img"
-                     src="/storage/img/nologin.jpg" />
-                <div class="teacher-name">湘潭大学-邹娟湘潭大学-邹娟湘潭大学-邹娟湘潭大学-邹娟</div>
-              </div>
-            </div>
-          </div>
-        </el-card>
-      </div>
-
-      <div class="card">
-        <el-card shadow="hover"
-                 :body-style="{ padding: '0px' }">
-          <img src="/storage/img/nologin.jpg"
-               class="card-image" />
-          <div class="card-info">
-            <div class="card-info-title">好吃的汉堡-好吃的汉堡-好吃的汉堡</div>
-            <div class="card-info-desc">好吃汉堡的介绍好吃汉堡的介绍好吃汉堡的介绍好吃汉堡的介绍好吃汉堡的介绍</div>
-            <div class="card-info-bottom">
-              <div class="teacher">
-                <img class="teacher-img"
-                     src="/storage/img/nologin.jpg" />
-                <div class="teacher-name">湘潭大学-邹娟湘潭大学-邹娟湘潭大学-邹娟湘潭大学-邹娟</div>
+                     :src="item.teacher.avatar" />
+                <div class="teacher-name">{{item.teacher.name}}</div>
               </div>
             </div>
           </div>
@@ -108,10 +35,13 @@
 
 <script>
 export default {
+  props: {
+    data: Array
+  },
   data() {
     return {
       currentDate: new Date()
-    };
+    }
   }
 }
 </script>

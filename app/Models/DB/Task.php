@@ -22,4 +22,9 @@ class Task extends Model
     {
         return $this->belongsToMany('App\Models\DB\Team', 'team_task', 'task_id', 'team_id');
     }
+
+    public function belongsToUser()
+    {
+        return $this->belongsTo('App\User', 'creater_id', 'id');
+    }
 }

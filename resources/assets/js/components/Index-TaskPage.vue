@@ -7,122 +7,41 @@
       </el-input>
     </div>
     <div class="index-body-container">
-      <div class="card">
+      <div class="card"
+           v-for="(item, index) in data"
+           :key="index">
         <el-card shadow="hover"
                  :body-style="{ padding: '0px' }">
           <div class="card-info">
-            <div class="card-info-title">好吃的汉堡-好吃的汉堡-好吃的汉堡</div>
-            <div class="card-info-desc">好吃汉堡的介绍</div>
+            <div class="card-info-title">{{item.title}}</div>
+            <div class="card-info-desc">{{item.desc}}</div>
             <div class="card-info-bottom">
               <div class="teacher">
                 <img class="teacher-img"
-                     src="/storage/img/nologin.jpg" />
-                <div class="teacher-name">湘潭大学-邹娟湘潭大学-邹娟湘潭大学-邹娟湘潭大学-邹娟</div>
+                     :src="item.creater.avatar" />
+                <div class="teacher-name">{{item.creater.name}}</div>
               </div>
-              <div class="time">2018/08/24</div>
+              <div class="time">{{item.created_at.substr(0, 10)}}</div>
             </div>
           </div>
         </el-card>
       </div>
-      <div class="card">
-        <el-card shadow="hover"
-                 :body-style="{ padding: '0px' }">
-          <div class="card-info">
-            <div class="card-info-title">好吃的汉堡-好吃的汉堡-好吃的汉堡</div>
-            <div class="card-info-desc">好吃汉堡的介绍好吃汉堡的介绍好吃汉堡的介绍好吃汉堡的介绍好吃汉堡的介绍</div>
-            <div class="card-info-bottom">
-              <div class="teacher">
-                <img class="teacher-img"
-                     src="/storage/img/nologin.jpg" />
-                <div class="teacher-name">湘潭大学-邹娟湘潭大学-邹娟湘潭大学-邹娟湘潭大学-邹娟</div>
-              </div>
-              <div class="time">2018/08/24</div>
-            </div>
-          </div>
-        </el-card>
-      </div>
-      <div class="card">
-        <el-card shadow="hover"
-                 :body-style="{ padding: '0px' }">
-          <div class="card-info">
-            <div class="card-info-title">好吃的汉堡-好吃的汉堡-好吃的汉堡</div>
-            <div class="card-info-desc">好吃汉堡的介绍好吃汉堡的介绍好吃汉堡的介绍好吃汉堡的介绍好吃汉堡的介绍</div>
-            <div class="card-info-bottom">
-              <div class="teacher">
-                <img class="teacher-img"
-                     src="/storage/img/nologin.jpg" />
-                <div class="teacher-name">湘潭大学-邹娟湘潭大学-邹娟湘潭大学-邹娟湘潭大学-邹娟</div>
-              </div>
-              <div class="time">2018/08/24</div>
-            </div>
-          </div>
-        </el-card>
-      </div>
-      <div class="card">
-        <el-card shadow="hover"
-                 :body-style="{ padding: '0px' }">
-          <div class="card-info">
-            <div class="card-info-title">好吃的汉堡-好吃的汉堡-好吃的汉堡</div>
-            <div class="card-info-desc">好吃汉堡的介绍好吃汉堡的介绍好吃汉堡的介绍好吃汉堡的介绍好吃汉堡的介绍</div>
-            <div class="card-info-bottom">
-              <div class="teacher">
-                <img class="teacher-img"
-                     src="/storage/img/nologin.jpg" />
-                <div class="teacher-name">湘潭大学-邹娟湘潭大学-邹娟湘潭大学-邹娟湘潭大学-邹娟</div>
-              </div>
-              <div class="time">2018/08/24</div>
-            </div>
-          </div>
-        </el-card>
-      </div>
-      <div class="card">
-        <el-card shadow="hover"
-                 :body-style="{ padding: '0px' }">
-          <div class="card-info">
-            <div class="card-info-title">好吃的汉堡-好吃的汉堡-好吃的汉堡</div>
-            <div class="card-info-desc">好吃汉堡的介绍好吃汉堡的介绍好吃汉堡的介绍好吃汉堡的介绍好吃汉堡的介绍</div>
-            <div class="card-info-bottom">
-              <div class="teacher">
-                <img class="teacher-img"
-                     src="/storage/img/nologin.jpg" />
-                <div class="teacher-name">湘潭大学-邹娟湘潭大学-邹娟湘潭大学-邹娟湘潭大学-邹娟</div>
-              </div>
-              <div class="time">2018/08/24</div>
-            </div>
-          </div>
-        </el-card>
-      </div>
-      <div class="card">
-        <el-card shadow="hover"
-                 :body-style="{ padding: '0px' }">
-          <div class="card-info">
-            <div class="card-info-title">好吃的汉堡-好吃的汉堡-好吃的汉堡</div>
-            <div class="card-info-desc">好吃汉堡的介绍好吃汉堡的介绍好吃汉堡的介绍好吃汉堡的介绍好吃汉堡的介绍</div>
-            <div class="card-info-bottom">
-              <div class="teacher">
-                <img class="teacher-img"
-                     src="/storage/img/nologin.jpg" />
-                <div class="teacher-name">湘潭大学-邹娟湘潭大学-邹娟湘潭大学-邹娟湘潭大学-邹娟</div>
-              </div>
-              <div class="time">2018/08/24</div>
-            </div>
-          </div>
-        </el-card>
-      </div>
-
     </div>
   </div>
 </template>
 
 <script>
 export default {
+  props: {
+    data: Array
+  },
   data() {
     return {
-      currentDate: new Date()
-    };
+    }
   },
   methods: {
-
+  },
+  mounted: function() {
   }
 }
 </script>

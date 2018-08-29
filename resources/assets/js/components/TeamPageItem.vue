@@ -77,7 +77,6 @@ export default {
         }
       ],
       cardBottom: false,
-      ll: "leader"
     }
   },
   methods: {
@@ -86,7 +85,7 @@ export default {
       // 显示
       this.cardBottom = !this.cardBottom
       // 数据获取
-      if (this.members.length == 1 && !this.members.id) {
+      if (this.members.length == 1 && !this.members[0].id) {
         this.MyAxios.get("/api/team/member/" + teamId)
           .catch(function(error) {
             alert("数据获取发生了错误,请联系管理员 QQ:1450872874")

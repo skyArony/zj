@@ -27,7 +27,7 @@ Vue.component('worlduc-questionDetail', require('./components/QuestionDetail.vue
 Vue.component('worlduc-survey', require('./components/Survey.vue'));
 Vue.component('worlduc-question', require('./components/Question.vue'));
 Vue.component('worlduc-customcourse', require('./components/CustomCourse.vue'));
-Vue.component('worlduc-video', require('./components/Video.vue'));
+Vue.component('worlduc-video', require('./components/Index-Video.vue'));
 Vue.component('worlduc-profile', require('./components/Profile.vue'));
 Vue.component('worlduc-404', require('./components/404.vue'));
 Vue.component('worlduc-readme', require('./components/Readme.vue'));
@@ -45,10 +45,20 @@ import 'element-ui/lib/theme-chalk/index.css';
 // vuex
 import store from './store';
 
+// vue-router
+import VueRouter from 'vue-router'
+import routes from './routes';    // 路由配置文件
+// 实例化路由
+const router = new VueRouter({
+    routes
+});
+
+Vue.use(VueRouter)
 Vue.use(ElementUI);
 
 const app = new Vue({
     el: '#app',
     store,
+    router
     // render: h => h(App)s
 });

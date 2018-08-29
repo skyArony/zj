@@ -1,14 +1,13 @@
 <template>
   <div class="nav-container">
-    <el-menu :default-active="activeIndex"
+    <el-menu :default-active="page"
              class="index-topnav"
              mode="horizontal"
              @select="handleSelect">
-      <el-menu-item index="1">科研课题</el-menu-item>
-      <el-menu-item index="2">研究团队</el-menu-item>
-      <el-menu-item index="3">课程中心</el-menu-item>
-      <el-menu-item index="4"
-                    id="userInfo">
+      <el-menu-item index="task">科研课题</el-menu-item>
+      <el-menu-item index="team">研究团队</el-menu-item>
+      <el-menu-item index="course">课程中心</el-menu-item>
+      <el-menu-item index="me" id="userInfo">
         <img :src="userImg"
              class="userImg" />
         <a href="/admin/profile">{{userName}}</a>
@@ -19,17 +18,48 @@
 
 <script>
 export default {
+  props: {
+    page: String
+  },
   data() {
     return {
+      MyAxios: axios.create({
+        headers: { "Content-Type": "application/json" }
+      }),
       userImg: "/storage/img/nologin.jpg",
       userName: "游客",
-      activeIndex: '1',
-    };
+    }
   },
   methods: {
+    // 处理 tab 切换
     handleSelect(key, keyPath) {
-      this.$emit('handleSelect', key, keyPath)
+      if (key == 'me') return  // TODO 使用说明
+      else this.$router.push("/index/" + key)
+    },
+    // init
+    init() {
+      // 个人信息
+      let that = this
+      this.MyAxios.get("/api/me")
+        .catch(function(error) {
+          if (error.response.data.errcode == -4007) {
+            that.userName = "游客"
+            that.userImg = "/storage/img/nologin.jpg"
+          }
+          console.log(error)
+        })
+        .then(function(response) {
+          if (response.data.errcode === 0) {
+            that.userName = response.data.data.name
+            that.userImg = response.data.data.avatar
+          } else {
+            console.log(response.data.errmsg)
+          }
+        })
     }
+  },
+  mounted: function() {
+    this.init()
   }
 }
 </script>
@@ -43,7 +73,7 @@ export default {
   @media screen and (min-width: 1161px)
     .index-topnav
       width 80%
-  
+
   .index-topnav
     margin 0 auto
     padding 0
@@ -52,7 +82,7 @@ export default {
 
     @media screen and (max-width: 405px)
       .el-menu-item
-        padding: 0 10px;
+        padding 0 10px
 
     #userInfo
       position absolute

@@ -1,11 +1,5 @@
 <template>
   <div class="video-outer">
-    <!-- <div class="video-nav">
-      <img :src="userImg"
-           class="userImg" />
-      <a href="/admin/profile">{{userName}}</a>
-    </div> -->
-    <worlduc-topnav></worlduc-topnav>
     <div class="video-body">
       <div class="video-left panel">
         <div id="swf">
@@ -59,7 +53,7 @@
 </template>
 
 <script>
-import Clipboard from "clipboard/dist/clipboard";
+import Clipboard from "clipboard/dist/clipboard"
 
 export default {
   data() {
@@ -78,61 +72,61 @@ export default {
       userName: "", // 用户名
       userImg: "", // 用户头像
       shareText: "填写问卷『』,定制化『』课程大纲."
-    };
+    }
   },
   methods: {
     copyText() {
-      var clipboard = new Clipboard("#copyShareText");
+      var clipboard = new Clipboard("#copyShareText")
       this.$notify({
         title: "成功",
         message: "成功复制分享链接到剪切板!",
         type: "success",
         position: "top-left"
-      });
+      })
     },
     handleNodeClick(data) {
       if (!data.children) {
-        this.selectedTitle = data.label;
-        this.selectedTags = data.tags;
-        this.selectedTarget = data.claims;
-        this.selectedSummary = data.summary;
+        this.selectedTitle = data.label
+        this.selectedTags = data.tags
+        this.selectedTarget = data.claims
+        this.selectedSummary = data.summary
         this.videoUrl =
-          "video=http://119.90.41.31/video/mooc_" + data.id + ".flv";
+          "video=http://119.90.41.31/video/mooc_" + data.id + ".flv"
         this.$nextTick(_ => {
-          let temp = document.getElementById("swf").innerHTML;
-          document.getElementById("swf").innerHTML = temp;
-        });
+          let temp = document.getElementById("swf").innerHTML
+          document.getElementById("swf").innerHTML = temp
+        })
       }
     },
     pageInit() {
       // 获取 id
-      let courseMatch = window.location.href.match(/^.*\/course\/(\d+)$/);
+      let courseMatch = window.location.href.match(/^.*\/course\/(\d+)$/)
       let customCourseMatch = window.location.href.match(
         /^.*\/customCourse\/(\d+)$/
-      );
-      if (courseMatch) this.courseId = courseMatch[1];
-      if (customCourseMatch) this.customCourseId = customCourseMatch[1];
+      )
+      if (courseMatch) this.courseId = courseMatch[1]
+      if (customCourseMatch) this.customCourseId = customCourseMatch[1]
       // 1. 请求课程树数据
-      var that = this;
-      let MyAxios = axios.create();
+      var that = this
+      let MyAxios = axios.create()
       if (this.courseId !== "") {
         MyAxios.get("/api/courseTree" + "/" + this.courseId)
           .catch(function(error) {
-            console.log(error);
-            location.href = "/404";
+            console.log(error)
+            location.href = "/404"
           })
           .then(function(response) {
             if (response.data.errcode === 0) {
-              that.courseTreeData = that.courseTreeDataDeal(response.data.data);
+              that.courseTreeData = that.courseTreeDataDeal(response.data.data)
             } else {
-              console.log(response.data.errmsg);
+              console.log(response.data.errmsg)
             }
-          });
+          })
         // 2. 课程信息
         MyAxios.get("/api/course" + "/" + this.courseId)
           .catch(function(error) {
-            console.log(error);
-            location.href = "/404";
+            console.log(error)
+            location.href = "/404"
           })
           .then(function(response) {
             if (response.data.errcode === 0) {
@@ -140,58 +134,58 @@ export default {
                 "快来查看我的「" +
                 response.data.data.name +
                 "」定制化课程吧.\n" +
-                window.location.href;
-              that.courseTitle = response.data.data.name;
-              that.courseImg = response.data.data.pic;
-              that.courseTeacher = response.data.data.teacher;
+                window.location.href
+              that.courseTitle = response.data.data.name
+              that.courseImg = response.data.data.pic
+              that.courseTeacher = response.data.data.teacher
             } else {
-              console.log(response.data.errmsg);
+              console.log(response.data.errmsg)
             }
-          });
+          })
       } else if (this.customCourseId !== "") {
         MyAxios.get("/api/customCourse" + "/" + this.customCourseId)
           .catch(function(error) {
-            console.log(error);
-            location.href = "/404";
+            console.log(error)
+            location.href = "/404"
           })
           .then(function(response) {
-            console.log(response);
+            console.log(response)
             if (response.data.errcode === 0) {
               that.courseTreeData = that.customCourseTreeDataDeal(
                 response.data.data.courseTreeTags
-              );
-              that.courseTitle = response.data.data.courseName;
-              that.courseImg = response.data.data.courseImg;
-              that.courseTeacher = response.data.data.courseTeacher;
+              )
+              that.courseTitle = response.data.data.courseName
+              that.courseImg = response.data.data.courseImg
+              that.courseTeacher = response.data.data.courseTeacher
             } else {
-              console.log(response.data.errmsg);
+              console.log(response.data.errmsg)
             }
-          });
+          })
       }
 
       // 3. 个人信息
       MyAxios.get("/api/me")
         .catch(function(error) {
           if (error.response.data.errcode == -4007) {
-            that.userName = "游客";
-            that.userImg = "/storage/img/nologin.jpg";
+            that.userName = "游客"
+            that.userImg = "/storage/img/nologin.jpg"
           }
-          console.log(error);
+          console.log(error)
         })
         .then(function(response) {
           if (response.data.errcode === 0) {
-            that.userName = response.data.data.name;
-            that.userImg = response.data.data.avatar;
+            that.userName = response.data.data.name
+            that.userImg = response.data.data.avatar
           } else {
-            console.log(response.data.errmsg);
+            console.log(response.data.errmsg)
           }
-        });
+        })
     },
     customCourseTreeDataDeal(sourceData) {
-      let res = [];
+      let res = []
       for (let key in sourceData) {
         if (sourceData[key].status) {
-          let children = [];
+          let children = []
           for (let key2 in sourceData[key]) {
             if (key2 != "chapter_name" && key2 != "status") {
               if (sourceData[key][key2].status) {
@@ -201,8 +195,8 @@ export default {
                   tags: sourceData[key][key2].tags,
                   claims: sourceData[key][key2].claims,
                   summary: sourceData[key][key2].period_summary
-                };
-                children.push(obj2);
+                }
+                children.push(obj2)
               }
             }
           }
@@ -210,15 +204,15 @@ export default {
             id: key,
             label: sourceData[key].chapter_name,
             children: children
-          });
+          })
         }
       }
-      return res;
+      return res
     },
     courseTreeDataDeal(sourceData) {
-      let res = [];
+      let res = []
       for (let key in sourceData) {
-        let children = [];
+        let children = []
         for (let key2 in sourceData[key]) {
           if (key2 != "chapter_name" && key2 != "status") {
             let obj2 = {
@@ -227,23 +221,26 @@ export default {
               tags: sourceData[key][key2].tags,
               claims: sourceData[key][key2].claims,
               summary: sourceData[key][key2].period_summary
-            };
-            children.push(obj2);
+            }
+            children.push(obj2)
           }
         }
         res.push({
           id: key,
           label: sourceData[key].chapter_name,
           children: children
-        });
+        })
       }
-      return res;
+      return res
     }
   },
   mounted: function() {
-    this.pageInit();
+    this.pageInit()
+  },
+  activated: function() {
+    this.$emit("changePage", "course")
   }
-};
+}
 </script>
 
 <style scoped>

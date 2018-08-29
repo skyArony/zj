@@ -11,9 +11,9 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
 
 Route::group(['prefix' => 'admin'], function () {
@@ -51,4 +51,4 @@ Route::get('pdf/{id}', 'CustomCourseController@getPDF');
 Route::view("404", "404");
 
 // 首页
-Route::view('index', 'index');
+Route::view('/', 'index');

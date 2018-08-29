@@ -1,13 +1,16 @@
 <template>
   <div>
-    <worlduc-topnav @handleSelect='changePage'></worlduc-topnav>
+    <worlduc-topnav :page="page"></worlduc-topnav>
+    <!-- <div class="index-search-container">
+      <el-input class="index-search"
+                placeholder="搜索"
+                prefix-icon="el-icon-search">
+      </el-input>
+    </div> -->
     <div id="page-body">
-      <worlduc-taskpage v-if="pageIndex == 1"
-                        :data="taskData"></worlduc-taskpage>
-      <worlduc-teampage v-else-if="pageIndex == 2"
-                        :data="teamData"></worlduc-teampage>
-      <worlduc-coursepage v-else-if="pageIndex == 3"
-                          :data="courseData"></worlduc-coursepage>
+      <keep-alive>
+        <router-view @changePage="changePage"></router-view>
+      </keep-alive>
     </div>
   </div>
 </template>
@@ -16,48 +19,15 @@
 export default {
   data() {
     return {
-      MyAxios: axios.create({
-        headers: { "Content-Type": "application/json" }
-      }),
-      pageIndex: "1",
-      taskData: null,
-      teamData: null,
-      courseData: null
+      page: ""
     }
   },
   methods: {
-    changePage(key, keyPath) {
-      let that = this
-      this.pageIndex = key[0]
-      if (this.pageIndex == '1' && this.taskData == null) {
-        this.MyAxios.get("/api/task/")
-          .catch(function(error) {
-            alert("数据获取发生了错误,请联系管理员 QQ:1450872874")
-          })
-          .then(function(response) {
-            that.taskData = response.data.data
-          })
-      } else if (this.pageIndex == '2' && this.teamData == null) {
-        this.MyAxios.get("/api/team/")
-          .catch(function(error) {
-            alert("数据获取发生了错误,请联系管理员 QQ:1450872874")
-          })
-          .then(function(response) {
-            that.teamData = response.data.data
-          })
-      } else if (this.pageIndex == '3' && this.courseData == null) {
-        this.MyAxios.get("/api/course/")
-          .catch(function(error) {
-            alert("数据获取发生了错误,请联系管理员 QQ:1450872874")
-          })
-          .then(function(response) {
-            that.courseData = response.data.data
-          })
-      }
+    changePage(page) {
+      this.page = page
     }
   },
   mounted: function() {
-    this.changePage(['1'], null)
   }
 }
 </script>
@@ -65,4 +35,37 @@ export default {
 <style lang="stylus" scoped>
 #page-body
   width 100%
+</style>
+
+<style>
+.page-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.index-search-container {
+  width: 100%;
+  display: flex;
+}
+.index-search {
+  width: 60%;
+  margin: 30px auto;
+  margin-bottom: 15px;
+  text-align: center;
+  justify-content: center;
+}
+.index-search input {
+  border-radius: 20px;
+}
+
+.index-body-container {
+  margin: 20px auto;
+  width: 80%;
+  display: flex;
+  flex-wrap: wrap;
+}
+.el-card__body {
+  display: flex;
+  flex-direction: column;
+}
 </style>

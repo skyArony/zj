@@ -16,7 +16,7 @@
         </h1>
         <button class="btn btn-warning" id="courseTreeAllSync"  url=@php echo '/api/courseTree/'.$courseId @endphp><i class="voyager-refresh"></i> <span>覆盖同步</span></button>
         <button class="btn btn-primary" id="courseTreeAddSync" url=@php echo '/api/courseTree/'.$courseId."?isAdd=true" @endphp><i class="voyager-refresh"></i> <span>增量同步</span></button>
-        <a href="@php echo '/video/course/'.$courseId @endphp" class="btn btn-success">
+        <a href="@php echo '/#/index/video/course/'.$courseId @endphp" class="btn btn-success">
             <i class="voyager-eye"></i> <span>查看课程视频</span>
         </a>
     </div>

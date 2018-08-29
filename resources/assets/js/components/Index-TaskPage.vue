@@ -1,14 +1,8 @@
 <template>
   <div class="page-container">
-    <div class="index-search-container">
-      <el-input class="index-search"
-                placeholder="搜索"
-                prefix-icon="el-icon-search">
-      </el-input>
-    </div>
     <div class="index-body-container">
       <div class="card"
-           v-for="(item, index) in data"
+           v-for="(item, index) in taskData"
            :key="index">
         <el-card shadow="hover"
                  :body-style="{ padding: '0px' }">
@@ -32,16 +26,31 @@
 
 <script>
 export default {
-  props: {
-    data: Array
-  },
   data() {
     return {
+      MyAxios: axios.create({
+        headers: { "Content-Type": "application/json" }
+      }),
+      taskData: null
     }
   },
   methods: {
+    init() {
+      let that = this
+      this.MyAxios.get("/api/task/")
+        .catch(function(error) {
+          alert("数据获取发生了错误,请联系管理员 QQ:1450872874")
+        })
+        .then(function(response) {
+          that.taskData = response.data.data
+        })
+    }
   },
   mounted: function() {
+    this.init()
+  },
+  activated: function() {
+    this.$emit("changePage", "task")
   }
 }
 </script>
@@ -122,32 +131,4 @@ export default {
           font-size 13px
           color #999
           flex-shrink 0
-</style>
-
-<style>
-.page-container {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-}
-.index-search-container {
-  width: 100%;
-  display: flex;
-}
-.index-search {
-  width: 60%;
-  margin: 30px auto;
-  text-align: center;
-  justify-content: center;
-}
-.index-search input {
-  border-radius: 20px;
-}
-
-.index-body-container {
-  margin: 0 auto;
-  width: 80%;
-  display: flex;
-  flex-wrap: wrap;
-}
 </style>

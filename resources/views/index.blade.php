@@ -16,7 +16,7 @@
 </head>
 <body>
   <div id="app" style="width:100%;height:100%;">
-    <worlduc-index></worlduc-index>
+    <router-view></router-view>
   </div>
   <script src="{{ mix('js/app.js') }}"></script>
 </body>

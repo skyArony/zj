@@ -132,7 +132,7 @@ export default {
         })
         .then(function(response) {
           if (response.data.errcode === 0) {
-            that.courseVideo = "/video/course/" + response.data.data.courseId;
+            that.courseVideo = "/#/index/video/course/" + response.data.data.courseId;
             that.courseName = response.data.data.courseName;
             that.courseDesc = response.data.data.courseDesc;
             that.courseImg = response.data.data.courseImg;
@@ -230,7 +230,7 @@ export default {
       return res;
     },
     viewCourseVideo() {
-      location.href = "/video/customCourse/" + this.id;
+      location.href = "/#/index/video/customCourse/" + this.id;
     }
   },
   mounted: function() {

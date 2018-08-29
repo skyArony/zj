@@ -1,14 +1,8 @@
 <template>
   <div class="page-container">
-    <div class="index-search-container">
-      <el-input class="index-search"
-                placeholder="搜索"
-                prefix-icon="el-icon-search">
-      </el-input>
-    </div>
     <div class="index-body-container">
       <div class="team-card"
-           v-for="(item, index) in data"
+           v-for="(item, index) in teamData"
            :key="index">
         <worlduc-teampageitem :data="item"></worlduc-teampageitem>
       </div>
@@ -18,45 +12,31 @@
 
 <script>
 export default {
-  props: {
-    data: Array
-  },
   data() {
     return {
-      test: "",
-      options: [
-        {
-          label: "江苏",
-          cities: []
-        },
-        {
-          label: "浙江",
-          cities: []
-        }
-      ],
-      pps: {
-        value: "label",
-        children: "cities"
-      },
-      resData: [
-        {
-          label: "网络",
-          cities: []
-        },
-        {
-          label: "获取",
-          cities: []
-        },
-        {
-          label: "的菜单",
-          cities: []
-        }
-      ],
-      indexStack: []
+      MyAxios: axios.create({
+        headers: { "Content-Type": "application/json" }
+      }),
+      teamData: null
     }
   },
   methods: {
-    
+    init() {
+      let that = this
+      this.MyAxios.get("/api/team/")
+        .catch(function(error) {
+          alert("数据获取发生了错误,请联系管理员 QQ:1450872874")
+        })
+        .then(function(response) {
+          that.teamData = response.data.data
+        })
+    }
+  },
+  mounted: function() {
+    this.init()
+  },
+  activated: function() {
+    this.$emit("changePage", "team")
   }
 }
 </script>
@@ -77,36 +57,4 @@ export default {
 @media screen and (max-width: 768px)
   .team-card
     width 100%
-</style>
-
-<style>
-.page-container {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-}
-.index-search-container {
-  width: 100%;
-  display: flex;
-}
-.index-search {
-  width: 60%;
-  margin: 30px auto;
-  text-align: center;
-  justify-content: center;
-}
-.index-search input {
-  border-radius: 20px;
-}
-
-.index-body-container {
-  margin: 0 auto;
-  width: 80%;
-  display: flex;
-  flex-wrap: wrap;
-}
-.el-card__body {
-  display: flex;
-  flex-direction: column;
-}
 </style>

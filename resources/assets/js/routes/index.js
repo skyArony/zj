@@ -27,6 +27,10 @@ export default [
             {
                 path: "video/customCourse/:courseId",
                 component: require("../components/Index-Video.vue")
+            },
+            {
+                path: "task/:taskId",
+                component: require("../components/Index-Task.vue")
             }
         ]
     }

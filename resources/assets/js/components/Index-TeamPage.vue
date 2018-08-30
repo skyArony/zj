@@ -1,11 +1,9 @@
 <template>
-  <div class="page-container">
-    <div class="index-body-container">
-      <div class="team-card"
-           v-for="(item, index) in teamData"
-           :key="index">
-        <worlduc-teampageitem :data="item"></worlduc-teampageitem>
-      </div>
+  <div class="team">
+    <div class="card-container"
+          v-for="(item, index) in teamData"
+          :key="index">
+      <worlduc-teampageitem :data="item"></worlduc-teampageitem>
     </div>
   </div>
 </template>
@@ -42,19 +40,29 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@media screen and (min-width: 1200px)
-  .team-card
+@media screen and (min-width: 1440px)
+  .card-container
+    width 25%
+
+@media screen and (max-width: 1440px) and (min-width: 1200px)
+  .card-container
     width 33.333%
 
 @media screen and (max-width: 1200px) and (min-width: 992px)
-  .team-card
+  .card-container
     width 50%
 
 @media screen and (max-width: 992px) and (min-width: 768px)
-  .team-card
+  .card-container
     width 50%
 
 @media screen and (max-width: 768px)
-  .team-card
+  .card-container
     width 100%
+
+.team
+  margin 20px auto
+  display flex
+  flex-wrap wrap
+  width 80%
 </style>

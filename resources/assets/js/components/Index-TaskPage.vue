@@ -1,25 +1,23 @@
 <template>
-  <div class="page-container">
-    <div class="index-body-container">
-      <div class="card"
-           v-for="(item, index) in taskData"
-           :key="index">
-        <el-card shadow="hover"
-                 :body-style="{ padding: '0px' }">
-          <div class="card-info">
-            <div class="card-info-title">{{item.title}}</div>
-            <div class="card-info-desc">{{item.desc}}</div>
-            <div class="card-info-bottom">
-              <div class="teacher">
-                <img class="teacher-img"
-                     :src="item.creater.avatar" />
-                <div class="teacher-name">{{item.creater.name}}</div>
-              </div>
-              <div class="time">{{item.created_at.substr(0, 10)}}</div>
+  <div class="task">
+    <div class="card"
+          v-for="(item, index) in taskData"
+          :key="index">
+      <el-card shadow="hover"
+                :body-style="{ padding: '0px' }">
+        <div class="card-info">
+          <div class="card-info-title">{{item.title}}</div>
+          <div class="card-info-desc">{{item.desc}}</div>
+          <div class="card-info-bottom">
+            <div class="teacher">
+              <img class="teacher-img"
+                    :src="item.creater.avatar" />
+              <div class="teacher-name">{{item.creater.name}}</div>
             </div>
+            <div class="time">{{item.created_at.substr(0, 10)}}</div>
           </div>
-        </el-card>
-      </div>
+        </div>
+      </el-card>
     </div>
   </div>
 </template>
@@ -72,63 +70,69 @@ export default {
   .card
     width 100%
 
-.card
-  padding 10px
-  box-sizing border-box
+.task
+  margin 20px auto
+  display flex
+  flex-wrap wrap
+  width 80%
 
-  .el-card
-    .card-image
-      width 100%
+  .card
+    padding 10px
+    box-sizing border-box
 
-    .card-info
-      padding 14px
-
-      .card-info-title
+    .el-card
+      .card-image
         width 100%
-        overflow hidden
-        text-overflow ellipsis
-        white-space nowrap
 
-      .card-info-desc
-        width 100%
-        display -webkit-box
-        overflow hidden
-        text-overflow ellipsis
-        word-break break-all
-        -webkit-box-orient vertical
-        -webkit-line-clamp 2
-        font-size 14px
-        color #757575
-        margin-top 10px
-        min-height 40px
+      .card-info
+        padding 14px
 
-      .card-info-bottom
-        display flex
-        justify-content space-between
-        align-items center
-        margin-top 10px
-
-        .teacher
-          display flex
-          align-items center
-          flex-grow 1
+        .card-info-title
+          width 100%
           overflow hidden
+          text-overflow ellipsis
+          white-space nowrap
 
-          .teacher-img
-            width 30px
-            height 30px
-            border-radius 15px
-            object-fit cover
+        .card-info-desc
+          width 100%
+          display -webkit-box
+          overflow hidden
+          text-overflow ellipsis
+          word-break break-all
+          -webkit-box-orient vertical
+          -webkit-line-clamp 2
+          font-size 14px
+          color #757575
+          margin-top 10px
+          min-height 40px
 
-          .teacher-name
-            font-size 13px
-            margin-left 5px
+        .card-info-bottom
+          display flex
+          justify-content space-between
+          align-items center
+          margin-top 10px
+
+          .teacher
+            display flex
+            align-items center
+            flex-grow 1
             overflow hidden
-            text-overflow ellipsis
-            white-space nowrap
 
-        .time
-          font-size 13px
-          color #999
-          flex-shrink 0
+            .teacher-img
+              width 30px
+              height 30px
+              border-radius 15px
+              object-fit cover
+
+            .teacher-name
+              font-size 13px
+              margin-left 5px
+              overflow hidden
+              text-overflow ellipsis
+              white-space nowrap
+
+          .time
+            font-size 13px
+            color #999
+            flex-shrink 0
 </style>

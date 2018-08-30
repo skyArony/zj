@@ -65,7 +65,6 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'], function ($api) {
     $api->get('/userId/team', 'ResearchResultsController@getTeamsByUserId');
     // 根据队伍 ID 返回其所参加的所有课题
     $api->get('/{teamId}/task', 'ResearchResultsController@getTasksByTeamId');
-
     // 获取系统中所有的课程
     $api->get('/course', 'CourseController@getAllCourse');
     // 获取系统中所有的研究课题
@@ -74,4 +73,7 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'], function ($api) {
     $api->get('/team', 'TeamController@getAllTeam');
     // 获取一只队伍所有的成员信息
     $api->get('/team/member/{teamId}', 'TeamController@getAllMember');
+
+    // 根据 id 获取一个科研课题的详细信息
+    $api->get('/task/{taskId}', 'TaskController@getTaskDetail');
 });

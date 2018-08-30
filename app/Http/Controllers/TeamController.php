@@ -19,7 +19,6 @@ class TeamController extends ApiController
         // TODO validate
 
         $teamId = $request->teamId;
-        $membersId = [];
 
         if ($team = Team::find($teamId)) {
             $leaderId = $team->creater_id;

@@ -4,35 +4,77 @@
       <h1>{{taskData.title}}</h1>
       <div class="task-info">
         <div class="task-info-item publish-date">{{taskData.created_at}}</div>
-        <div class="task-info-item team-number">报名队数: <span>{{taskData.registTeams}}</span></div>
-        <div class="task-info-item regist-end-time">距报名截止: <span>2小时20分</span></div>
-        <div class="task-info-item submit-end-time">距课题截止: <span>10天12小时</span></div>
+        <div class="task-info-item team-number">报名队数:
+          <span>{{taskData.registTeams}}</span>
+        </div>
+        <div class="task-info-item regist-end-time">距报名截止:
+          <span>{{taskData.regist_end_at}}</span>
+        </div>
+        <div class="task-info-item submit-end-time">距课题截止:
+          <span>{{taskData.submit_end_at}}</span>
+        </div>
+        <el-popover placement="bottom"
+                    trigger="hover">
+          <el-table :data="teamData"
+                    max-height="300">
+            <el-table-column prop="title"
+                             label="可选团队">
+              <template slot-scope="scope">
+                <div class="surveyTitle">{{scope.row.team_name}}</div>
+              </template>
+            </el-table-column>
+            <el-table-column label="操作"
+                             width="55">
+              <template slot-scope="scope">
+                <el-button v-if="scope.row.isSign"
+                           type="text"
+                           size="small"
+                           disabled>
+                  已报名
+                </el-button>
+                <el-button v-else
+                           @click.native.prevent="sign(scope.row.id, taskData.id, scope.$index)"
+                           type="text"
+                           size="small">
+                  报名
+                </el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+          <el-button slot="reference"
+                     type="primary"
+                     class="button"
+                     size="mini"
+                     @click.stop=";"
+                     plain>报名</el-button>
+        </el-popover>
       </div>
-      <div class="task-detail" v-html="taskData.detail">
+      <div class="task-detail"
+           v-html="taskData.detail">
       </div>
       <div class="task-file">
-        <i v-for="(item, index) in taskData.file" 
-           :key="index" 
+        <i v-for="(item, index) in taskData.file"
+           :key="index"
            class="el-icon-document">
-           &nbsp;<a :href="'storage/' + item.download_link">{{item.original_name}}</a>
+          &nbsp;
+          <a :href="'storage/' + item.download_link">{{item.original_name}}</a>
         </i>
       </div>
     </div>
     <div class="task-right pannel">
       <div class="teacher-info">
-        <img class="teacher-img" :src="taskData.creater_avatar" />
+        <img class="teacher-img"
+             :src="taskData.creater_avatar" />
         <div class="teacher-name">{{taskData.creater_name}}</div>
       </div>
       <div class="more-tasks-title">
         <h3>更多课题</h3>
       </div>
       <div class="task-item-container">
-        <div class="task-item">第一个课题</div>
-        <div class="task-item">第一个课题第一个课题</div>
-        <div class="task-item">第一个课题第一个课题第一个课题</div>
-        <div class="task-item">第一个课题第一个课题第一个课题第一个课题</div>
-        <div class="task-item">第一个课题第一个课题第一个课题第一个课题第一个课题</div>
-        <div class="task-item">第一个课题第一个课题第一个课题第一个课题第一个课题第一个课题</div>
+        <div class="task-item"
+             v-for="item in moreTask"
+             :key="item.id"
+             @click="toTask(item.id)">{{item.title}}</div>
       </div>
     </div>
   </div>
@@ -41,33 +83,74 @@
 
 <script>
 export default {
+  props: {
+    teams: Array
+  },
   data() {
     return {
       MyAxios: axios.create({
         headers: { "Content-Type": "application/json" }
       }),
-      taskData: '',
+      taskData: "",
+      moreTask: "",
+      teamData: []
     }
   },
   methods: {
+    toTask(taksId) {
+      this.$router.push({ path: `/index/task/${taksId}` })
+    },
     init(taskId) {
-      let that = this
-      this.MyAxios.get("/api/task/" + taskId)
+      if (taskId != undefined) {
+        let that = this
+        this.MyAxios.get("/api/task/" + taskId)
+          .catch(function(error) {
+            alert("数据获取发生了错误,请联系管理员 QQ:1450872874")
+          })
+          .then(function(response) {
+            that.taskData = response.data.data
+            for (let index in that.teams) {
+              if (that.taskData.signTeams.includes(that.teams[index].id))
+                that.$set(that.teams[index], "isSign", true)
+              else that.$set(that.teams[index], "isSign", false)
+            }
+            that.teamData = that.teams
+            that.MyAxios.get("/api/task/more/" + that.taskData.creater_id)
+              .catch(function(error) {
+                alert("数据获取发生了错误,请联系管理员 QQ:1450872874")
+              })
+              .then(function(response) {
+                that.moreTask = response.data.data
+              })
+          })
+      }
+    },
+    sign(teamId, taskId, index) {
+      var that = this
+      this.MyAxios.post("/api/task/sign", {
+        taskId: taskId,
+        teamId: teamId
+      })
         .catch(function(error) {
           alert("数据获取发生了错误,请联系管理员 QQ:1450872874")
         })
         .then(function(response) {
-          that.taskData = response.data.data
+          if (response.data.errcode == 0) {
+            that.teamData[index].isSign = true
+          }
         })
     }
   },
-  mounted: function() {
-    let taskId = this.$route.params.taskId
-    this.init(taskId)
-    
+  // 同级页面的切换,在此进行数据的获取
+  beforeRouteUpdate(to, from, next) {
+    this.init(to.params.taskId)
+    next()
   },
+  // 从其他路由过来,在此进行数据的获取
   activated: function() {
     this.$emit("changePage", "task")
+    this.taskData = ""
+    this.init(this.$route.params.taskId)
   }
 }
 </script>
@@ -77,7 +160,7 @@ export default {
 @media screen and (min-width: 830px)
   .taskDetail
     width 80%
-  
+
   .task-left
     margin-right 25px
 
@@ -85,7 +168,7 @@ export default {
   .taskDetail
     width 80%
     flex-direction column
-  
+
   .task-left
     margin-right 0
 
@@ -103,12 +186,11 @@ export default {
   h1
     font-size 1.5rem
 
-
 .pannel
-  background-color: #fff;
-  border: 1px solid transparent;
-  border-radius: 4px;
-  box-shadow: 0 2px 10px rgba(0,0,0,.05);
+  background-color #fff
+  border 1px solid transparent
+  border-radius 4px
+  box-shadow 0 2px 10px rgba(0, 0, 0, 0.05)
 
 .taskDetail
   margin 20px auto
@@ -127,6 +209,7 @@ export default {
       font-size 12px
       font-weight 400
       display flex
+      align-items center
 
       .task-info-item
         margin-right 20px
@@ -176,7 +259,7 @@ export default {
     .more-tasks-title
       border-bottom 1px solid #e5e9ef
 
-      h3  
+      h3
         margin-bottom 10px
 
     .task-item-container
@@ -193,7 +276,7 @@ export default {
         overflow hidden
         text-overflow ellipsis
         white-space nowrap
-      
+
       .task-item:hover
         color #409dfd
         cursor pointer

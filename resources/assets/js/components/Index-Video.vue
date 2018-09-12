@@ -234,10 +234,8 @@ export default {
       return res
     }
   },
-  mounted: function() {
-    this.pageInit()
-  },
   activated: function() {
+    this.pageInit()
     this.$emit("changePage", "course")
   }
 }

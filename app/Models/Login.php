@@ -19,6 +19,14 @@ class Login extends Model
         $thirdCheck = self::thirdCheck($email, $pass);
         $myCheck = self::myCheck($email, $pass);
 
+        // 大学城崩了的时候
+        // if($myCheck) {
+        //     return [
+        //         "code" => 0,
+        //         'msg' => $thirdCheck['msg']
+        //     ];
+        // }
+
         // 通过
         if ($myCheck && $thirdCheck['code'] == 0) {
             return [

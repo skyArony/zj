@@ -76,4 +76,8 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'], function ($api) {
 
     // 根据 id 获取一个科研课题的详细信息
     $api->get('/task/{taskId}', 'TaskController@getTaskDetail');
+    // 获取一个用户的其他课题信息
+    $api->get('/task/more/{userId}', 'TaskController@getMoreTasks');
+    // 一支队伍报名一个课题
+    $api->post('/task/sign', 'TeamController@signTask');
 });

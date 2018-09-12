@@ -1,17 +1,18 @@
 <template>
   <div class="task">
     <div class="card"
-          v-for="(item, index) in taskData"
-          :key="index">
+         v-for="(item, index) in taskData"
+         :key="index"
+         @click="toTask(item.id)">
       <el-card shadow="hover"
-                :body-style="{ padding: '0px' }">
+               :body-style="{ padding: '0px' }">
         <div class="card-info">
           <div class="card-info-title">{{item.title}}</div>
           <div class="card-info-desc">{{item.desc}}</div>
           <div class="card-info-bottom">
             <div class="teacher">
               <img class="teacher-img"
-                    :src="item.creater.avatar" />
+                   :src="item.creater.avatar" />
               <div class="teacher-name">{{item.creater.name}}</div>
             </div>
             <div class="time">{{item.created_at.substr(0, 10)}}</div>
@@ -33,6 +34,9 @@ export default {
     }
   },
   methods: {
+    toTask(taksId) {
+      this.$router.push({ path: `/index/task/${taksId}` })
+    },
     init() {
       let that = this
       this.MyAxios.get("/api/task/")

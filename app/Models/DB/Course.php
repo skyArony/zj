@@ -22,4 +22,9 @@ class Course extends Model
         return $this->hasOne('App\User', 'id', 'teacher_id');
     }
 
+    public function hasManySurveys()
+    {
+        return $this->hasMany('App\Models\DB\Survey', 'course_id', 'id');
+    }
+
 }

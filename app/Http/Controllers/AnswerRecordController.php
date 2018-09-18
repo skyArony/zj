@@ -27,7 +27,7 @@ class AnswerRecordController extends ApiController
         if ($answerRecord) {
             return self::setResponse($answerRecord, 200, 0);
         } else {
-            return self::setResponse(null, 500, -4006);
+            return self::setResponse(null, 400, -4006);
         }
     }
 
@@ -38,7 +38,7 @@ class AnswerRecordController extends ApiController
         if ($answerRecord = AnswerRecord::find($request->id)) 
             return self::setResponse($answerRecord, 200, 0);
         else 
-            return self::setResponse(null, 400, -4005);
+            return self::setResponse(null, 404, -4005);
     }
 
     // 检查是否填写过问卷

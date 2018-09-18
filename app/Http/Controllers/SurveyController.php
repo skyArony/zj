@@ -25,7 +25,7 @@ class SurveyController extends ApiController
         if ($survey->save()) {
             return self::setResponse($survey, 200, 0);
         } else {
-            return self::setResponse(null, 500, -4006);
+            return self::setResponse(null, 400, -4006);
         }
     }
 
@@ -53,7 +53,7 @@ class SurveyController extends ApiController
         if ($survey->save()) {
             return self::setResponse($survey, 200, 0);
         } else {
-            return self::setResponse(null, 500, -4006);
+            return self::setResponse(null, 400, -4006);
         }
     }
 
@@ -64,6 +64,6 @@ class SurveyController extends ApiController
         if ($survey = Survey::find($request->id)) 
             return self::setResponse($survey, 200, 0);
         else 
-            return self::setResponse(null, 400, -4005);
+            return self::setResponse(null, 404, -4005);
     }
 }

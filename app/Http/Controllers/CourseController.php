@@ -20,7 +20,7 @@ class CourseController extends ApiController
         if($courses) {
             return self::setResponse($courses, 200, 0);
         } else {
-            return self::setResponse(null, 500, -4005);
+            return self::setResponse(null, 404, -4005);
         }
     }
 
@@ -32,7 +32,7 @@ class CourseController extends ApiController
         if($courses) {
             return self::setResponse($courses, 200, 0);
         } else {
-            return self::setResponse(null, 500, -4005);
+            return self::setResponse(null, 404, -4005);
         }
     }
 

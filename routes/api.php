@@ -34,7 +34,7 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'], function ($api) {
     // 根据课程 ID 查看课程信息
     $api->get('/course/{courseId}', 'CourseController@getCourse');
     // 查看一个用户的所有课程[需要带 cookie 访问]
-    $api->get('/userCourse', 'CourseController@getAllCourseByUserId');
+    $api->post('/userCourse', 'CourseController@getAllCourseByUserId');
     // 获取 tag
     $api->get('/tag/{courseId}', 'TagController@listTags');
     // 增加 tag [需要带 cookie 访问]
@@ -71,13 +71,20 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'], function ($api) {
     $api->get('/task', 'TaskController@getAllTask');
     // 获取系统中所有的团队
     $api->get('/team', 'TeamController@getAllTeam');
+    // 获取某一个团队的信息
+    $api->get('/team/{teamId}', 'TeamController@getTeam');
     // 获取一只队伍所有的成员信息
     $api->get('/team/member/{teamId}', 'TeamController@getAllMember');
-
+    // 添加一个成员到一个队伍[需要带 cookie 访问]
+    $api->post('/team/member', 'TeamController@addMember');
+    // 添加队伍的一个成员[需要带 cookie 访问]
+    $api->delete('/team/member', 'TeamController@deleteMember');
     // 根据 id 获取一个科研课题的详细信息
     $api->get('/task/{taskId}', 'TaskController@getTaskDetail');
     // 获取一个用户的其他课题信息
     $api->get('/task/more/{userId}', 'TaskController@getMoreTasks');
     // 一支队伍报名一个课题
     $api->post('/task/sign', 'TeamController@signTask');
+    // 搜索用户
+    $api->get('/search/user', 'UserController@search');
 });

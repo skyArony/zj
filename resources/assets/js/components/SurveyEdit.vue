@@ -218,7 +218,7 @@ export default {
       var that = this;
       let MyAxios = axios.create();
       // 获取当前页的类型
-      this.pageType = window.location.href.match(/.*\/(.*?)$/)[1];
+      this.pageType = (/.*?surveys\/(\w+)#?/).exec(window.location.href)[1];
       if (this.pageType == "create") {
         // 获取所有的课程
         MyAxios.get("/api/userCourse")

@@ -16,6 +16,19 @@ class TeamController extends ApiController
         return self::setResponse($teams, 200, 0);
     }
 
+    // 获取一个 team 的信息
+    public function getTeam(Request $request) {
+        // TODO validate
+
+        $teamId = $request->teamId;
+
+        if ($team = Team::find($teamId)) {
+            return self::setResponse($team, 200, 0);
+        } else {
+            return self::setResponse(null, 404, -4005);
+        }
+    }
+
     // 获取一个队伍的所有成员信息
     public function getAllMember(Request $request) {
         // TODO validate
@@ -32,8 +45,67 @@ class TeamController extends ApiController
             $membersInfo->prepend($leaderInfo);
             return self::setResponse($membersInfo, 200, 0);
         } else {
-            return self::setResponse(null, 500, -4005);
+            return self::setResponse(null, 404, -4005);
         }
+    }
+
+    // 增加队伍的一个成员
+    public function addMember(Request $request) {
+        // TODO validate
+
+        if (Cookie::get('id')) $ownerId = Crypt::decrypt(Cookie::get('id'));
+        else return self::setResponse(null, 400, -4007);    // 未登录
+
+        $userId = $request->userId;
+        $teamId = $request->teamId;
+
+        $owner = User::find($ownerId);
+        $teams = $owner->hasManyTeams()->pluck("id")->toArray();
+
+        if (!in_array($teamId, $teams)) {
+            return self::setResponse(null, 400, -4009);
+        }
+
+        if ($team = Team::find($teamId)) {
+            if ($team->creater_id == $userId) {
+                return self::setResponse(null, 200, 0);
+            }
+            $team->belongsToManyUsers()->syncWithoutDetaching($userId);
+            return self::setResponse(null, 200, 0);
+        } else {
+            return self::setResponse(null, 404, -4005);
+        }
+    }
+
+    // 删除队伍的一个成员
+    public function deleteMember(Request $request) {
+        // TODO validate
+
+        if (Cookie::get('id')) $ownerId = Crypt::decrypt(Cookie::get('id'));
+        else return self::setResponse(null, 400, -4007);    // 未登录
+
+        $userId = $request->userId;
+        $teamId = $request->teamId;
+
+        $owner = User::find($ownerId);
+        $teams = $owner->hasManyTeams()->pluck("id")->toArray();
+
+        if (!in_array($teamId, $teams)) {
+            return self::setResponse(null, 400, -4009);
+        }
+
+        if ($team = Team::find($teamId)) {
+            if ($team->creater_id == $userId) {
+                return self::setResponse(null, 400, -4010);
+            }
+            if ($team->belongsToManyUsers()->detach($userId)) {
+                return self::setResponse(null, 200, 0);
+            } else {
+                return self::setResponse(null, 500, -4006);
+            }
+        } else {
+            return self::setResponse(null, 404, -4005);
+        } 
     }
 
     // 队伍报名一个课题
@@ -54,10 +126,11 @@ class TeamController extends ApiController
         }
 
         if ($team = Team::find($teamId)) {
-            $status = $team->belongsToManyTasks()->syncWithoutDetaching($taskId);
+            // 使用 attach 会报 sql 操作错误
+            $team->belongsToManyTasks()->syncWithoutDetaching($taskId);
             return self::setResponse(null, 200, 0);
         } else {
-            return self::setResponse(null, 500, -4005);
+            return self::setResponse(null, 404, -4005);
         }
     }
 }

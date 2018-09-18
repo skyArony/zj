@@ -1,9 +1,23 @@
 <template>
-  <div class="team">
-    <div class="card-container"
-          v-for="(item, index) in teamData"
-          :key="index">
-      <worlduc-teampageitem :data="item"></worlduc-teampageitem>
+  <div class="page">
+    <div class="index-search-container">
+      <el-input v-model="keyword"
+                @blur="keywordCheck"
+                class="index-search"
+                type="search"
+                placeholder="搜索"
+                prefix-icon="el-icon-search">
+        <el-button slot="append"
+                   icon="el-icon-search"
+                   @click="search"></el-button>
+      </el-input>
+    </div>
+    <div class="team">
+      <div class="card-container"
+           v-for="(item, index) in teamData2"
+           :key="index">
+        <worlduc-teampageitem :data="item"></worlduc-teampageitem>
+      </div>
     </div>
   </div>
 </template>
@@ -15,7 +29,9 @@ export default {
       MyAxios: axios.create({
         headers: { "Content-Type": "application/json" }
       }),
-      teamData: null
+      keyword: "",
+      teamData: null,
+      teamData2: null
     }
   },
   methods: {
@@ -26,8 +42,19 @@ export default {
           alert("数据获取发生了错误,请联系管理员 QQ:1450872874")
         })
         .then(function(response) {
-          that.teamData = response.data.data
+          that.teamData = response.data.data.sort(function() {return .5 - Math.random()})
+          that.teamData2 = that.teamData
         })
+    },
+    search() {
+      if (this.keyword == "") return
+      let re = new RegExp(this.keyword)
+      this.teamData2 = this.teamData.filter(function(item) {
+        return re.test(item.team_name)
+      })
+    },
+    keywordCheck() {
+      if (this.keyword == "") this.teamData2 = this.teamData
     }
   },
   mounted: function() {
@@ -59,6 +86,14 @@ export default {
 @media screen and (max-width: 768px)
   .card-container
     width 100%
+
+.page
+  display flex
+  flex-direction column
+
+  .index-search-container
+    margin 40px auto 20px auto
+    width 50%
 
 .team
   margin 20px auto

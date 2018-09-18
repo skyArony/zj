@@ -70,7 +70,7 @@ class TaskController extends ApiController
 
         $userId = $request->userId;
 
-        $tasks = Task::where('creater_id', $userId)->take(5)->get(['id', 'title']);
+        $tasks = Task::where('creater_id', $userId)->get(['id', 'title']);
         return self::setResponse($tasks, 200, 0);
     }
 }

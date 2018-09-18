@@ -1,24 +1,38 @@
 <template>
-  <div class="task">
-    <div class="card"
-         v-for="(item, index) in taskData"
-         :key="index"
-         @click="toTask(item.id)">
-      <el-card shadow="hover"
-               :body-style="{ padding: '0px' }">
-        <div class="card-info">
-          <div class="card-info-title">{{item.title}}</div>
-          <div class="card-info-desc">{{item.desc}}</div>
-          <div class="card-info-bottom">
-            <div class="teacher">
-              <img class="teacher-img"
-                   :src="item.creater.avatar" />
-              <div class="teacher-name">{{item.creater.name}}</div>
+  <div class="page">
+    <div class="index-search-container">
+      <el-input v-model="keyword"
+                @blur="keywordCheck"
+                class="index-search"
+                type="search"
+                placeholder="搜索"
+                prefix-icon="el-icon-search">
+        <el-button slot="append"
+                   icon="el-icon-search"
+                   @click="search"></el-button>
+      </el-input>
+    </div>
+    <div class="task">
+      <div class="card"
+           v-for="(item, index) in taskData2"
+           :key="index"
+           @click="toTask(item.id)">
+        <el-card shadow="hover"
+                 :body-style="{ padding: '0px' }">
+          <div class="card-info">
+            <div class="card-info-title">{{item.title}}</div>
+            <div class="card-info-desc">{{item.desc}}</div>
+            <div class="card-info-bottom">
+              <div class="teacher">
+                <img class="teacher-img"
+                     :src="item.creater.avatar" />
+                <div class="teacher-name">{{item.creater.name}}</div>
+              </div>
+              <div class="time">{{item.created_at.substr(0, 10)}}</div>
             </div>
-            <div class="time">{{item.created_at.substr(0, 10)}}</div>
           </div>
-        </div>
-      </el-card>
+        </el-card>
+      </div>
     </div>
   </div>
 </template>
@@ -30,7 +44,9 @@ export default {
       MyAxios: axios.create({
         headers: { "Content-Type": "application/json" }
       }),
-      taskData: null
+      keyword: '',
+      taskData: null,
+      taskData2: null
     }
   },
   methods: {
@@ -44,8 +60,19 @@ export default {
           alert("数据获取发生了错误,请联系管理员 QQ:1450872874")
         })
         .then(function(response) {
-          that.taskData = response.data.data
+          that.taskData = response.data.data.sort(function() {return .5 - Math.random()})
+          that.taskData2 = that.taskData
         })
+    },
+    search() {
+      if (this.keyword == '') return
+      let re = new RegExp(this.keyword)
+      this.taskData2 = this.taskData.filter(function(item) {
+        return re.test(item.title)
+      })
+    },
+    keywordCheck() {
+      if (this.keyword == "") this.taskData2 = this.taskData
     }
   },
   mounted: function() {
@@ -73,6 +100,14 @@ export default {
 @media screen and (max-width: 768px)
   .card
     width 100%
+
+.page
+  display flex
+  flex-direction column
+
+  .index-search-container
+    margin 40px auto 20px auto
+    width 50%
 
 .task
   margin 20px auto

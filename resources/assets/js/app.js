@@ -38,6 +38,7 @@ Vue.component('worlduc-taskpage', require('./components/Index-TaskPage.vue'));
 Vue.component('worlduc-teampage', require('./components/Index-TeamPage.vue'));
 Vue.component('worlduc-teampageitem', require('./components/TeamPageItem.vue'));
 Vue.component('worlduc-coursepageitem', require('./components/CoursePageItem.vue'));
+Vue.component('worlduc-addmember', require('./components/AddMember.vue'));
 
 // element ui
 import ElementUI from 'element-ui';

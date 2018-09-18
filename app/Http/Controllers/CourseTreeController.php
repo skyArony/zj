@@ -47,7 +47,7 @@ class CourseTreeController extends ApiController
             $courseTree->save();
             return self::setResponse($courseTree, 200, 0);
         } else {
-            return self::setResponse(null, 400, -4005);
+            return self::setResponse(null, 404, -4005);
         }
         
     }

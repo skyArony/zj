@@ -14,9 +14,15 @@ export default new Vuex.Store({
         // 正在设置的问题的 index
         index: null,
         // 当前要从课程总tag 表中删除的 tag
-        removeTag: ''
+        removeTag: '',
+        // 用户的个人信息
+        userInfo: {}
     },
     mutations: {
+        // 设置用户信息
+        setUserInfo(state, data) {
+            state.userInfo = data
+        },
         // 添加 tag
         addTag(state, tag) {
             state.dynamicTags.push(tag)

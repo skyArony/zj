@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Cookie;
 
 class UserController extends ApiController
 {
@@ -23,4 +25,30 @@ class UserController extends ApiController
             return self::setResponse($users, 200, 0);
         }
     }
+
+    // 绑定 QQ 和手机号
+    public function bindContact(Request $request) {
+        // TODO validate
+
+        if (Cookie::get('id')) $userId = Crypt::decrypt(Cookie::get('id'));
+        else return self::setResponse(null, 400, -4007);    // 未登录
+
+        $type = $request->type;
+
+        if ($user = User::find($userId)) {
+            if ($type == 'tel') {
+                $user->phone = $request->phone;
+            } else if ($type == 'qq') {
+                $user->QQ = $request->qq;
+            }
+            if($user->save()) {
+                return self::setResponse(null, 200, 0);
+            } else {
+                return self::setResponse(null, 500, -4006);
+            }
+        } else {
+            return self::setResponse(null, 404, -4005);
+        }
+    }
+
 }

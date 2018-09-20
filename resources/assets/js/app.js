@@ -36,6 +36,7 @@ Vue.component('worlduc-index', require('./components/Index.vue'));
 Vue.component('worlduc-coursepage', require('./components/Index-CoursePage.vue'));
 Vue.component('worlduc-taskpage', require('./components/Index-TaskPage.vue'));
 Vue.component('worlduc-teampage', require('./components/Index-TeamPage.vue'));
+Vue.component('worlduc-userpage', require('./components/Index-UserPage.vue'));
 Vue.component('worlduc-teampageitem', require('./components/TeamPageItem.vue'));
 Vue.component('worlduc-coursepageitem', require('./components/CoursePageItem.vue'));
 Vue.component('worlduc-addmember', require('./components/AddMember.vue'));
@@ -54,6 +55,10 @@ import routes from './routes';    // 路由配置文件
 const router = new VueRouter({
     routes
 });
+
+// iconfont
+document.write("<script src='//at.alicdn.com/t/font_844452_z6bqchhefu.js'></script>");
+document.write("<style>.icon{width:1em;height:1em;vertical-align:-0.15em;fill:currentColor;overflow:hidden;}</style>");
 
 Vue.use(VueRouter)
 Vue.use(ElementUI);

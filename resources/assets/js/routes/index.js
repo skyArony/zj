@@ -21,6 +21,10 @@ export default [
                 component: require("../components/Index-CoursePage.vue")
             },
             {
+                path: "me",
+                component: require("../components/Index-UserPage.vue"),
+            },
+            {
                 path: "video/course/:courseId",
                 component: require("../components/Index-Video.vue")
             },

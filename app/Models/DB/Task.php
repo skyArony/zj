@@ -12,6 +12,7 @@ class Task extends Model
     
     protected $dates = ['deleted_at'];
     protected $table = 'tasks';
+    // protected $hidden=['pivot']; 
 
     public function setCreaterIdAttribute($value)
     {

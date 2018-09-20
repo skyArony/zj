@@ -33,8 +33,7 @@ export default {
   methods: {
     // 处理 tab 切换
     handleSelect(key, keyPath) {
-      if (key == 'me') return  // TODO 使用说明
-      else this.$router.push("/index/" + key)
+      this.$router.push("/index/" + key)
     },
     // init
     init() {
@@ -50,6 +49,7 @@ export default {
         })
         .then(function(response) {
           if (response.data.errcode === 0) {
+            that.$store.commit("setUserInfo", response.data.data);
             that.userName = response.data.data.name
             that.userImg = response.data.data.avatar
           } else {

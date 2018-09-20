@@ -133,4 +133,30 @@ class TeamController extends ApiController
             return self::setResponse(null, 404, -4005);
         }
     }
+
+    // 队伍退出一个课题
+    public function leaveTask(Request $request) {
+        // TODO validate
+
+        if (Cookie::get('id')) $userId = Crypt::decrypt(Cookie::get('id'));
+        else return self::setResponse(null, 400, -4007);    // 未登录
+
+        $teamId = $request->teamId;
+        $taskId = $request->taskId;
+
+        $user = User::find($userId);
+        $teams = $user->hasManyTeams()->pluck("id")->toArray();
+
+        if (!in_array($teamId, $teams)) {
+            return self::setResponse(null, 400, -4009);
+        }
+
+        if ($team = Team::find($teamId)) {
+            // 使用 attach 会报 sql 操作错误
+            $team->belongsToManyTasks()->detach($taskId);
+            return self::setResponse(null, 200, 0);
+        } else {
+            return self::setResponse(null, 404, -4005);
+        }
+    }
 }

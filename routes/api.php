@@ -85,6 +85,12 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'], function ($api) {
     $api->get('/task/more/{userId}', 'TaskController@getMoreTasks');
     // 一支队伍报名一个课题
     $api->post('/task/sign', 'TeamController@signTask');
+    // 一支队伍退出一个课题
+    $api->post('/task/leave', 'TeamController@leaveTask');
     // 搜索用户
     $api->get('/search/user', 'UserController@search');
+    // 绑定用户联系信息[需要带 cookie 访问]
+    $api->post('/user/bind/{type}', 'UserController@bindContact');
+    // 获取一个用户参与的所有 task[需要带 cookie 访问]
+    $api->get('/user/tasks', 'TaskController@getTasksByUserId');
 });

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="index">
     <worlduc-topnav :page="page"
                     class="topnav"></worlduc-topnav>
     <!-- <div class="index-search-container">
@@ -49,9 +49,16 @@ export default {
 </script>
 
 <style scoped>
+.index {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
 .page-container {
   width: 100%;
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
+  display: flex;
 }
 </style>

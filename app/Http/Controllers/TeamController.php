@@ -108,6 +108,28 @@ class TeamController extends ApiController
         } 
     }
 
+    // 退出团队
+    public function leaveTeam(Request $request) {
+        // TODO validate
+        if (Cookie::get('id')) $userId = Crypt::decrypt(Cookie::get('id'));
+        else return self::setResponse(null, 400, -4007);    // 未登录
+
+        $teamId = $request->teamId;
+
+        if ($team = Team::find($teamId)) {
+            if ($team->creater_id == $userId) {
+                return self::setResponse(null, 400, -4010);
+            }
+            if ($team->belongsToManyUsers()->detach($userId)) {
+                return self::setResponse(null, 200, 0);
+            } else {
+                return self::setResponse(null, 500, -4006);
+            }
+        } else {
+            return self::setResponse(null, 404, -4005);
+        } 
+    }
+
     // 队伍报名一个课题
     public function signTask(Request $request) {
         // TODO validate
@@ -158,5 +180,25 @@ class TeamController extends ApiController
         } else {
             return self::setResponse(null, 404, -4005);
         }
+    }
+
+    // 删除一个队
+    public function deleteTeam(Request $request) {
+        // TODO validate
+
+        if (Cookie::get('id')) $userId = Crypt::decrypt(Cookie::get('id'));
+        else return self::setResponse(null, 400, -4007);    // 未登录
+
+        $teamId = $request->teamId;
+
+        $user = User::find($userId);
+        $teams = $user->hasManyTeams()->pluck("id")->toArray();
+
+        if (!in_array($teamId, $teams)) {
+            return self::setResponse(null, 400, -4009);
+        }
+
+        Team::find($teamId)->delete();
+        return self::setResponse(null, 200, 0);
     }
 }

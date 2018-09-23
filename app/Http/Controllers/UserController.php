@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
+use App\Models\DB\AnswerRecord;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Cookie;
 
@@ -50,5 +51,70 @@ class UserController extends ApiController
             return self::setResponse(null, 404, -4005);
         }
     }
+    
+    // 获取一个用户的问卷填写记录
+    public function getAnswerRecord() {
+        // TODO validate
 
+        if (Cookie::get('id')) $userId = Crypt::decrypt(Cookie::get('id'));
+        else return self::setResponse(null, 400, -4007);    // 未登录
+
+        $ansRecs = AnswerRecord::with('belongsToSurvey.belongsToCourse')->where('creater_id', $userId)->get();
+        $ansRecs = $ansRecs->map(function ($item) {
+            $res = [];
+            $res['id'] = $item->id;
+            $res['survey'] = $item->belongsToSurvey->title;
+            $res['course'] = $item->belongsToSurvey->belongsToCourse->name;
+            $res['updated_at'] = date("Y-m-d H:i:s", strtotime($item->updated_at));
+            return $res;
+        });
+        return self::setResponse($ansRecs, 200, 0);
+    }
+
+    // 获取一个用户参与的所有团队
+    public function getMyTeams() {
+        // TODO validate
+
+        if (Cookie::get('id')) $userId = Crypt::decrypt(Cookie::get('id'));
+        else return self::setResponse(null, 400, -4007);    // 未登录
+
+        if ($user = User::with('belongsToManyTeams.belongsToManyUsers')->find($userId)) {
+            // 自己作为队员的组
+            $teams = $user->belongsToManyTeams;
+            $teams = $teams->map(function ($item) {
+                $res = [];
+                $res['id'] = $item->id;
+                $res['avatar'] = $item->avatar;
+                $res['team'] = $item->team_name;
+                $res['desc'] = $item->team_desc;
+                $res['avatar'] = $item->avatar;
+                $res['memberNum'] = $item->belongsToManyUsers->count() + 1;
+                $res['leader'] = $item->belongsToUser->name;
+                $res['isLeader'] = false;
+                return $res;
+            });
+
+            // 自己作为队长的组
+            $user = User::with('hasManyTeams.belongsToManyTasks.belongsToUser')->find($userId);
+            $teams2 = $user->hasManyTeams;
+            $teams2 = $teams2->map(function ($item) use($user) {
+                $res = [];
+                $res['id'] = $item->id;
+                $res['avatar'] = $item->avatar;
+                $res['team'] = $item->team_name;
+                $res['desc'] = $item->team_desc;
+                $res['avatar'] = $item->avatar;
+                $res['memberNum'] = $item->belongsToManyUsers->count() + 1;
+                $res['leader'] = $user->name;
+                $res['isLeader'] = true;
+                return $res;
+            });
+
+            // 去除空元素,化为一维
+            $teamsArray = array_merge($teams->toArray(), $teams2->toArray());
+            return self::setResponse($teamsArray, 200, 0);
+        } else {
+            return self::setResponse(null, 404, -4005);
+        }
+    }
 }

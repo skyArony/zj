@@ -206,7 +206,7 @@ export default {
       this.isComplete = false;
     },
     view() {
-      location.href = "/admin/customCourse/" + this.customCourseId;
+      location.href = "/#/index/customCourse/" + this.customCourseId;
     }
   },
   mounted: function() {

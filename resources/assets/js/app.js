@@ -58,7 +58,7 @@ const router = new VueRouter({
 
 // iconfont
 document.write("<script src='//at.alicdn.com/t/font_844452_z6bqchhefu.js'></script>");
-document.write("<style>.icon{width:1em;height:1em;vertical-align:-0.15em;fill:currentColor;overflow:hidden;}</style>");
+document.write("<style>.iconIn{width:1em;height:1em;vertical-align:-0.15em;fill:currentColor;overflow:hidden;}</style>");
 
 Vue.use(VueRouter)
 Vue.use(ElementUI);

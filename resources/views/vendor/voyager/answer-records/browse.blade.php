@@ -213,7 +213,7 @@
                                                 @endphp
                                                 @include('voyager::bread.partials.actions', ['action' => $action])
                                             @endforeach
-                                            <a href="@php echo route('voyager.dashboard')."/customCourse/".$data->id; @endphp" title="查看定制化课程" class="btn btn-sm btn-success pull-right edit">
+                                            <a target="_blank" href="@php echo "/#/index/customCourse/".$data->id; @endphp" title="查看定制化课程" class="btn btn-sm btn-warning pull-right edit">
                                                 <i class="voyager-eye"></i> <span class="hidden-xs hidden-sm">查看定制化课程</span>
                                             </a>
                                         </td>

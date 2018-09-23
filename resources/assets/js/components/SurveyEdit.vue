@@ -218,7 +218,7 @@ export default {
       var that = this;
       let MyAxios = axios.create();
       // 获取当前页的类型
-      this.pageType = (/.*?surveys\/(\w+)#?/).exec(window.location.href)[1];
+      this.pageType = (/.*?surveys\/(?:\d*\/)?(\w+)#?/).exec(window.location.href)[1];
       if (this.pageType == "create") {
         // 获取所有的课程
         MyAxios.get("/api/userCourse")
@@ -239,7 +239,7 @@ export default {
           });
       } else if (this.pageType == "edit") {
         // 获取问卷的 ID
-        this.id = window.location.href.match(/.*\/(.*?)\/edit$/)[1];
+        this.id = window.location.href.match(/.*?surveys\/(\d)+/)[1];
         // 获取问卷的数据
         MyAxios.get("/api/survey/" + this.id)
           .catch(function(error) {

@@ -35,7 +35,7 @@
                            size="mini"
                            @click="edit">绑定</el-button>
               </div>
-              <svg class="icon"
+              <svg class="iconIn"
                    :class="[userInfo.phone && !isEdit ? 'icon-active' : '']"
                    slot="reference"
                    aria-hidden="true">
@@ -67,7 +67,7 @@
                            size="mini"
                            @click="edit">绑定</el-button>
               </div>
-              <svg class="icon"
+              <svg class="iconIn"
                    :class="[userInfo.QQ && !isEdit ? 'icon-active' : '']"
                    slot="reference"
                    aria-hidden="true">
@@ -83,7 +83,7 @@
                  @tab-click="handleClick">
           <el-tab-pane name="mytask">
             <span slot="label">
-              <svg class="icon icon-active"
+              <svg class="iconIn icon-active"
                    slot="reference"
                    aria-hidden="true">
                 <use xlink:href="#icon-task"></use>
@@ -126,7 +126,7 @@
                     <el-button v-if="scope.row.isLeader"
                                size="mini"
                                type="danger"
-                               @click="leave(scope.row.taskId, scope.row.teamId, scope.$index)">退出</el-button>
+                               @click="leaveTask(scope.row.taskId, scope.row.teamId, scope.$index)">退出</el-button>
                   </div>
                 </template>
               </el-table-column>
@@ -134,7 +134,7 @@
           </el-tab-pane>
           <el-tab-pane name="myresult">
             <span slot="label">
-              <svg class="icon icon-active"
+              <svg class="iconIn icon-active"
                    slot="reference"
                    aria-hidden="true">
                 <use xlink:href="#icon-success"></use>
@@ -142,50 +142,74 @@
               &nbsp;科研成果</span>
             <el-table :data="resData"
                       style="width: 100%">
-              <el-table-column prop="taskName"
-                               label="课题">
+              <el-table-column prop="title"
+                               label="成果"
+                               min-width="100px">
               </el-table-column>
-              <el-table-column prop="taskTeacher"
-                               label="成果">
+              <el-table-column prop="task"
+                               label="课题"
+                               min-width="180px">
               </el-table-column>
-              <el-table-column prop="taskTeam"
+              <el-table-column prop="team"
                                label="团队">
               </el-table-column>
-              <el-table-column prop="taskSubmitStatus"
-                               label="提交时间">
+              <el-table-column prop="created_at"
+                               label="提交时间"
+                               sortable
+                               width="170px">
               </el-table-column>
-              <el-table-column prop="taskAction"
-                               label="操作">
+              <el-table-column prop="action"
+                               label="操作"
+                               width="75px">
+                <template slot-scope="scope">
+                  <el-button size="mini"
+                             type="primary"
+                             @click="toTask(scope.row.id)">查看</el-button>
+                </template>
               </el-table-column>
             </el-table>
           </el-tab-pane>
-          <el-tab-pane name="mycourse">
+          <el-tab-pane name="myansrec">
             <span slot="label">
-              <svg class="icon icon-active"
+              <svg class="iconIn icon-active"
                    slot="reference"
                    aria-hidden="true">
                 <use xlink:href="#icon-course"></use>
               </svg>
               &nbsp;我的课程</span>
-            <el-table :data="courseData"
+            <el-table :data="ansRecData"
                       style="width: 100%">
-              <el-table-column prop="taskName"
-                               label="问卷">
+              <el-table-column prop="survey"
+                               label="问卷"
+                               min-width="180px">
               </el-table-column>
-              <el-table-column prop="taskTeacher"
+              <el-table-column prop="course"
                                label="课程">
               </el-table-column>
-              <el-table-column prop="taskTeam"
-                               label="填写时间">
+              <el-table-column prop="updated_at"
+                               label="填写时间"
+                               sortable
+                               width="170px">
               </el-table-column>
-              <el-table-column prop="taskAction"
-                               label="操作">
+              <el-table-column prop="action"
+                               label="操作"
+                               width="140px">
+                <template slot-scope="scope">
+                  <div style="display:flex">
+                    <el-button size="mini"
+                               type="primary"
+                               @click="toCustomCourse(scope.row.id)">查看</el-button>
+                    <el-button size="mini"
+                               type="danger"
+                               @click="deleteAnsRec(scope.row.id, scope.$index)">删除</el-button>
+                  </div>
+                </template>
               </el-table-column>
             </el-table>
           </el-tab-pane>
           <el-tab-pane name="myteam">
             <span slot="label">
-              <svg class="icon icon-active"
+              <svg class="iconIn icon-active"
                    slot="reference"
                    aria-hidden="true">
                 <use xlink:href="#icon-team"></use>
@@ -193,23 +217,42 @@
               &nbsp;我的团队</span>
             <el-table :data="teamData"
                       style="width: 100%">
-              <el-table-column prop="taskTeam"
-                               label="头像">
+              <el-table-column prop="avatar"
+                               label="头像"
+                               width="80px">
+                <template slot-scope="scope">
+                  <img :src="'/storage/' + scope.row.avatar" />
+                </template>
               </el-table-column>
-              <el-table-column prop="taskName"
-                               label="队名">
+              <el-table-column prop="team"
+                               label="队名"
+                               min-width="50px">
               </el-table-column>
-              <el-table-column prop="taskTeacher"
-                               label="队简介">
+              <el-table-column prop="leader"
+                               label="队长"
+                               width="75px">
               </el-table-column>
-              <el-table-column prop="taskTeam"
-                               label="成员数">
+              <el-table-column prop="memberNum"
+                               label="成员数"
+                               width="75px">
               </el-table-column>
-              <el-table-column prop="taskAction"
-                               label="队长">
+              <el-table-column prop="desc"
+                               label="队简介"
+                               min-width="140px">
               </el-table-column>
-              <el-table-column prop="taskAction"
-                               label="操作">
+              <el-table-column prop="action"
+                               label="操作"
+                               width="75px">
+                <template slot-scope="scope">
+                  <el-button v-if="scope.row.isLeader"
+                             size="mini"
+                             type="danger"
+                             @click="dissolveTeam(scope.row.id, scope.$index)">解散</el-button>
+                  <el-button v-else
+                             size="mini"
+                             type="danger"
+                             @click="leaveTeam(scope.row.id, scope.$index)">退出</el-button>
+                </template>
               </el-table-column>
             </el-table>
           </el-tab-pane>
@@ -230,7 +273,7 @@ export default {
       activeName: "mytask",
       taskData: [],
       resData: [],
-      courseData: [],
+      ansRecData: [],
       teamData: [],
       isEdit: false
     }
@@ -282,47 +325,173 @@ export default {
         })
     },
     toTask(taskId) {
-      window.open("/#/index/task/" + taskId)
+      // window.open("/#/index/task/" + taskId)
+      location.href = "/#/index/task/" + taskId
     },
-    leave(taskId, teamId, index) {
+    toCustomCourse(customCourseId) {
+      // window.open("/#/index/customCourse/" + customCourseId)
+      location.href = "/#/index/customCourse/" + customCourseId
+    },
+    // 退出课题
+    leaveTask(taskId, teamId, index) {
       let that = this
       this.$confirm("确定要退出次课题吗?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
-      })
-        .then(() => {
-          this.MyAxios.post("/api/task/leave", {
-            taskId: taskId,
-            teamId: teamId
-          })
-            .catch(function(error) {
-              alert("数据获取发生了错误,请联系管理员 QQ:1450872874")
-            })
-            .then(function(response) {
-              if (response.data.errcode == 0) {
-                that.taskData.splice(index, 1)
-                that.$message({
-                  type: "success",
-                  message: "退出成功!"
-                })
-              } else {
-                that.$message({
-                  type: "info",
-                  message: "删除失败了!"
-                })
-              }
-            })
+      }).then(() => {
+        this.MyAxios.post("/api/task/leave", {
+          taskId: taskId,
+          teamId: teamId
         })
-        .catch(() => {
-          // this.$message({
-          //   type: 'info',
-          //   message: '已取消删除'
-          // });
+          .catch(function(error) {
+            alert("数据获取发生了错误,请联系管理员 QQ:1450872874")
+          })
+          .then(function(response) {
+            if (response.data.errcode == 0) {
+              that.taskData.splice(index, 1)
+              that.$message({
+                type: "success",
+                message: "退出成功!"
+              })
+            } else {
+              that.$message({
+                type: "info",
+                message: "删除失败了!"
+              })
+            }
+          })
+      })
+    },
+    // 删除问卷填写记录
+    deleteAnsRec(id, index) {
+      let that = this
+      this.$confirm("确定要删除这个定制课程吗?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(() => {
+        this.MyAxios.delete("/api/answerRecord/" + id)
+          .catch(function(error) {
+            alert("数据获取发生了错误,请联系管理员 QQ:1450872874")
+          })
+          .then(function(response) {
+            if (response.data.errcode == 0) {
+              that.ansRecData.splice(index, 1)
+              that.$message({
+                type: "success",
+                message: "删除成功!"
+              })
+            } else {
+              that.$message({
+                type: "info",
+                message: "删除失败了!"
+              })
+            }
+          })
+      })
+    },
+    // 解散团队
+    dissolveTeam(teamId, index) {
+      let that = this
+      this.$confirm("作为队长,确定要解散这个团队吗?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(() => {
+        this.MyAxios.delete("/api/team/" + teamId)
+          .catch(function(error) {
+            if (error.response.data.status != 200) {
+              alert(error.response.data.errmsg)
+            }
+          })
+          .then(function(response) {
+            if (response.data.errcode == 0) {
+              that.teamData.splice(index, 1)
+              that.$message({
+                type: "success",
+                message: "删除成功!"
+              })
+            } else {
+              that.$message({
+                type: "info",
+                message: "删除失败了!"
+              })
+            }
+          })
+      })
+    },
+    // 退出团队
+    leaveTeam(teamId, index) {
+      let that = this
+      this.$confirm("确定要退出这团队吗?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(() => {
+        this.MyAxios.delete("/api/user/team/" + teamId)
+          .catch(function(error) {
+            if (error.response.data.status != 200) {
+              alert(error.response.data.errmsg)
+            }
+          })
+          .then(function(response) {
+            if (response.data.errcode == 0) {
+              that.teamData.splice(index, 1)
+              that.$message({
+                type: "success",
+                message: "删除成功!"
+              })
+            } else {
+              that.$message({
+                type: "info",
+                message: "删除失败了!"
+              })
+            }
+          })
+      })
+    },
+    initResults() {
+      let that = this
+      this.MyAxios.get("/api/user/results")
+        .then(function(response) {
+          if (response.data.errcode == 0) that.resData = response.data.data
+          else console.log(response.data.errmsg)
+        })
+        .catch(function(error) {
+          console.log(error)
+        })
+    },
+    initAnsRec() {
+      let that = this
+      this.MyAxios.get("/api/user/ansrecs")
+        .then(function(response) {
+          if (response.data.errcode == 0) that.ansRecData = response.data.data
+          else console.log(response.data.errmsg)
+        })
+        .catch(function(error) {
+          console.log(error)
+        })
+    },
+    initTeam() {
+      let that = this
+      this.MyAxios.get("/api/user/teams")
+        .then(function(response) {
+          if (response.data.errcode == 0) that.teamData = response.data.data
+          else console.log(response.data.errmsg)
+        })
+        .catch(function(error) {
+          console.log(error)
         })
     },
     handleClick(tab, event) {
-      console.log(tab, event)
+      if (tab.name == "myresult" && this.resData.length == 0) {
+        this.initResults()
+      } else if (tab.name == "myansrec" && this.ansRecData.length == 0) {
+        this.initAnsRec()
+      } else if (tab.name == "myteam" && this.teamData.length == 0) {
+        this.initTeam()
+      }
     }
   },
   computed: {
@@ -390,7 +559,7 @@ export default {
           margin-top 10px
           display flex
 
-          .icon
+          .iconIn
             font-size 22px
             margin-right 5px
             cursor pointer
@@ -401,6 +570,11 @@ export default {
 
     .detail
       margin-top 30px
+
+      img
+        width 50px
+        height 50px
+        object-fit base-conver
 </style>
 
 <style>

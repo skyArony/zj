@@ -27,18 +27,7 @@ Route::group(['prefix' => 'admin'], function () {
 // 自定义的页要加到认证后的,就加到这个里面
 Route::group(['middleware' => 'admin.user'], function () {
     // 课程信息页
-    Route::view('/admin/customCourse/{id}', 'customCourse');
     Route::view('/admin/teams/member/{teamId}', 'addMember');
-});
-
-// 课程视频播放页
-Route::group(['prefix' => 'video'], function () {
-    Route::get('course/{id}', function() {
-        return view('video');
-    });
-    Route::get('customCourse/{id}', function() {
-        return view('video');
-    });
 });
 
 // 问卷预览和填写页

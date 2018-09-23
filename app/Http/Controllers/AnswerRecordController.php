@@ -54,4 +54,27 @@ class AnswerRecordController extends ApiController
         else
             return self::setResponse(false, 200, 0);
     }
+
+    // 删除一个问卷填写记录
+    public function delete(Request $request) {
+        // TODO validate
+
+        if (Cookie::get('id')) $userId = Crypt::decrypt(Cookie::get('id'));
+        else return self::setResponse(null, 400, -4007);    // 未登录
+
+        $surveyId = $request->surveyId;
+
+        $ansRecIds = AnswerRecord::where('creater_id', $userId)->get(['id'])->toArray();
+
+        $ids = [];
+        foreach ($ansRecIds as $key => $value) {
+            $ids[] = $value['id'];
+        }
+        if (!in_array($surveyId, $ids)) {
+            return self::setResponse(null, 400, -4009);
+        }
+
+        AnswerRecord::find($surveyId)->delete();
+        return self::setResponse(null, 200, 0);
+    }
 }

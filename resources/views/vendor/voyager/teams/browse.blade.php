@@ -196,8 +196,15 @@
                                         @endforeach
                                         <td class="no-sort no-click" id="bread-actions">
                                             @foreach(Voyager::actions() as $action)
+                                                @php
+                                                    if ($action == 'TCG\Voyager\Actions\ViewAction')
+                                                        continue;
+                                                @endphp
                                                 @include('voyager::bread.partials.actions', ['action' => $action])
                                             @endforeach
+                                            <a href="@php echo "/admin/teams/member/".$data->id; @endphp" title="查看定制化课程" class="btn btn-sm btn-primary pull-right edit" style="margin-right:5px">
+                                                <i class="voyager-edit"></i> <span class="hidden-xs hidden-sm">编辑队员</span>
+                                            </a>
                                         </td>
                                     </tr>
                                     @endforeach

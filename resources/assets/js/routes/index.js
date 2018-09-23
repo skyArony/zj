@@ -35,6 +35,10 @@ export default [
             {
                 path: "task/:taskId",
                 component: require("../components/Index-Task.vue")
+            },
+            {
+                path: "customCourse/:customCourseId",
+                component: require("../components/CustomCourse.vue")
             }
         ]
     }

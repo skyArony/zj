@@ -34,7 +34,7 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'], function ($api) {
     // 根据课程 ID 查看课程信息
     $api->get('/course/{courseId}', 'CourseController@getCourse');
     // 查看一个用户的所有课程[需要带 cookie 访问]
-    $api->post('/userCourse', 'CourseController@getAllCourseByUserId');
+    $api->get('/userCourse', 'CourseController@getAllCourseByUserId');
     // 获取 tag
     $api->get('/tag/{courseId}', 'TagController@listTags');
     // 增加 tag [需要带 cookie 访问]
@@ -57,6 +57,8 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'], function ($api) {
     $api->get('/answerRecord/{surveyId}', 'AnswerRecordController@checkRecord');
     // 填写一个问卷,记录结果[需要带 cookie 访问]
     $api->post('/answerRecord/{surveyId}', 'AnswerRecordController@addRecord');
+    // 删除一个问卷填写记录[需要带 cookie 访问]
+    $api->delete('/answerRecord/{surveyId}', 'AnswerRecordController@delete');
     // 获取一个定制化课程的数据
     $api->get('/customCourse/{id}', 'CustomCourseController@getCustomCourse');
     // 获取已经登录的用户信息[需要带 cookie 访问]
@@ -73,6 +75,8 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'], function ($api) {
     $api->get('/team', 'TeamController@getAllTeam');
     // 获取某一个团队的信息
     $api->get('/team/{teamId}', 'TeamController@getTeam');
+    // 删除一个团队
+    $api->delete('/team/{teamId}', 'TeamController@deleteTeam');
     // 获取一只队伍所有的成员信息
     $api->get('/team/member/{teamId}', 'TeamController@getAllMember');
     // 添加一个成员到一个队伍[需要带 cookie 访问]
@@ -93,4 +97,12 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'], function ($api) {
     $api->post('/user/bind/{type}', 'UserController@bindContact');
     // 获取一个用户参与的所有 task[需要带 cookie 访问]
     $api->get('/user/tasks', 'TaskController@getTasksByUserId');
+    // 获取一个用户参加的所有组的所有研究成果[需要带 cookie 访问]
+    $api->get('/user/results', 'ResearchResultsController@getResults');
+    // 获取一个用户所有填写记录[需要带 cookie 访问]
+    $api->get('/user/ansrecs', 'UserController@getAnswerRecord');
+    // 获取一个用户所有的团队[需要带 cookie 访问]
+    $api->get('/user/teams', 'UserController@getMyTeams');
+    // 退出团队[需要带 cookie 访问]
+    $api->delete('/user/team/{teamId}', 'TeamController@leaveTeam');
 });

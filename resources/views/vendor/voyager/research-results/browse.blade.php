@@ -196,8 +196,15 @@
                                         @endforeach
                                         <td class="no-sort no-click" id="bread-actions">
                                             @foreach(Voyager::actions() as $action)
+                                                @php
+                                                    if ($action == 'TCG\Voyager\Actions\ViewAction')
+                                                        continue;
+                                                @endphp                                            
                                                 @include('voyager::bread.partials.actions', ['action' => $action])
                                             @endforeach
+                                            <a target="_blank" href="@php echo "/#/index/result/".$data->id; @endphp" title="查看" class="btn btn-sm btn-warning pull-right edit">
+                                                <i class="voyager-eye"></i> <span class="hidden-xs hidden-sm">查看</span>
+                                            </a>
                                         </td>
                                     </tr>
                                     @endforeach

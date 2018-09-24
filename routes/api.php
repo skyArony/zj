@@ -105,4 +105,6 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'], function ($api) {
     $api->get('/user/teams', 'UserController@getMyTeams');
     // 退出团队[需要带 cookie 访问]
     $api->delete('/user/team/{teamId}', 'TeamController@leaveTeam');
+    // 根据 id 获取一个科研成果的详细信息
+    $api->get('/result/{resultId}', 'ResearchResultsController@getResultDetail');
 });

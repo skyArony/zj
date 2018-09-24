@@ -164,7 +164,7 @@
                 <template slot-scope="scope">
                   <el-button size="mini"
                              type="primary"
-                             @click="toTask(scope.row.id)">查看</el-button>
+                             @click="toResult(scope.row.id)">查看</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -327,6 +327,10 @@ export default {
     toTask(taskId) {
       // window.open("/#/index/task/" + taskId)
       location.href = "/#/index/task/" + taskId
+    },
+    toResult(resultId) {
+      // window.open("/#/index/task/" + taskId)
+      location.href = "/#/index/result/" + resultId
     },
     toCustomCourse(customCourseId) {
       // window.open("/#/index/customCourse/" + customCourseId)

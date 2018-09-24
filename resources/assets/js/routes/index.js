@@ -39,7 +39,11 @@ export default [
             {
                 path: "customCourse/:customCourseId",
                 component: require("../components/CustomCourse.vue")
-            }
+            },
+            {
+                path: "result/:resultId",
+                component: require("../components/Index-Result.vue")
+            },
         ]
     }
 ]

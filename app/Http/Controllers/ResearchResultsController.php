@@ -66,4 +66,18 @@ class ResearchResultsController extends ApiController
 
         $results = ResearchResult::all();
     }
+
+    public function getResultDetail(Request $request) {
+        // TODO validate
+
+        $resultId = $request->resultId;
+        
+        if ($result = ResearchResult::find($resultId)) {
+            $result->team = Team::find($result->team_id, ['team_name'])->team_name;
+            $result->task = Task::find($result->task_id, ['title'])->title;
+            return self::setResponse($result, 200, 0);
+        } else {
+            return self::setResponse(null, 404, -4005);
+        }
+    }
 }

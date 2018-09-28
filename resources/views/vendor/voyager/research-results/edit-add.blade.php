@@ -234,7 +234,7 @@
             })
             // 对 select 的下拉选项进行过滤
             $.ajax({
-                url : '/api/userId/team',
+                url : '/api/user/team',
                 dataType: 'json',
                 type : 'GET',
                 success: function(data) {
@@ -263,25 +263,34 @@
             // 监听第一个 selection 的 change
             $('select').eq(0).on('change', function() {
                 var teamId = $('select').eq(0).val()
-                $.ajax({
-                url : '/api/' + teamId + '/task',
-                dataType: 'json',
-                type : 'GET',
-                success: function(data) {
-                    if (data.errcode == 0) {
-                        var html = ''
-                        for (var index in data.data) {
-                            html += '<option value=' + data.data[index].id + '>' + data.data[index].title + '</option>'
+                // var type = window.location.href.match(/.*?research-results(?:\/\d)?\/(edit|create)/)[1]
+                if (teamId) {
+                    $.ajax({
+                        url : '/api/team/task',
+                        data: {
+                            teamId: teamId
+                        },
+                        dataType: 'json',
+                        type : 'GET',
+                        success: function(data) {
+                            if (data.errcode == 0) {
+                                var html = ''
+                                for (var index in data.data) {
+                                    html += '<option value=' + data.data[index].id + '>' + data.data[index].title + '</option>'
+                                }
+                                $('select').eq(1).html(html)
+                            } else {
+                                alert(data.errmsg);
+                            }
+                        },
+                        error: function() {
+                            alert("发生了意外错误,请联系开发者:QQ1450872874");
                         }
-                        $('select').eq(1).html(html)
-                    } else {
-                        alert(data.errmsg);
-                    }
-                },
-                error: function() {
-                    alert("发生了意外错误,请联系开发者:QQ1450872874");
+                    });    
+                } else {
+                    var html = ''
+                    $('select').eq(1).html(html)
                 }
-            });
             })
         }) 
     </script>

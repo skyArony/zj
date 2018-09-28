@@ -64,11 +64,18 @@ class SpiderController extends ApiController
         if($request->courseId) $courseId = $request->courseId;
         else return self::setResponse(null, 400, -4004);    // 缺失必要参数
 
-        // 非法操作检验
-        if (Cookie::get('id')) $userId = Crypt::decrypt(Cookie::get('id'));
+        // 登录检查
+        if (Cookie::get('id') && Cookie::get('role')) {
+            $userId = Crypt::decrypt(Cookie::get('id'));
+            $role = Crypt::decrypt(Cookie::get('role'));
+        } 
         else return self::setResponse(null, 400, -4007);    // 未登录
-        $course = Course::where("id", $courseId)->first();
-        if ($course->teacher_id != $userId) return self::setResponse(null, 400, -4009);    // 非法操作
+
+        // 权限检验
+        if ($role != 1) {
+            $course = Course::where("id", $courseId)->first();
+            if ($course->teacher_id != $userId) return self::setResponse(null, 400, -4009);    // 非法操作
+        }
 
         $guzzleClient = new GuzzleClient(['cookies' => true]);
         $response = $guzzleClient->request('GET', $mooc_course_tree.$courseId, ['http_errors' => false]);

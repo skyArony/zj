@@ -10,7 +10,7 @@
     </div> -->
     <div class="page-container">
       <keep-alive>
-        <router-view @changePage="changePage" :teams="teams"></router-view>
+        <router-view @changePage="changePage"></router-view>
       </keep-alive>
     </div>
   </div>
@@ -24,26 +24,14 @@ export default {
         headers: { "Content-Type": "application/json" }
       }),
       page: "", // 导航栏激活游标的位置
-      teams: []
     }
   },
   methods: {
     changePage(page) {
       this.page = page
-    },
-    getTeams() {
-      let that = this
-      this.MyAxios.get("/api/userId/team/")
-        .catch(function(error) {
-          alert("数据获取发生了错误,请联系管理员 QQ:1450872874")
-        })
-        .then(function(response) {
-          that.teams = response.data.data
-        })
     }
   },
   mounted: function() {
-    this.getTeams()
   }
 }
 </script>

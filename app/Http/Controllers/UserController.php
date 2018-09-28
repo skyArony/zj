@@ -117,4 +117,8 @@ class UserController extends ApiController
             return self::setResponse(null, 404, -4005);
         }
     }
+
+    public function test() {
+        return self::setResponse($_SERVER, 200, 0);
+    }
 }

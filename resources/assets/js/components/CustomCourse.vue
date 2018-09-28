@@ -372,7 +372,7 @@ ul {
 }
 .outer {
   width: 80%;
-  margin: auto;
+  margin: 20px auto;
   margin-bottom: 30px;
   font-family: Open Sans, sans-serif;
   font-size: 14px;

@@ -27,6 +27,7 @@ class TaskController extends ApiController
         return self::setResponse($tasks, 200, 0);
     }
 
+    // 获取一个 task 的详细数据
     public function getTaskDetail(Request $request)
     {
         // TODO validate
@@ -34,6 +35,8 @@ class TaskController extends ApiController
         $taskId = $request->taskId;
 
         $task = Task::find($taskId);
+        if(!$task) return self::setResponse(null, 404, -4005);
+
         $creater = User::find($task->creater_id);
         $registTeams = $task->belongsToManyTeams->count();
 

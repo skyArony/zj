@@ -22,7 +22,7 @@
         <el-card v-for="(item, index) in searchRes"
                  :key="index"
                  :body-style="{ padding: '0px', display: 'flex', height: '100px', width: '280px'}">
-          <img src="/storage/img/nologin.jpg">
+          <img :src="item.avatar">
           <div class="search-res-item-info">
             <span class="item-name">{{item.name}}</span>
             <span class="item-id">{{item.id}}</span>
@@ -134,14 +134,11 @@ export default {
         userId: user.id
       })
         .then(function(response) {
-          if (response.data.errcode == 0) {
-            that.tableData.push(user)
-            that.tableData = Array.from(new Set(that.tableData));
-          }
-          else console.log(response.data.errmsg)
+          that.tableData.push(user)
+          that.tableData = Array.from(new Set(that.tableData))
         })
         .catch(function(error) {
-          console.log(error)
+          alert(error.response.data.errmsg)
         })
     },
     deleteMember(userId) {
@@ -153,20 +150,16 @@ export default {
         }
       })
         .then(function(response) {
-          if (response.data.errcode == 0) {
-            that.tableData = that.tableData.filter(function(item) {
-              return item.id != userId
-            })
-          } else console.log(response.data.errmsg)
+          that.tableData = that.tableData.filter(function(item) {
+            return item.id != userId
+          })
         })
         .catch(function(error) {
-          if (error.response.data.status != 200) {
-            alert(error.response.data.errmsg)
-          }
+          alert(error.response.data.errmsg)
         })
     },
     keywordCheck() {
-      if (this.keyword == '') this.searchRes = ''
+      if (this.keyword == "") this.searchRes = ""
     }
   },
   mounted: function() {
@@ -213,9 +206,10 @@ export default {
 
   img
     width 100px
+    height 100px
 
   .search-res-item-info
-    width 100%
+    flex-grow 1
     padding 14px
     display flex
     flex-direction column

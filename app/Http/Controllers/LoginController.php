@@ -101,7 +101,7 @@ class LoginController extends ApiController
     public function redirectTo()
     {
         if ($this->redirectUrl) {
-            $url = env('APP_URL').$this->redirectUrl;
+            $url = $this->redirectUrl;
             return $url;
         }
         return config('voyager.user.redirect', route('voyager.dashboard'));

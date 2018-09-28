@@ -28,7 +28,7 @@ class ResearchResultsController extends ApiController
 
         if ($request->teamId) {
             $team = Team::find($request->teamId);
-            $tasks = $team->belongsToManyTasks()->get();
+            $tasks = $team->belongsToManyTasks;
             return self::setResponse($tasks, 200, 0);
         } else {
             return self::setResponse(null, 400, -4004);    // 未登录

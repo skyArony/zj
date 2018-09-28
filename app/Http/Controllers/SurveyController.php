@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\DB\Question;
 use App\Models\DB\Survey;
+use App\Models\DB\Course;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Crypt;
 
@@ -61,9 +62,10 @@ class SurveyController extends ApiController
     public function getSurvey(Request $request) {
         // TODO validate
 
-        if ($survey = Survey::find($request->id)) 
+        if ($survey = Survey::find($request->id)) {
+            $survey->course = Course::find($survey->course_id, ['name'])->name;
             return self::setResponse($survey, 200, 0);
-        else 
+        } else 
             return self::setResponse(null, 404, -4005);
     }
 }

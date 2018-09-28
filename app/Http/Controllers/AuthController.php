@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
@@ -15,7 +16,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login']]);
+        $this->middleware('jwt.auth', ['except' => ['login', 'refresh']]);
     }
 
     /**
@@ -41,7 +42,7 @@ class AuthController extends Controller
      */
     public function me()
     {
-        return response()->json(auth('api')->user());
+        return response()->json(JWTAuth::parseToken()->toUser());
     }
 
     /**
@@ -51,7 +52,7 @@ class AuthController extends Controller
      */
     public function logout()
     {
-        auth('api')->logout();
+        JWTAuth::parseToken()->invalidate();
 
         return response()->json(['message' => 'Successfully logged out']);
     }
@@ -64,7 +65,7 @@ class AuthController extends Controller
      */
     public function refresh()
     {
-        return $this->respondWithToken(auth('api')->refresh());
+        return $this->respondWithToken(JWTAuth::parseToken()->refresh());
     }
 
     /**

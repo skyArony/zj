@@ -115,50 +115,68 @@
             })
         })()
         // 覆盖同步
-        document.getElementById("courseTreeAllSync").onclick = function() {
-            if(confirm("『覆盖同步』会从世界大学城同步以更新你的 CourseTree，你设置 Tag 和课程目标都将消失，确定同步吗？")){
-                var xmlhttp = new XMLHttpRequest();
-                var url = document.getElementById("courseTreeAllSync").attributes["url"].value;  
-                xmlhttp.open("POST", url, true);
-                xmlhttp.send();
-                xmlhttp.onreadystatechange = function() {
-                    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                        var data = JSON.parse(xmlhttp.responseText)
+        $('#courseTreeAllSync').click(function() {
+            if ($("#courseTreeAllSync").hasClass('disabled')) return false
+            if(confirm("『覆盖同步』会从世界大学城同步以更新你的 CourseTree，你设置 Tag 和课程目标都将消失，确定同步吗？")) {
+                $("#courseTreeAllSync").removeClass("btn-success")
+                $("#courseTreeAllSync").addClass("btn-default")
+                $("#courseTreeAllSync").addClass("disabled")
+                var url = $('#courseTreeAllSync').attr('url');
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    dataType: 'json',
+                    success: function(data) {
                         if (data.data == null) alert("覆盖同步获取成功,但是你并没有在大学城-空间慕课设置课时!")
                         else {
                             alert("覆盖同步获取成功!")
                             location.reload()
                         }
                         console.log("覆盖同步获取成功")
-                    } else if(xmlhttp.readyState == 4 && xmlhttp.status != 200) {
+                    },
+                    error: function(data) {
                         console.log("覆盖同步获取失败")
                         alert("覆盖同步获取失败!")
+                    },
+                    complete: function () {
+                        $("#courseTreeAllSync").removeClass("btn-default")
+                        $("#courseTreeAllSync").addClass("btn-success")
+                        $("#courseTreeAllSync").removeClass("disabled")
                     }
-                }
-            } 
-        };
-
-        document.getElementById("courseTreeAddSync").onclick = function() {
-            if(confirm("『增量同步』会从世界大学城同步以更新你的 CourseTree，并保留你设置 Tag 和课程目标，确定同步吗？")){  
-                var xmlhttp = new XMLHttpRequest();
-                var url = document.getElementById("courseTreeAddSync").attributes["url"].value;  
-                xmlhttp.open("POST", url, true);
-                xmlhttp.send();
-                xmlhttp.onreadystatechange = function() {
-                    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                        var data = JSON.parse(xmlhttp.responseText)
-                        if (data.data == null) alert("覆盖同步获取成功,但是你并没有在大学城-空间慕课设置课时!")
+                })
+            }
+        })
+        // 增量同步
+        $('#courseTreeAddSync').click(function() {
+            if ($("#courseTreeAddSync").hasClass('disabled')) return false
+            if(confirm("『增量同步』会从世界大学城同步以更新你的 CourseTree，并保留你设置 Tag 和课程目标，确定同步吗？")) {
+                $("#courseTreeAddSync").removeClass("btn-success")
+                $("#courseTreeAddSync").addClass("btn-default")
+                $("#courseTreeAddSync").addClass("disabled")
+                var url = $('#courseTreeAddSync').attr('url');
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    dataType: 'json',
+                    success: function(data) {
+                        if (data.data == null) alert("增量同步获取成功,但是你并没有在大学城-空间慕课设置课时!")
                         else {
                             alert("增量同步获取成功!")
                             location.reload()
                         }
                         console.log("增量同步获取成功")
-                    } else if(xmlhttp.readyState == 4 && xmlhttp.status != 200) {
+                    },
+                    error: function(data) {
                         console.log("增量同步获取失败")
                         alert("增量同步获取失败!")
+                    },
+                    complete: function () {
+                        $("#courseTreeAddSync").removeClass("btn-default")
+                        $("#courseTreeAddSync").addClass("btn-success")
+                        $("#courseTreeAddSync").removeClass("disabled")
                     }
-                }
-            } 
-        };
+                })
+            }
+        })
     </script>
 @stop

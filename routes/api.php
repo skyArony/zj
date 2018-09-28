@@ -34,7 +34,7 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'], function ($api) {
     // 根据课程 ID 查看课程信息
     $api->get('/course/{courseId}', 'CourseController@getCourse');
     // 查看一个用户的所有课程[需要带 cookie 访问]
-    $api->get('/userCourse', 'CourseController@getAllCourseByUserId');
+    $api->get('/user/course', 'CourseController@getAllCourseByUserId');
     // 获取 tag
     $api->get('/tag/{courseId}', 'TagController@listTags');
     // 增加 tag [需要带 cookie 访问]
@@ -64,9 +64,9 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'], function ($api) {
     // 获取已经登录的用户信息[需要带 cookie 访问]
     $api->get('/me', 'LoginController@me');
     // 根据用户 ID 返回其创建的所有队伍[需要带 cookie 访问]
-    $api->get('/userId/team', 'ResearchResultsController@getTeamsByUserId');
+    $api->get('/user/team', 'ResearchResultsController@getTeamsByUserId');
     // 根据队伍 ID 返回其所参加的所有课题
-    $api->get('/{teamId}/task', 'ResearchResultsController@getTasksByTeamId');
+    $api->get('/team/task', 'ResearchResultsController@getTasksByTeamId');
     // 获取系统中所有的课程
     $api->get('/course', 'CourseController@getAllCourse');
     // 获取系统中所有的研究课题
@@ -75,14 +75,14 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'], function ($api) {
     $api->get('/team', 'TeamController@getAllTeam');
     // 获取某一个团队的信息
     $api->get('/team/{teamId}', 'TeamController@getTeam');
-    // 删除一个团队
+    // 删除队伍的一个成员[需要带 cookie 访问]
+    $api->delete('/team/member', 'TeamController@deleteMember');
+    // 解散一个团队
     $api->delete('/team/{teamId}', 'TeamController@deleteTeam');
     // 获取一只队伍所有的成员信息
     $api->get('/team/member/{teamId}', 'TeamController@getAllMember');
     // 添加一个成员到一个队伍[需要带 cookie 访问]
     $api->post('/team/member', 'TeamController@addMember');
-    // 添加队伍的一个成员[需要带 cookie 访问]
-    $api->delete('/team/member', 'TeamController@deleteMember');
     // 根据 id 获取一个科研课题的详细信息
     $api->get('/task/{taskId}', 'TaskController@getTaskDetail');
     // 获取一个用户的其他课题信息
@@ -107,4 +107,7 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'], function ($api) {
     $api->delete('/user/team/{teamId}', 'TeamController@leaveTeam');
     // 根据 id 获取一个科研成果的详细信息
     $api->get('/result/{resultId}', 'ResearchResultsController@getResultDetail');
+
+
+    $api->get('/test', "UserController@test");
 });

@@ -28,6 +28,8 @@ Route::group(['prefix' => 'admin'], function () {
 Route::group(['middleware' => 'admin.user'], function () {
     // 课程信息页
     Route::view('/admin/teams/member/{teamId}', 'addMember');
+    // 首页
+    Route::view('/', 'index');
 });
 
 // 问卷预览和填写页
@@ -39,5 +41,3 @@ Route::get('pdf/{id}', 'CustomCourseController@getPDF');
 // 404
 Route::view("404", "404");
 
-// 首页
-Route::view('/', 'index');

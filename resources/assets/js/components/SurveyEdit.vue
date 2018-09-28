@@ -221,7 +221,7 @@ export default {
       this.pageType = (/.*?surveys\/(?:\d*\/)?(\w+)#?/).exec(window.location.href)[1];
       if (this.pageType == "create") {
         // 获取所有的课程
-        MyAxios.get("/api/userCourse")
+        MyAxios.get("/api/user/course")
           .catch(function(error) {
             console.log(error);
           })

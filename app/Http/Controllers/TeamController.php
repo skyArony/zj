@@ -53,27 +53,29 @@ class TeamController extends ApiController
     public function addMember(Request $request) {
         // TODO validate
 
-        if (Cookie::get('id')) $ownerId = Crypt::decrypt(Cookie::get('id'));
+        // 登录检查
+        if (Cookie::get('id') && Cookie::get('role')) {
+            $userId = Crypt::decrypt(Cookie::get('id'));
+            $role = Crypt::decrypt(Cookie::get('role'));
+        } 
         else return self::setResponse(null, 400, -4007);    // 未登录
 
-        $userId = $request->userId;
+        $memberId = $request->userId;
         $teamId = $request->teamId;
+        $team = Team::find($teamId);
 
-        $owner = User::find($ownerId);
-        $teams = $owner->hasManyTeams()->pluck("id")->toArray();
+        // 权限检验
+        if ($role != 1)
+            if ($team->creater_id != $userId) return self::setResponse(null, 400, -4009);    // 越权操作   
 
-        if (!in_array($teamId, $teams)) {
-            return self::setResponse(null, 400, -4009);
-        }
-
-        if ($team = Team::find($teamId)) {
-            if ($team->creater_id == $userId) {
-                return self::setResponse(null, 200, 0);
+        if ($team) {
+            if ($team->creater_id == $memberId) {
+                return self::setResponse(null, 400, -4010);
             }
-            $team->belongsToManyUsers()->syncWithoutDetaching($userId);
+            $team->belongsToManyUsers()->syncWithoutDetaching($memberId);
             return self::setResponse(null, 200, 0);
         } else {
-            return self::setResponse(null, 404, -4005);
+            return self::setResponse(null, 404, -4012);
         }
     }
 
@@ -81,30 +83,32 @@ class TeamController extends ApiController
     public function deleteMember(Request $request) {
         // TODO validate
 
-        if (Cookie::get('id')) $ownerId = Crypt::decrypt(Cookie::get('id'));
+        // 登录检查
+        if (Cookie::get('id') && Cookie::get('role')) {
+            $userId = Crypt::decrypt(Cookie::get('id'));
+            $role = Crypt::decrypt(Cookie::get('role'));
+        } 
         else return self::setResponse(null, 400, -4007);    // 未登录
 
-        $userId = $request->userId;
+        $memberId = $request->userId;
         $teamId = $request->teamId;
+        $team = Team::find($teamId);
 
-        $owner = User::find($ownerId);
-        $teams = $owner->hasManyTeams()->pluck("id")->toArray();
+        // 权限检验
+        if ($role != 1)
+            if ($team->creater_id != $userId) return self::setResponse(null, 400, -4009);    // 越权操作   
 
-        if (!in_array($teamId, $teams)) {
-            return self::setResponse(null, 400, -4009);
-        }
-
-        if ($team = Team::find($teamId)) {
-            if ($team->creater_id == $userId) {
+        if ($team) {
+            if ($team->creater_id == $memberId) {
                 return self::setResponse(null, 400, -4010);
             }
-            if ($team->belongsToManyUsers()->detach($userId)) {
+            if ($team->belongsToManyUsers()->detach($memberId)) {
                 return self::setResponse(null, 200, 0);
             } else {
                 return self::setResponse(null, 500, -4006);
             }
         } else {
-            return self::setResponse(null, 404, -4005);
+            return self::setResponse(null, 404, -4012);
         } 
     }
 

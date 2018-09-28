@@ -188,18 +188,14 @@ export default {
         tags: res
       })
         .then(function(response) {
-          if (response.data.errcode == 0) {
-            // 显示结果或跳转;
-            that.customCourseId = response.data.data.id;
-            that.isComplete = true;
-          } else {
-            alert("发生了错误,请报告开发者.QQ: 1450872874");
-            console.log(response.data.errmsg);
-          }
+          // 显示结果或跳转;
+          that.customCourseId = response.data.data.id;
+          that.isComplete = true;
         })
         .catch(function(error) {
           console.log(error);
-          alert("发生了错误,请报告开发者.QQ: 1450872874");
+          if (error.response.data.errcode == -4007) alert ("请先登录!");
+          else alert(error.response.data.errmsg);
         });
     },
     again() {

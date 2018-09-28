@@ -7,7 +7,7 @@
         <h1 class="page-title">
             <i class="{{ $dataType->icon }}"></i> {{ $dataType->display_name_plural }}
         </h1>
-        <button class="btn btn-success" id="courseSync" url="@php echo '/api/userCourse' @endphp"><i class="voyager-refresh"></i> <span>同步课程</span></button>
+        <button class="btn btn-success" id="courseSync" url="@php echo '/api/course' @endphp"><i class="voyager-refresh"></i> <span>同步课程</span></button>
     </div>
 @stop
 
@@ -287,23 +287,24 @@
         });
     </script>
     <script>
-        document.getElementById("courseSync").onclick = function() {
+        $('#courseSync').click(function() {
             if ($("#courseSync").hasClass('disabled')) return false
+            $("#courseSync").removeClass("btn-success")
+            $("#courseSync").addClass("btn-default")
             $("#courseSync").addClass("disabled")
-            $("#courseSync").removeClass("btn-warning")
-            var xmlhttp = new XMLHttpRequest();
-            var url = document.getElementById("courseSync").attributes["url"].value;  
-            xmlhttp.open("GET", url, true);
-            xmlhttp.send();
-            xmlhttp.onreadystatechange = function() {
-                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            var url = $('#courseSync').attr('url');
+            $.ajax({
+                type: "POST",
+                url: url,
+                success: function(data) {
                     console.log("同步成功!")
                     location.reload()
-                } else if(xmlhttp.readyState == 4 && xmlhttp.status != 200) {
+                },
+                error: function(data) {
                     console.log("同步失败!")
                     alert("同步失败!")
                 }
-            }
-        };
+            })
+        })
     </script>
 @stop

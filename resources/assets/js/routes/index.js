@@ -1,5 +1,5 @@
 export default [
-    // { path: "/", redirect: "/index/task" },
+    { path: "/", component: require("../components/Redirect.vue") },
     {
         path: "/index",
         component: require("../components/Index.vue"),
@@ -22,7 +22,7 @@ export default [
             },
             {
                 path: "me",
-                component: require("../components/Index-UserPage.vue"),
+                component: require("../components/Index-UserPage.vue")
             },
             {
                 path: "video/course/:courseId",
@@ -43,7 +43,7 @@ export default [
             {
                 path: "result/:resultId",
                 component: require("../components/Index-Result.vue")
-            },
+            }
         ]
     }
 ]

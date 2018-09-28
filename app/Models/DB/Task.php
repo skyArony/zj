@@ -12,8 +12,7 @@ class Task extends Model
     
     protected $dates = ['deleted_at'];
     protected $table = 'tasks';
-    // protected $hidden=['pivot']; 
-
+    
     public function setCreaterIdAttribute($value)
     {
         $this->attributes['creater_id'] = Cookie::get('id');

@@ -195,11 +195,11 @@
                                             </td>
                                         @endforeach
                                         <td class="no-sort no-click" id="bread-actions">
-                                            <a href="/survey/@php echo $data->id;  @endphp" target="_blank" title="查看问卷" class="btn btn-sm btn-warning pull-right edit">
-                                                <i class="voyager-eye"></i> <span class="hidden-xs hidden-sm">查看问卷</span>
+                                            <a href="/survey/@php echo $data->id;  @endphp" target="_blank" title="查看" class="btn btn-sm btn-warning pull-right edit">
+                                                <i class="voyager-eye"></i> <span class="hidden-xs hidden-sm">查看</span>
                                             </a>
-                                            <a href="/admin/answer-records?survey_id=@php echo $data->id;  @endphp" title="查看填写记录" class="btn btn-sm btn-warning pull-right edit">
-                                                <i class="voyager-eye"></i> <span class="hidden-xs hidden-sm">查看填写记录</span>
+                                            <a href="/admin/answer-records?surveyId=@php echo $data->id;  @endphp" title="查看记录" class="btn btn-sm btn-warning pull-right edit">
+                                                <i class="voyager-eye"></i> <span class="hidden-xs hidden-sm">查看记录</span>
                                             </a>
                                             @foreach(Voyager::actions() as $action)
                                                 @php

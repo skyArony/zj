@@ -152,9 +152,14 @@ return [
                 'classes'    => 'class-full-of-rum',
                 'icon_class' => 'voyager-person',
             ],
+            '首页' => [
+                'route'        => '/#/index',
+                'icon_class'   => 'voyager-home',
+                'target_blank' => true,
+            ],
             '我的大学城' => [
                 'route'        => 'http://worlduc.com/SpaceManage/default.aspx',
-                'icon_class'   => 'voyager-home',
+                'icon_class'   => 'voyager-world',
                 'target_blank' => true,
             ],
             'Logout' => [

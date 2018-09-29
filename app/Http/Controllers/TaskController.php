@@ -103,7 +103,7 @@ class TaskController extends ApiController
         if ($user = User::with('belongsToManyTeams.belongsToManyTasks.belongsToUser')->find($userId)) {
             // 自己作为队员的组
             $teams = $user->belongsToManyTeams;
-            $tasks = $teams->map(function ($item) {
+            $tasksRes1 = $teams->map(function ($item) {
                 $tasks = $item->belongsToManyTasks;
                 $tasks = $tasks->map(function ($item2) use ($item) {
                     $res = [];
@@ -126,7 +126,7 @@ class TaskController extends ApiController
             // 自己作为队长的组
             $user = User::with('hasManyTeams.belongsToManyTasks.belongsToUser')->find($userId);
             $teams2 = $user->hasManyTeams;
-            $tasks2 = $teams2->map(function ($item) {
+            $tasksRes2 = $teams2->map(function ($item) {
                 $tasks2 = $item->belongsToManyTasks;
                 $tasks2 = $tasks2->map(function ($item2) use ($item) {
                     $res = [];
@@ -148,11 +148,15 @@ class TaskController extends ApiController
             });
 
             // 去除空元素,化为一维
-            $tasksArray = array_merge($tasks->toArray(), $tasks2->toArray());
+            $tasksArray = array_merge($tasksRes1->toArray(), $tasksRes2->toArray());
             $tasks = [];
             foreach ($tasksArray as $key => $value) {
                 if ($value) {
-                    $tasks[] = $value[0];
+                    foreach($value as $key2 => $value2) {
+                        if ($value2) {
+                            $tasks[] = $value2;
+                        }
+                    }
                 }
             }
             return self::setResponse($tasks, 200, 0);

@@ -202,8 +202,11 @@
                                                 @endphp                                            
                                                 @include('voyager::bread.partials.actions', ['action' => $action])
                                             @endforeach
-                                            <a target="_blank" href="@php echo "/#/index/task/".$data->id; @endphp" title="查看课程目录" class="btn btn-sm btn-warning pull-right edit">
-                                                <i class="voyager-eye"></i> <span class="hidden-xs hidden-sm">查看课题详情</span>
+                                            <a target="_blank" href="@php echo "/#/index/task/".$data->id; @endphp" title="详情" class="btn btn-sm btn-warning pull-right edit">
+                                                <i class="voyager-eye"></i> <span class="hidden-xs hidden-sm">详情</span>
+                                            </a>
+                                            <a href="/admin/research-results?taskId=@php echo $data->id;  @endphp" title="成果" class="btn btn-sm btn-warning pull-right edit">
+                                                <i class="voyager-eye"></i> <span class="hidden-xs hidden-sm">成果</span>
                                             </a>
                                         </td>
                                     </tr>

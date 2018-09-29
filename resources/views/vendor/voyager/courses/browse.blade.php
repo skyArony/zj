@@ -183,8 +183,8 @@
                                             <!-- @foreach(Voyager::actions() as $action)
                                                 @include('voyager::bread.partials.actions', ['action' => $action])
                                             @endforeach -->
-                                            <a href="@php echo route('voyager.dashboard')."/course-trees?courseId=".$data->id; @endphp" title="查看课程目录" class="btn btn-sm btn-warning pull-right edit">
-                                                <i class="voyager-eye"></i> <span class="hidden-xs hidden-sm">查看课程目录</span>
+                                            <a href="@php echo route('voyager.dashboard')."/course-trees?courseId=".$data->id; @endphp" title="查看" class="btn btn-sm btn-warning pull-right edit">
+                                                <i class="voyager-eye"></i> <span class="hidden-xs hidden-sm">查看</span>
                                             </a>
                                         </td>
                                     </tr>

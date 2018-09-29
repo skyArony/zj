@@ -85,17 +85,17 @@
                                     <!-- 过滤 -->
                                     @php
                                         if (Cookie::get('role') == 1 || Cookie::get('role') == 2) {
-                                            if (isset($_GET['survey_id'])) {
+                                            if (isset($_GET['surveyId'])) {
                                                 for ($i = 0, $len = count($dataTypeContent); $i < $len; $i++) {
-                                                    if ($dataTypeContent[$i]->survey_id != $_GET['survey_id']) {
+                                                    if ($dataTypeContent[$i]->survey_id != $_GET['surveyId']) {
                                                         unset($dataTypeContent[$i]);
                                                     }
                                                 }
                                             }
                                         } else {
-                                            if (isset($_GET['survey_id'])) {
+                                            if (isset($_GET['surveyId'])) {
                                                 for ($i = 0, $len = count($dataTypeContent); $i < $len; $i++) {
-                                                    if ($dataTypeContent[$i]->survey_id != $_GET['survey_id']) {
+                                                    if ($dataTypeContent[$i]->survey_id != $_GET['surveyId']) {
                                                         unset($dataTypeContent[$i]);
                                                     }
                                                 }
@@ -213,8 +213,8 @@
                                                 @endphp
                                                 @include('voyager::bread.partials.actions', ['action' => $action])
                                             @endforeach
-                                            <a target="_blank" href="@php echo "/#/index/customCourse/".$data->id; @endphp" title="查看定制化课程" class="btn btn-sm btn-warning pull-right edit">
-                                                <i class="voyager-eye"></i> <span class="hidden-xs hidden-sm">查看定制化课程</span>
+                                            <a target="_blank" href="@php echo "/#/index/customCourse/".$data->id; @endphp" title="查看" class="btn btn-sm btn-warning pull-right edit">
+                                                <i class="voyager-eye"></i> <span class="hidden-xs hidden-sm">查看</span>
                                             </a>
                                         </td>
                                     </tr>

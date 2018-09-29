@@ -102,17 +102,25 @@
                                label="团队">
               </el-table-column>
               <el-table-column prop="time"
-                               label="课题状态">
+                               label="课题状态"
+                               :filters="[{ text: '已过期', value: 'past' }, { text: '未过期', value: 'working' }]"
+                               :filter-method="taskStatusFilter"
+                               :filter-multiple=false
+                               filter-placement="bottom-end">
                 <template slot-scope="scope">
                   <el-tag :type="scope.row.time === '已过期' ? 'info' : 'success'"
                           disable-transitions>{{scope.row.time === '已过期' ? '' : '剩'}}{{scope.row.time}}</el-tag>
                 </template>
               </el-table-column>
               <el-table-column prop="isSubmit"
-                               label="提交状态">
+                               label="提交状态"
+                               :filters="[{ text: '已提交', value: 'submit' }, { text: '未提交', value: 'nosubmit' }]"
+                               :filter-method="taskSubmitFilter"
+                               :filter-multiple=false
+                               filter-placement="bottom-end">
                 <template slot-scope="scope">
-                  <el-tag :type="scope.row.isSubmit === 'true' ? 'success' : 'info'"
-                          plain>{{scope.row.isSubmit === 'true' ? '已提交' : '未提交'}}</el-tag>
+                  <el-tag :type="scope.row.isSubmit === true ? 'success' : 'info'"
+                          plain>{{scope.row.isSubmit === true ? '已提交' : '未提交'}}</el-tag>
                 </template>
               </el-table-column>
               <el-table-column prop="isLeader"
@@ -151,7 +159,8 @@
                                min-width="180px">
               </el-table-column>
               <el-table-column prop="team"
-                               label="团队">
+                               label="团队"
+                               sortable>
               </el-table-column>
               <el-table-column prop="created_at"
                                label="提交时间"
@@ -184,7 +193,8 @@
                                min-width="180px">
               </el-table-column>
               <el-table-column prop="course"
-                               label="课程">
+                               label="课程"
+                               sortable>
               </el-table-column>
               <el-table-column prop="updated_at"
                                label="填写时间"
@@ -230,7 +240,7 @@
               </el-table-column>
               <el-table-column prop="leader"
                                label="队长"
-                               width="75px">
+                               width="80px">
               </el-table-column>
               <el-table-column prop="memberNum"
                                label="成员数"
@@ -242,7 +252,11 @@
               </el-table-column>
               <el-table-column prop="action"
                                label="操作"
-                               width="75px">
+                               width="75px"
+                               :filters="[{ text: '我创建的', value: 'myCreate' }, { text: '我参与的', value: 'myPartic' }]"
+                               :filter-method="teamActionFilter"
+                               :filter-multiple=false
+                               filter-placement="bottom-end">
                 <template slot-scope="scope">
                   <el-button v-if="scope.row.isLeader"
                              size="mini"
@@ -496,6 +510,24 @@ export default {
       } else if (tab.name == "myteam" && this.teamData.length == 0) {
         this.initTeam()
       }
+    },
+    teamActionFilter(value, row) {
+      if (value == 'myCreate') 
+        return row.isLeader === true
+      else if (value == 'myPartic')
+        return row.isLeader === false
+    },
+    taskStatusFilter(value, row) {
+      if (value == 'past') 
+        return row.time == '已过期'
+      else if  (value == 'working')
+        return row.time != '已过期'
+    },
+    taskSubmitFilter(value, row) {
+      if (value == 'submit') 
+        return row.isSubmit == true
+      else if  (value == 'nosubmit')
+        return row.isSubmit == false
     }
   },
   computed: {

@@ -91,10 +91,21 @@
                                     @php
                                         if (Cookie::get('role') == 3 || Cookie::get('role') == 4) {
                                             for ($i = 0, $len = count($dataTypeContent); $i < $len; $i++) {
-                                                    if ($dataTypeContent[$i]->creater_id != Cookie::get('id')) {
-                                                        unset($dataTypeContent[$i]);
-                                                    }
+                                                if ($dataTypeContent[$i]->creater_id != Cookie::get('id')) {
+                                                    unset($dataTypeContent[$i]);
                                                 }
+                                                if (isset($_GET['taskId'])) {
+                                                    if($dataTypeContent[$i]->task_id != $_GET['taskId']) {
+                                                        unset($dataTypeContent[$i]);
+                                                    }                                                    
+                                                }
+                                            }
+                                        } else {
+                                            if (isset($_GET['taskId'])) {
+                                                if($dataTypeContent[$i]->task_id != $_GET['taskId']) {
+                                                    unset($dataTypeContent[$i]);
+                                                }                                                    
+                                            }
                                         }
                                     @endphp
                                     <!-- /过滤 -->                                    

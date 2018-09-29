@@ -311,6 +311,8 @@ export default {
           qq: this.userInfo.QQ
         }).catch(function(error) {
           alert(error.response.data.errmsg)
+        }).then(function() {
+          location.href = "/socialite/bind/qq"
         })
       }
       this.isEdit = false

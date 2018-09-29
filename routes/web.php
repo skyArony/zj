@@ -41,3 +41,8 @@ Route::get('pdf/{id}', 'CustomCourseController@getPDF');
 // 404
 Route::view("404", "404");
 
+// QQ 登陆
+Route::get('/socialite/callback', 'SocialiteController@callback');
+Route::get('/socialite/bind/qq', 'SocialiteController@bindQQ');
+Route::get('/socialite/login/qq', 'SocialiteController@loginQQ');
+

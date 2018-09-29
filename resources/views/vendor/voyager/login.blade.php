@@ -35,6 +35,20 @@
     </style>
 
     <link href="/css/font-css.css" rel="stylesheet">
+    <style>
+        .iconIn {
+            width:1em;
+            height:1em;
+            vertical-align:-0.15em;
+            fill:currentColor;
+            overflow:hidden;
+        }
+        .qqLogin {
+            font-size: 32px;
+            margin-top: 10px;
+            margin-left: 20px;
+        }
+    </style>
 </head>
 <body class="login">
 <div class="container-fluid">
@@ -95,6 +109,13 @@
                         <span class="signin">{{ __('voyager::generic.login') }}</span>
                     </button>
 
+                    <a id="qq" class="qq" href="/socialite/login/qq">
+                        <svg class="iconIn qqLogin"
+                            aria-hidden="true">
+                            <use xlink:href="#icon-qq"></use>
+                        </svg>
+                    </a>
+
               </form>
 
               <div style="clear:both"></div>
@@ -108,12 +129,20 @@
                 </ul>
               </div>
               @endif
+              @if(isset($_GET['error']))
+              <div class="alert alert-red">
+                <ul class="list-unstyled">
+                    <li>{{ $_GET['error'] }}</li>
+                </ul>
+              </div>
+              @endif
 
             </div> <!-- .login-container -->
 
         </div> <!-- .login-sidebar -->
     </div> <!-- .row -->
 </div> <!-- .container-fluid -->
+<script src='//at.alicdn.com/t/font_844452_z6bqchhefu.js'></script>
 <script>
     var btn = document.querySelector('button[type="submit"]');
     var form = document.forms[0];

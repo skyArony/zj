@@ -38,7 +38,7 @@ class ApiController extends Controller
             -4010 => '队长不能添加或删除!',
             -4011 => '参数不能为空',
             -4012 => '参数错误!',
-            -4013 => '已过期, 无法操作!'
+            -4013 => '已过期, 无法操作!',
         );
         return $msgForCode[$errcode];
     }

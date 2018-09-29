@@ -46,12 +46,12 @@ export default {
       let resultId = this.$route.params.resultId
       let that = this
       this.MyAxios.get("/api/result/" + resultId)
+        .then(function(response) {
+          that.resultData = response.data.data
+        })
         .catch(function(error) {
           if (error.response.status == 404) location.href = "/404"
           else alert(error.response.data.errmsg)
-        })
-        .then(function(response) {
-          that.resultData = response.data.data
         })
     }
   },

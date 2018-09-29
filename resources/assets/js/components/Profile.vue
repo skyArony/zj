@@ -103,35 +103,34 @@ export default {
       //     num: "120",
       //   }
       // ]
-    };
+    }
   },
   methods: {
     toWorlduc() {
       location.href =
-        "http://worlduc.com/SpaceShow/Index.aspx?uid=" + this.userId;
+        "http://worlduc.com/SpaceShow/Index.aspx?uid=" + this.userId
     },
     mailToAdmin() {
-      location.href =
-        "mailto:sky.arony@qq.com";
+      location.href = "mailto:sky.arony@qq.com"
     }
   },
   mounted: function() {
-    let that = this;
-    let MyAxios = axios.create();
+    let that = this
+    let MyAxios = axios.create()
     MyAxios.get("/api/me")
+      .then(function(response) {
+        let roleId = response.data.data.role_id
+        if (roleId == 1) that.role = "超级管理员"
+        else if (roleId == 2) that.role = "管理员"
+        if (roleId == 3) that.role = "教师"
+        if (roleId == 4) that.role = "学生"
+        that.userId = response.data.data.id
+      })
       .catch(function(error) {
         alert(error.response.data.errmsg)
       })
-      .then(function(response) {
-          let roleId = response.data.data.role_id;
-          if (roleId == 1) that.role = "超级管理员";
-          else if (roleId == 2) that.role = "管理员";
-          if (roleId == 3) that.role = "教师";
-          if (roleId == 4) that.role = "学生";
-          that.userId = response.data.data.id;
-      });
   }
-};
+}
 </script>
 
 <style scoped>

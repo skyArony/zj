@@ -38,12 +38,14 @@ export default {
     init() {
       let that = this
       this.MyAxios.get("/api/team/")
+        .then(function(response) {
+          that.teamData = response.data.data.sort(function() {
+            return 0.5 - Math.random()
+          })
+          that.teamData2 = that.teamData
+        })
         .catch(function(error) {
           alert(error.response.data.errmsg)
-        })
-        .then(function(response) {
-          that.teamData = response.data.data.sort(function() {return .5 - Math.random()})
-          that.teamData2 = that.teamData
         })
     },
     search() {

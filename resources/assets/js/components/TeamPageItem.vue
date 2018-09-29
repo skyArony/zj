@@ -76,7 +76,7 @@ export default {
           isLeader: true
         }
       ],
-      cardBottom: false,
+      cardBottom: false
     }
   },
   methods: {
@@ -87,11 +87,11 @@ export default {
       // 数据获取
       if (this.members.length == 1 && !this.members[0].id) {
         this.MyAxios.get("/api/team/member/" + teamId)
-          .catch(function(error) {
-            alert(error.response.data.errmsg)
-          })
           .then(function(response) {
             that.members = response.data.data
+          })
+          .catch(function(error) {
+            alert(error.response.data.errmsg)
           })
       }
     }

@@ -38,14 +38,14 @@ export default {
     init() {
       let that = this
       this.MyAxios.get("/api/course/")
-        .catch(function(error) {
-          alert(error.response.data.errmsg)
-        })
         .then(function(response) {
           that.courseData = response.data.data.sort(function() {
             return 0.5 - Math.random()
           })
           that.courseData2 = that.courseData
+        })
+        .catch(function(error) {
+          alert(error.response.data.errmsg)
         })
     },
     search() {

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\DB\Team;
+use App\Models\DB\Task;
 use App\User;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Cookie;
@@ -145,19 +146,16 @@ class TeamController extends ApiController
         $taskId = $request->taskId;
 
         $user = User::find($userId);
-        $teams = $user->hasManyTeams()->pluck("id")->toArray();
+        $team = Team::find($teamId);
+        $task = Task::find($taskId);
 
-        if (!in_array($teamId, $teams)) {
-            return self::setResponse(null, 400, -4009);
-        }
+        if (!$team || !$task) return self::setResponse(null, 404, -4005);
+        if ($team->creater_id != $user->id) return self::setResponse(null, 400, -4009);
+        if ($task->regist_end_at < date("Y-m-d H:i:s")) return self::setResponse(null, 400, -4013);
 
-        if ($team = Team::find($teamId)) {
-            // 使用 attach 会报 sql 操作错误
-            $team->belongsToManyTasks()->syncWithoutDetaching($taskId);
-            return self::setResponse(null, 200, 0);
-        } else {
-            return self::setResponse(null, 404, -4005);
-        }
+        // 使用 attach 会报 sql 操作错误
+        $team->belongsToManyTasks()->syncWithoutDetaching($taskId);
+        return self::setResponse(null, 200, 0);
     }
 
     // 队伍退出一个课题

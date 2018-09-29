@@ -75,7 +75,7 @@
 </template>
 
 <script>
-import Clipboard from "clipboard/dist/clipboard";
+import Clipboard from "clipboard/dist/clipboard"
 
 export default {
   data() {
@@ -89,51 +89,68 @@ export default {
       customCourseId: "", // 填写完成的定制化课程 ID
       shareText: "填写问卷『』,定制化『』课程大纲.",
       qrcodeVisible: false // 是否显示分享框
-    };
+    }
   },
   methods: {
     copyText() {
-      var clipboard = new Clipboard("#copyQRText");
-      var clipboard = new Clipboard("#copyShareText");
+      var clipboard = new Clipboard("#copyQRText")
+      var clipboard = new Clipboard("#copyShareText")
       this.$notify({
-          title: '成功',
-          message: '成功复制到剪切板!',
-          type: 'success',
-          position: "top-left"
-      });
+        title: "成功",
+        message: "成功复制到剪切板!",
+        type: "success",
+        position: "top-left"
+      })
     },
     showQRcode(data) {
-      this.qrcodeVisible = !this.qrcodeVisible;
+      this.qrcodeVisible = !this.qrcodeVisible
       if (this.$refs.qrcode.childNodes.length == 0) {
         let qrcode = new QRCode("qrcode", {
           width: 200,
           height: 200
-        });
-        qrcode.makeCode(window.location.href);
+        })
+        qrcode.makeCode(window.location.href)
       }
     },
     setAnswerData(data) {
-      this.answer[data.id] = data;
+      this.answer[data.id] = data
     },
     getSurvey() {
-      var that = this;
-      let MyAxios = axios.create();
+      var that = this
+      let MyAxios = axios.create()
       // 获取当前问卷的ID
-      this.id = window.location.href.match(/.*\/survey\/(\d+)/)[1];
+      this.id = window.location.href.match(/.*\/survey\/(\d+)/)[1]
       // 获取问卷的数据
       MyAxios.get("/api/survey/" + this.id)
+        .then(function(response) {
+          that.shareText =
+            "填写问卷「" +
+            response.data.data.title +
+            "」, 定制化「" +
+            response.data.data.course +
+            "」课程大纲.\n" +
+            window.location.href
+          that.title = response.data.data.title
+          that.desc = response.data.data.desc
+          that.questions = JSON.parse(response.data.data.questions)
+        })
         .catch(function(error) {
           if (error.response.status == 404) location.href = "/404"
           else alert(error.response.data.errmsg)
         })
-        .then(function(response) {
-            that.shareText = "填写问卷「" + response.data.data.title + "」, 定制化「" + response.data.data.course + "」课程大纲.\n" + window.location.href
-            that.title = response.data.data.title;
-            that.desc = response.data.data.desc;
-            that.questions = JSON.parse(response.data.data.questions);
-        });
       // 检查是否填写过当前问卷
       MyAxios.get("/api/answerRecord/" + this.id)
+        .then(function(response) {
+          if (response.data.data) {
+            that.$notify({
+              title: "提示",
+              message: "你填写过本问卷,再次填写将覆盖之前记录!",
+              type: "info",
+              duration: "4000",
+              position: "top-left"
+            })
+          }
+        })
         .catch(function(error) {
           if (error.response.data.errcode == -4007) {
             that.$notify({
@@ -146,67 +163,56 @@ export default {
               type: "info",
               duration: "6000",
               position: "top-left"
-            });
+            })
           } else alert(error.response.data.errmsg)
         })
-        .then(function(response) {
-          if (response.data.data) {
-            that.$notify({
-              title: "提示",
-              message: "你填写过本问卷,再次填写将覆盖之前记录!",
-              type: "info",
-              duration: "4000",
-              position: "top-left"
-            });
-          }
-        });
     },
     submit() {
-      let addTags = [];
-      let removeTags = [];
+      let addTags = []
+      let removeTags = []
       for (let key in this.answer) {
-        addTags = addTags.concat(this.answer[key]["addTags"]);
-        removeTags = removeTags.concat(this.answer[key]["removeTags"]);
+        addTags = addTags.concat(this.answer[key]["addTags"])
+        removeTags = removeTags.concat(this.answer[key]["removeTags"])
       }
-      addTags = Array.from(new Set(addTags));
-      removeTags = Array.from(new Set(removeTags));
+      addTags = Array.from(new Set(addTags))
+      removeTags = Array.from(new Set(removeTags))
       // 交集
-      let intersection = addTags.filter(v => removeTags.includes(v));
+      let intersection = addTags.filter(v => removeTags.includes(v))
       // 差集-结果
       let res = addTags
         .concat(intersection)
-        .filter(v => !addTags.includes(v) || !intersection.includes(v));
+        .filter(v => !addTags.includes(v) || !intersection.includes(v))
 
       // 发送结果到后台
-      let that = this;
+      let that = this
       let MyAxios = axios.create({
         headers: { "Content-Type": "application/json" }
-      });
+      })
       MyAxios.post("/api/answerRecord/" + this.id, {
         tags: res
       })
         .then(function(response) {
           // 显示结果或跳转;
-          that.customCourseId = response.data.data.id;
-          that.isComplete = true;
+          that.customCourseId = response.data.data.id
+          that.isComplete = true
         })
         .catch(function(error) {
-          if (error.response.data.errcode == -4007) alert ("请先登录!");
-          else alert(error.response.data.errmsg);
-        });
+          if (error.response.data.errcode == -4007) alert("请先登录!")
+          else alert(error.response.data.errmsg)
+        })
     },
     again() {
-      this.isComplete = false;
+      this.isComplete = false
     },
     view() {
-      location.href = "/#/index/customCourse/" + this.customCourseId;
+      location.href = "/#/index/customCourse/" + this.customCourseId
     }
   },
   mounted: function() {
     // 获取问卷数据,检查是否填写过问卷
-    this.getSurvey();
+    this.getSurvey()
   }
-};
+}
 </script>
 
 <style scoped>

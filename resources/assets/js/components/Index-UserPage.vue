@@ -353,17 +353,17 @@ export default {
           taskId: taskId,
           teamId: teamId
         })
-          .catch(function(error) {
-            that.$message({
-              type: "info",
-              message: "退出课题失败了!" + error.response.data.errmsg
-            })
-          })
           .then(function(response) {
             that.taskData.splice(index, 1)
             that.$message({
               type: "success",
               message: "退出课题成功!"
+            })
+          })
+          .catch(function(error) {
+            that.$message({
+              type: "info",
+              message: "退出课题失败了!" + error.response.data.errmsg
             })
           })
       })
@@ -377,17 +377,17 @@ export default {
         type: "warning"
       }).then(() => {
         this.MyAxios.delete("/api/answerRecord/" + id)
-          .catch(function(error) {
-            that.$message({
-              type: "info",
-              message: "删除课程失败了!" + error.response.data.errmsg
-            })
-          })
           .then(function(response) {
             that.ansRecData.splice(index, 1)
             that.$message({
               type: "success",
               message: "删除课程成功!"
+            })
+          })
+          .catch(function(error) {
+            that.$message({
+              type: "info",
+              message: "删除课程失败了!" + error.response.data.errmsg
             })
           })
       })
@@ -401,17 +401,17 @@ export default {
         type: "warning"
       }).then(() => {
         this.MyAxios.delete("/api/team/" + teamId)
-          .catch(function(error) {
-            that.$message({
-              type: "info",
-              message: "解散团队失败了!" + error.response.data.errmsg
-            })
-          })
           .then(function(response) {
             that.teamData.splice(index, 1)
             that.$message({
               type: "success",
               message: "解散团队成功!"
+            })
+          })
+          .catch(function(error) {
+            that.$message({
+              type: "info",
+              message: "解散团队失败了!" + error.response.data.errmsg
             })
           })
       })
@@ -425,17 +425,17 @@ export default {
         type: "warning"
       }).then(() => {
         this.MyAxios.delete("/api/user/team/" + teamId)
-          .catch(function(error) {
-            that.$message({
-              type: "info",
-              message: "退出团队失败了!" + error.response.data.errmsg
-            })
-          })
           .then(function(response) {
             that.teamData.splice(index, 1)
             that.$message({
               type: "success",
               message: "退出团队成功!"
+            })
+          })
+          .catch(function(error) {
+            that.$message({
+              type: "info",
+              message: "退出团队失败了!" + error.response.data.errmsg
             })
           })
       })

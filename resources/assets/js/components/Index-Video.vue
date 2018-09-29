@@ -111,19 +111,15 @@ export default {
       let MyAxios = axios.create()
       if (this.courseId !== "") {
         MyAxios.get("/api/courseTree" + "/" + this.courseId)
-          .catch(function(error) {
-            if (error.response.status == 404) location.href = "/404"
-            else alert(error.response.data.errmsg)
-          })
           .then(function(response) {
             that.courseTreeData = that.courseTreeDataDeal(response.data.data)
           })
-        // 2. 课程信息
-        MyAxios.get("/api/course" + "/" + this.courseId)
           .catch(function(error) {
             if (error.response.status == 404) location.href = "/404"
             else alert(error.response.data.errmsg)
           })
+        // 2. 课程信息
+        MyAxios.get("/api/course" + "/" + this.courseId)
           .then(function(response) {
             that.shareText =
               "快来查看我的「" +
@@ -134,12 +130,12 @@ export default {
             that.courseImg = response.data.data.pic
             that.courseTeacher = response.data.data.teacher
           })
-      } else if (this.customCourseId !== "") {
-        MyAxios.get("/api/customCourse" + "/" + this.customCourseId)
           .catch(function(error) {
             if (error.response.status == 404) location.href = "/404"
             else alert(error.response.data.errmsg)
           })
+      } else if (this.customCourseId !== "") {
+        MyAxios.get("/api/customCourse" + "/" + this.customCourseId)
           .then(function(response) {
             that.courseTreeData = that.customCourseTreeDataDeal(
               response.data.data.courseTreeTags
@@ -148,19 +144,23 @@ export default {
             that.courseImg = response.data.data.courseImg
             that.courseTeacher = response.data.data.courseTeacher
           })
+          .catch(function(error) {
+            if (error.response.status == 404) location.href = "/404"
+            else alert(error.response.data.errmsg)
+          })
       }
 
       // 3. 个人信息
       MyAxios.get("/api/me")
+        .then(function(response) {
+          that.userName = response.data.data.name
+          that.userImg = response.data.data.avatar
+        })
         .catch(function(error) {
           if (error.response.data.errcode == -4007) {
             that.userName = "游客"
             that.userImg = "/storage/img/nologin.jpg"
           } else alert(error.response.data.errmsg)
-        })
-        .then(function(response) {
-            that.userName = response.data.data.name
-            that.userImg = response.data.data.avatar
         })
     },
     customCourseTreeDataDeal(sourceData) {

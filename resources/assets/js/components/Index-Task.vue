@@ -101,22 +101,17 @@ export default {
       // 可报名的团队-初始化
       let that = this
       await this.MyAxios.get("/api/user/team/")
-        .catch(function(error) {
-          alert(error.response.data.errmsg)
-        })
         .then(function(response) {
           let teams = response.data.data
-          for (let index in teams)
-              that.$set(teams[index], "isSign", false)
+          for (let index in teams) that.$set(teams[index], "isSign", false)
           that.teamData = teams
           console.log(that.teamData)
         })
+        .catch(function(error) {
+          alert(error.response.data.errmsg)
+        })
       // 获取 task 详细数据
       this.MyAxios.get("/api/task/" + taskId)
-        .catch(function(error) {
-          if (error.response.status == 404) location.href = "/404";
-          else alert(error.response.data.errmsg)
-        })
         .then(function(response) {
           that.taskData = response.data.data
           let teams = that.teamData
@@ -127,12 +122,16 @@ export default {
           }
           that.teamData = teams
           that.MyAxios.get("/api/task/more/" + that.taskData.creater_id)
-            .catch(function(error) {
-              alert(error.response.data.errmsg)
-            })
             .then(function(response) {
               that.moreTask = response.data.data
             })
+            .catch(function(error) {
+              alert(error.response.data.errmsg)
+            })
+        })
+        .catch(function(error) {
+          if (error.response.status == 404) location.href = "/404"
+          else alert(error.response.data.errmsg)
         })
     },
     sign(teamId, taskId, index) {
@@ -141,11 +140,11 @@ export default {
         taskId: taskId,
         teamId: teamId
       })
-        .catch(function(error) {
-          alert(error.response.data.errmsg)
-        })
         .then(function(response) {
           that.teamData[index].isSign = true
+        })
+        .catch(function(error) {
+          alert(error.response.data.errmsg)
         })
     }
   },
@@ -159,7 +158,7 @@ export default {
     this.$emit("changePage", "task")
     this.taskData = ""
     this.init(this.$route.params.taskId)
-  },
+  }
 }
 </script>
 

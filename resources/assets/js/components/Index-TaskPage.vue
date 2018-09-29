@@ -44,7 +44,7 @@ export default {
       MyAxios: axios.create({
         headers: { "Content-Type": "application/json" }
       }),
-      keyword: '',
+      keyword: "",
       taskData: null,
       taskData2: null
     }
@@ -56,16 +56,18 @@ export default {
     init() {
       let that = this
       this.MyAxios.get("/api/task/")
+        .then(function(response) {
+          that.taskData = response.data.data.sort(function() {
+            return 0.5 - Math.random()
+          })
+          that.taskData2 = that.taskData
+        })
         .catch(function(error) {
           alert(error.response.data.errmsg)
         })
-        .then(function(response) {
-          that.taskData = response.data.data.sort(function() {return .5 - Math.random()})
-          that.taskData2 = that.taskData
-        })
     },
     search() {
-      if (this.keyword == '') return
+      if (this.keyword == "") return
       let re = new RegExp(this.keyword)
       this.taskData2 = this.taskData.filter(function(item) {
         return re.test(item.title)

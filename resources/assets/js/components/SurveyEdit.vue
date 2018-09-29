@@ -219,9 +219,6 @@ export default {
       if (this.pageType == "create") {
         // 获取所有的课程
         MyAxios.get("/api/user/course")
-          .catch(function(error) {
-            alert(error.response.data.errmsg)
-          })
           .then(function(response) {
             let courses = response.data.data
             let data = []
@@ -234,15 +231,14 @@ export default {
             }
             that.courses = data
           })
+          .catch(function(error) {
+            alert(error.response.data.errmsg)
+          })
       } else if (this.pageType == "edit") {
         // 获取问卷的 ID
         this.id = window.location.href.match(/.*?surveys\/(\d)+/)[1]
         // 获取问卷的数据
         MyAxios.get("/api/survey/" + this.id)
-          .catch(function(error) {
-              if (error.response.status == 404) location.href = "/404"
-              else alert(error.response.data.errmsg)
-          })
           .then(function(response) {
             that.ruleForm.title = response.data.data.title
             that.ruleForm.desc = response.data.data.desc
@@ -251,13 +247,17 @@ export default {
             )
             // 获取问卷可选择的 tags
             MyAxios.get("/api/tag/" + response.data.data.course_id)
-              .catch(function(error) {
-                alert(error.response.data.errmsg)
-              })
               .then(function(response) {
                 that.dynamicTags = response.data.data
                 that.$store.commit("setTag", that.dynamicTags)
               })
+              .catch(function(error) {
+                alert(error.response.data.errmsg)
+              })
+          })
+          .catch(function(error) {
+            if (error.response.status == 404) location.href = "/404"
+            else alert(error.response.data.errmsg)
           })
       }
     },

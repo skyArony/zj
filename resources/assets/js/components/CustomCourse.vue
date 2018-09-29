@@ -127,10 +127,6 @@ export default {
       this.id = window.location.href.match(/.*\/(\d+)/)[1]
       // 获取所有的课程
       MyAxios.get("/api/customCourse" + "/" + this.id)
-        .catch(function(error) {
-          if (error.response.status == 404) location.href = "/404"
-          else alert(error.response.data.errmsg)
-        })
         .then(function(response) {
           that.courseVideo =
             "/#/index/video/course/" + response.data.data.courseId
@@ -150,6 +146,10 @@ export default {
             false
           )
           if (that.answerRecordTags.length > 0) that.isHasTag = true
+        })
+        .catch(function(error) {
+          if (error.response.status == 404) location.href = "/404"
+          else alert(error.response.data.errmsg)
         })
     },
     treeData(sourceData) {

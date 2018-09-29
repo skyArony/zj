@@ -29,6 +29,9 @@ class ResearchResultsController extends ApiController
         if ($request->teamId) {
             $team = Team::find($request->teamId);
             $tasks = $team->belongsToManyTasks;
+            $tasks = $tasks->filter(function($item) {
+                if ($item->submit_end_at >= date("Y-m-d H:i:s")) return true;
+            });
             return self::setResponse($tasks, 200, 0);
         } else {
             return self::setResponse(null, 400, -4004);    // 未登录

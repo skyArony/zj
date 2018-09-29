@@ -120,19 +120,15 @@ export default {
     let MyAxios = axios.create();
     MyAxios.get("/api/me")
       .catch(function(error) {
-        console.log(error);
+        alert(error.response.data.errmsg)
       })
       .then(function(response) {
-        if (response.data.errcode === 0) {
           let roleId = response.data.data.role_id;
           if (roleId == 1) that.role = "超级管理员";
           else if (roleId == 2) that.role = "管理员";
           if (roleId == 3) that.role = "教师";
           if (roleId == 4) that.role = "学生";
           that.userId = response.data.data.id;
-        } else {
-          console.log(response.data.errmsg);
-        }
       });
   }
 };

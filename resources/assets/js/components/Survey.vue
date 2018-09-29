@@ -123,16 +123,14 @@ export default {
       // 获取问卷的数据
       MyAxios.get("/api/survey/" + this.id)
         .catch(function(error) {
-          console.log(error);
-          location.href = "/404";
+          if (error.response.status == 404) location.href = "/404"
+          else alert(error.response.data.errmsg)
         })
         .then(function(response) {
-          if (response.data.errcode === 0) {
             that.shareText = "填写问卷「" + response.data.data.title + "」, 定制化「" + response.data.data.course + "」课程大纲.\n" + window.location.href
             that.title = response.data.data.title;
             that.desc = response.data.data.desc;
             that.questions = JSON.parse(response.data.data.questions);
-          }
         });
       // 检查是否填写过当前问卷
       MyAxios.get("/api/answerRecord/" + this.id)
@@ -149,7 +147,7 @@ export default {
               duration: "6000",
               position: "top-left"
             });
-          }
+          } else alert(error.response.data.errmsg)
         })
         .then(function(response) {
           if (response.data.data) {
@@ -193,7 +191,6 @@ export default {
           that.isComplete = true;
         })
         .catch(function(error) {
-          console.log(error);
           if (error.response.data.errcode == -4007) alert ("请先登录!");
           else alert(error.response.data.errmsg);
         });

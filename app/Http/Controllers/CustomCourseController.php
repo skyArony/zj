@@ -102,6 +102,7 @@ p {
         // TODO validate
 
         $answerRecord = AnswerRecord::find($request->id);
+        if (!$answerRecord) return self::setResponse(null, 404, -4005);
         $survey = $answerRecord->belongsToSurvey;
         $course = $survey->belongsToCourse;
         $courseTree = $course->hasOneCourseTree;

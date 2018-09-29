@@ -57,7 +57,7 @@ export default {
       let that = this
       this.MyAxios.get("/api/task/")
         .catch(function(error) {
-          alert("数据获取发生了错误,请联系管理员 QQ:1450872874")
+          alert(error.response.data.errmsg)
         })
         .then(function(response) {
           that.taskData = response.data.data.sort(function() {return .5 - Math.random()})

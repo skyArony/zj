@@ -116,7 +116,7 @@ export default {
       //     removeTags: {}
       //   }
       // ],
-    };
+    }
   },
   methods: {
     // 添加一个问题
@@ -129,7 +129,7 @@ export default {
           id: new Date().getTime(),
           addTags: {},
           removeTags: {}
-        });
+        })
       } else if (type == "checkBox") {
         this.$store.commit("addQuestion", {
           question: "-------- 双击编辑你的问题(多选) --------",
@@ -138,7 +138,7 @@ export default {
           id: new Date().getTime(),
           addTags: {},
           removeTags: {}
-        });
+        })
       }
     },
     // 保存
@@ -147,10 +147,10 @@ export default {
         if (valid) {
           let MyAxios = axios.create({
             headers: { "Content-Type": "application/json" }
-          });
+          })
           // 新建的保存
           if (this.pageType == "create") {
-            var info = this.ruleForm.course_id.split("$");
+            var info = this.ruleForm.course_id.split("$")
             MyAxios.post("/api/survey", {
               title: this.ruleForm.title,
               desc: this.ruleForm.desc,
@@ -159,13 +159,11 @@ export default {
               questions: this.$store.state.questions
             })
               .then(function(response) {
-                if (response.data.errcode == 0) 
-                  location.href = "/admin/surveys";
+                location.href = "/admin/surveys"
               })
               .catch(function(error) {
-                console.log(error);
-                alert("发生了错误,请报告开发者.QQ: 1450872874");
-              });
+                alert(error.response.data.errmsg)
+              })
           } else if (this.pageType == "edit") {
             // 修改的保存
             MyAxios.put("/api/survey", {
@@ -175,13 +173,12 @@ export default {
               questions: this.$store.state.questions
             })
               .then(function(response) {
-                if (response.data.errcode == 0) 
-                  location.href = "/admin/surveys";
+                location.href = "/admin/surveys"
               })
               .catch(function(error) {
-                console.log(error);
-                alert("没有操作权限!");
-              });
+                if (error.response.data.errcode == -4009) alert("没有操作权限!")
+                else alert(error.response.data.errmsg)
+              })
           }
         } else {
           if (this.courses.length == 0)
@@ -191,107 +188,106 @@ export default {
               type: "warning",
               duration: "3000",
               response: ""
-            });
-          console.log("error submit!!");
-          return false;
+            })
+          console.log("error submit!!")
+          return false
         }
-      });
+      })
     },
     // 修改可以选择的 tags
     changeDynamicTags(option) {
-      let info = option.split("$");
-      let course_id = info[0];
-      var that = this;
-      let MyAxios = axios.create();
+      let info = option.split("$")
+      let course_id = info[0]
+      var that = this
+      let MyAxios = axios.create()
 
       MyAxios.get("/api/tag/" + course_id).then(function(response) {
-        if (response.data.errcode == 0) {
-          that.dynamicTags = response.data.data;
-          that.$store.commit("setTag", that.dynamicTags);
-        }
-      });
+        that.dynamicTags = response.data.data
+        that.$store.commit("setTag", that.dynamicTags)
+      })
       // 清空所有问题的已选 addTag 和 removetag
-      this.$store.commit("clearAllQuestionsTag");
+      this.$store.commit("clearAllQuestionsTag")
     },
     // 页面数据初始化
     pageInit() {
-      var that = this;
-      let MyAxios = axios.create();
+      var that = this
+      let MyAxios = axios.create()
       // 获取当前页的类型
-      this.pageType = (/.*?surveys\/(?:\d*\/)?(\w+)#?/).exec(window.location.href)[1];
+      this.pageType = /.*?surveys\/(?:\d*\/)?(\w+)#?/.exec(
+        window.location.href
+      )[1]
       if (this.pageType == "create") {
         // 获取所有的课程
         MyAxios.get("/api/user/course")
           .catch(function(error) {
-            console.log(error);
+            alert(error.response.data.errmsg)
           })
           .then(function(response) {
-            let courses = response.data.data;
-            let data = [];
-            var index;
+            let courses = response.data.data
+            let data = []
+            var index
             for (index in courses) {
               data.push({
                 label: courses[index].name,
                 value: courses[index].id + "$" + courses[index].name
-              });
+              })
             }
-            that.courses = data;
-          });
+            that.courses = data
+          })
       } else if (this.pageType == "edit") {
         // 获取问卷的 ID
-        this.id = window.location.href.match(/.*?surveys\/(\d)+/)[1];
+        this.id = window.location.href.match(/.*?surveys\/(\d)+/)[1]
         // 获取问卷的数据
         MyAxios.get("/api/survey/" + this.id)
           .catch(function(error) {
-            console.log(error);
+              if (error.response.status == 404) location.href = "/404"
+              else alert(error.response.data.errmsg)
           })
           .then(function(response) {
-            that.ruleForm.title = response.data.data.title;
-            that.ruleForm.desc = response.data.data.desc;
+            that.ruleForm.title = response.data.data.title
+            that.ruleForm.desc = response.data.data.desc
             that.$store.state.questions = JSON.parse(
               response.data.data.questions
-            );
+            )
             // 获取问卷可选择的 tags
             MyAxios.get("/api/tag/" + response.data.data.course_id)
               .catch(function(error) {
-                console.log(error);
+                alert(error.response.data.errmsg)
               })
               .then(function(response) {
-                if (response.data.errcode == 0) {
-                  that.dynamicTags = response.data.data;
-                  that.$store.commit("setTag", that.dynamicTags);
-                }
-              });
-          });
+                that.dynamicTags = response.data.data
+                that.$store.commit("setTag", that.dynamicTags)
+              })
+          })
       }
     },
     // left and right init
     heightInit() {
-      let total = document.querySelector("body").offsetHeight;
-      document.querySelector(".left").style.maxHeight = total - 240 + "px";
-      document.querySelector(".right").style.maxHeight = total - 240 + "px";
+      let total = document.querySelector("body").offsetHeight
+      document.querySelector(".left").style.maxHeight = total - 240 + "px"
+      document.querySelector(".right").style.maxHeight = total - 240 + "px"
     }
   },
   computed: {
     questions: {
       // getter
       get: function() {
-        return this.$store.state.questions;
+        return this.$store.state.questions
       },
       // setter
       set: function(questions) {
-        this.$store.commit("setQuestion", questions);
+        this.$store.commit("setQuestion", questions)
       }
     },
     question: function() {
-      return this.$store.state.questions[this.$store.state.index];
+      return this.$store.state.questions[this.$store.state.index]
     }
   },
   mounted: function() {
-    this.pageInit();
-    this.heightInit();
+    this.pageInit()
+    this.heightInit()
   }
-};
+}
 </script>
 
 <style scoped>

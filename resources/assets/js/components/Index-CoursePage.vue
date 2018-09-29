@@ -31,7 +31,7 @@ export default {
       }),
       courseData: null,
       courseData2: null,
-      keyword: '',
+      keyword: ""
     }
   },
   methods: {
@@ -39,22 +39,24 @@ export default {
       let that = this
       this.MyAxios.get("/api/course/")
         .catch(function(error) {
-          alert("数据获取发生了错误,请联系管理员 QQ:1450872874")
+          alert(error.response.data.errmsg)
         })
         .then(function(response) {
-          that.courseData = response.data.data.sort(function() {return .5 - Math.random()})
+          that.courseData = response.data.data.sort(function() {
+            return 0.5 - Math.random()
+          })
           that.courseData2 = that.courseData
         })
     },
     search() {
-      if (this.keyword == '') return
-      let re = new RegExp(this.keyword);
+      if (this.keyword == "") return
+      let re = new RegExp(this.keyword)
       this.courseData2 = this.courseData.filter(function(item) {
-        return  re.test(item.name)
+        return re.test(item.name)
       })
     },
     keywordCheck() {
-      if (this.keyword == '') this.courseData2 = this.courseData
+      if (this.keyword == "") this.courseData2 = this.courseData
     }
   },
   mounted: function() {

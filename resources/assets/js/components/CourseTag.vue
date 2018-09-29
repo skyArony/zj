@@ -102,8 +102,9 @@ export default {
       return MyAxios.post("/api/tag/" + this.courseId, {
         tag: tag
       }).catch(function(error) {
-        console.log(error);
-        alert("没有操作权限!")
+        if(error.response.data.errcode == -4009)
+          alert("没有操作权限!")
+        else alert(error.response.data.errmsg)
         that.inputValue = "";
       });
     },
@@ -116,8 +117,9 @@ export default {
           tag: tag
         }
       }).catch(function(error) {
-        console.log(error);
-        alert("没有操作权限!")
+        if(error.response.data.errcode == -4009)
+          alert("没有操作权限!")
+        else alert(error.response.data.errmsg)
       });
     },
 
@@ -130,6 +132,8 @@ export default {
           that.dynamicTags = response.data.data;
           that.$store.commit("setTag", that.dynamicTags);
         }
+      }).catch(function(error) {
+        alert(error.response.data.errmsg)
       });
     }
   },

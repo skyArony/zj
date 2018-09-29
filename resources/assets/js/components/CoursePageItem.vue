@@ -56,11 +56,6 @@ export default {
     data: Object
   },
   data() {
-    return {
-      MyAxios: axios.create({
-        headers: { "Content-Type": "application/json" }
-      })
-    }
   },
   methods: {
     toCourse(courseId) {

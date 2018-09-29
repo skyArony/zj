@@ -112,54 +112,41 @@ export default {
       if (this.courseId !== "") {
         MyAxios.get("/api/courseTree" + "/" + this.courseId)
           .catch(function(error) {
-            console.log(error)
-            location.href = "/404"
+            if (error.response.status == 404) location.href = "/404"
+            else alert(error.response.data.errmsg)
           })
           .then(function(response) {
-            if (response.data.errcode === 0) {
-              that.courseTreeData = that.courseTreeDataDeal(response.data.data)
-            } else {
-              console.log(response.data.errmsg)
-            }
+            that.courseTreeData = that.courseTreeDataDeal(response.data.data)
           })
         // 2. 课程信息
         MyAxios.get("/api/course" + "/" + this.courseId)
           .catch(function(error) {
-            console.log(error)
-            location.href = "/404"
+            if (error.response.status == 404) location.href = "/404"
+            else alert(error.response.data.errmsg)
           })
           .then(function(response) {
-            if (response.data.errcode === 0) {
-              that.shareText =
-                "快来查看我的「" +
-                response.data.data.name +
-                "」定制化课程吧.\n" +
-                window.location.href
-              that.courseTitle = response.data.data.name
-              that.courseImg = response.data.data.pic
-              that.courseTeacher = response.data.data.teacher
-            } else {
-              console.log(response.data.errmsg)
-            }
+            that.shareText =
+              "快来查看我的「" +
+              response.data.data.name +
+              "」定制化课程吧.\n" +
+              window.location.href
+            that.courseTitle = response.data.data.name
+            that.courseImg = response.data.data.pic
+            that.courseTeacher = response.data.data.teacher
           })
       } else if (this.customCourseId !== "") {
         MyAxios.get("/api/customCourse" + "/" + this.customCourseId)
           .catch(function(error) {
-            console.log(error)
-            location.href = "/404"
+            if (error.response.status == 404) location.href = "/404"
+            else alert(error.response.data.errmsg)
           })
           .then(function(response) {
-            console.log(response)
-            if (response.data.errcode === 0) {
-              that.courseTreeData = that.customCourseTreeDataDeal(
-                response.data.data.courseTreeTags
-              )
-              that.courseTitle = response.data.data.courseName
-              that.courseImg = response.data.data.courseImg
-              that.courseTeacher = response.data.data.courseTeacher
-            } else {
-              console.log(response.data.errmsg)
-            }
+            that.courseTreeData = that.customCourseTreeDataDeal(
+              response.data.data.courseTreeTags
+            )
+            that.courseTitle = response.data.data.courseName
+            that.courseImg = response.data.data.courseImg
+            that.courseTeacher = response.data.data.courseTeacher
           })
       }
 
@@ -169,16 +156,11 @@ export default {
           if (error.response.data.errcode == -4007) {
             that.userName = "游客"
             that.userImg = "/storage/img/nologin.jpg"
-          }
-          console.log(error)
+          } else alert(error.response.data.errmsg)
         })
         .then(function(response) {
-          if (response.data.errcode === 0) {
             that.userName = response.data.data.name
             that.userImg = response.data.data.avatar
-          } else {
-            console.log(response.data.errmsg)
-          }
         })
     },
     customCourseTreeDataDeal(sourceData) {

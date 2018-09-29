@@ -90,22 +90,20 @@ export default {
       // 团队成员信息
       this.MyAxios.get("/api/team/member/" + this.teamId)
         .then(function(response) {
-          if (response.data.errcode == 0) that.tableData = response.data.data
-          else console.log(response.data.errmsg)
+          that.tableData = response.data.data
         })
         .catch(function(error) {
-          console.log(error)
           if (error.response.status == 404) location.href = "/404"
+          else alert(error.response.data.errmsg)
         })
       // 团队信息
       this.MyAxios.get("/api/team/" + this.teamId)
         .then(function(response) {
-          if (response.data.errcode == 0)
-            that.teamName = response.data.data.team_name
-          else console.log(response.data.errmsg)
+          that.teamName = response.data.data.team_name
         })
         .catch(function(error) {
-          console.log(error)
+          if (error.response.status == 404) location.href = "/404"
+          else alert(error.response.data.errmsg)
         })
     },
     search() {
@@ -119,11 +117,10 @@ export default {
           }
         })
           .then(function(response) {
-            if (response.data.errcode == 0) that.searchRes = response.data.data
-            else console.log(response.data.errmsg)
+            that.searchRes = response.data.data
           })
           .catch(function(error) {
-            console.log(error)
+            alert(error.response.data.errmsg)
           })
       }
     },

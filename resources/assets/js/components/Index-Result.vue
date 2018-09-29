@@ -5,7 +5,8 @@
       <div class="task-info">
         <div class="task-info-item publish-date">{{resultData.created_at}}</div>
         <div class="task-info-item team-number">课题:
-          <span @click="toTask(resultData.task_id)" style="cursor: pointer">{{resultData.task}}</span>
+          <span @click="toTask(resultData.task_id)"
+                style="cursor: pointer">{{resultData.task}}</span>
         </div>
         <div class="task-info-item regist-end-time">研究团队:
           <span>{{resultData.team}}</span>
@@ -43,18 +44,15 @@ export default {
     },
     init() {
       let resultId = this.$route.params.resultId
-      if (resultId) {
-        let that = this
-        this.MyAxios.get("/api/result/" + resultId)
-          .catch(function(error) {
-            alert("数据获取发生了错误,请联系管理员 QQ:1450872874")
-          })
-          .then(function(response) {
-            that.resultData = response.data.data
-          })
-      } else {
-        location.href = "/404"
-      }
+      let that = this
+      this.MyAxios.get("/api/result/" + resultId)
+        .catch(function(error) {
+          if (error.response.status == 404) location.href = "/404"
+          else alert(error.response.data.errmsg)
+        })
+        .then(function(response) {
+          that.resultData = response.data.data
+        })
     }
   },
   // 从其他路由过来,在此进行数据的获取

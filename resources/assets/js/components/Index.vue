@@ -20,9 +20,6 @@
 export default {
   data() {
     return {
-      MyAxios: axios.create({
-        headers: { "Content-Type": "application/json" }
-      }),
       page: "", // 导航栏激活游标的位置
     }
   },

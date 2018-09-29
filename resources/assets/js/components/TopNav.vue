@@ -7,7 +7,8 @@
       <el-menu-item index="task">科研课题</el-menu-item>
       <el-menu-item index="team">研究团队</el-menu-item>
       <el-menu-item index="course">课程中心</el-menu-item>
-      <el-menu-item index="me" id="userInfo">
+      <el-menu-item index="me"
+                    id="userInfo">
         <img :src="userImg"
              class="userImg" />
         <a href="/admin/profile">{{userName}}</a>
@@ -27,7 +28,7 @@ export default {
         headers: { "Content-Type": "application/json" }
       }),
       userImg: "/storage/img/nologin.jpg",
-      userName: "游客",
+      userName: "游客"
     }
   },
   methods: {
@@ -44,17 +45,12 @@ export default {
           if (error.response.data.errcode == -4007) {
             that.userName = "游客"
             that.userImg = "/storage/img/nologin.jpg"
-          }
-          console.log(error)
+          } else alert(error.response.data.errmsg)
         })
         .then(function(response) {
-          if (response.data.errcode === 0) {
-            that.$store.commit("setUserInfo", response.data.data);
-            that.userName = response.data.data.name
-            that.userImg = response.data.data.avatar
-          } else {
-            console.log(response.data.errmsg)
-          }
+          that.$store.commit("setUserInfo", response.data.data)
+          that.userName = response.data.data.name
+          that.userImg = response.data.data.avatar
         })
     }
   },

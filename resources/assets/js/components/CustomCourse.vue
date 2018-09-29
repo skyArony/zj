@@ -128,35 +128,28 @@ export default {
       // 获取所有的课程
       MyAxios.get("/api/customCourse" + "/" + this.id)
         .catch(function(error) {
-          console.log(error)
-          location.href = "/404"
+          if (error.response.status == 404) location.href = "/404"
+          else alert(error.response.data.errmsg)
         })
         .then(function(response) {
-          if (response.data.errcode === 0) {
-            that.courseVideo =
-              "/#/index/video/course/" + response.data.data.courseId
-            that.courseName = response.data.data.courseName
-            that.courseDesc = response.data.data.courseDesc
-            that.courseImg = response.data.data.courseImg
-            that.courseTeacher = response.data.data.courseTeacher
-            that.surveyName = response.data.data.surveyName
-            that.answerRecordTags = response.data.data.answerRecordTags
-            that.courseTreeData = that.treeData(
-              response.data.data.courseTreeTags
-            )
-            that.courseTargetData = that.targetData(
-              response.data.data.courseTreeTags,
-              true
-            )
-            that.courseTargetData2 = that.targetData(
-              response.data.data.courseTreeTags,
-              false
-            )
-            if (that.answerRecordTags.length > 0) that.isHasTag = true
-          } else {
-            console.log(response.data.errmsg)
-            location.href = "/404"
-          }
+          that.courseVideo =
+            "/#/index/video/course/" + response.data.data.courseId
+          that.courseName = response.data.data.courseName
+          that.courseDesc = response.data.data.courseDesc
+          that.courseImg = response.data.data.courseImg
+          that.courseTeacher = response.data.data.courseTeacher
+          that.surveyName = response.data.data.surveyName
+          that.answerRecordTags = response.data.data.answerRecordTags
+          that.courseTreeData = that.treeData(response.data.data.courseTreeTags)
+          that.courseTargetData = that.targetData(
+            response.data.data.courseTreeTags,
+            true
+          )
+          that.courseTargetData2 = that.targetData(
+            response.data.data.courseTreeTags,
+            false
+          )
+          if (that.answerRecordTags.length > 0) that.isHasTag = true
         })
     },
     treeData(sourceData) {

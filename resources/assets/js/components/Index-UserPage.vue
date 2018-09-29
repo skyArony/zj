@@ -302,24 +302,16 @@ export default {
         // ajax 修改tel
         this.MyAxios.post("/api/user/bind/tel", {
           phone: this.userInfo.phone
+        }).catch(function(error) {
+          alert(error.response.data.errmsg)
         })
-          .then(function(response) {
-            if (response.data.errcode != 0) console.log(response.data.errmsg)
-          })
-          .catch(function(error) {
-            console.log(error)
-          })
       } else if (type == "qq") {
         // ajax 修改 qq
         this.MyAxios.post("/api/user/bind/qq", {
           qq: this.userInfo.QQ
+        }).catch(function(error) {
+          alert(error.response.data.errmsg)
         })
-          .then(function(response) {
-            if (response.data.errcode != 0) console.log(response.data.errmsg)
-          })
-          .catch(function(error) {
-            console.log(error)
-          })
       }
       this.isEdit = false
       this.$store.commit("setUserInfo", this.userInfo)
@@ -331,11 +323,10 @@ export default {
       let that = this
       this.MyAxios.get("/api/user/tasks")
         .then(function(response) {
-          if (response.data.errcode == 0) that.taskData = response.data.data
-          else console.log(response.data.errmsg)
+          that.taskData = response.data.data
         })
         .catch(function(error) {
-          console.log(error)
+          alert(error.response.data.errmsg)
         })
     },
     toTask(taskId) {
@@ -363,21 +354,17 @@ export default {
           teamId: teamId
         })
           .catch(function(error) {
-            alert("数据获取发生了错误,请联系管理员 QQ:1450872874")
+            that.$message({
+              type: "info",
+              message: "退出课题失败了!" + error.response.data.errmsg
+            })
           })
           .then(function(response) {
-            if (response.data.errcode == 0) {
-              that.taskData.splice(index, 1)
-              that.$message({
-                type: "success",
-                message: "退出成功!"
-              })
-            } else {
-              that.$message({
-                type: "info",
-                message: "删除失败了!"
-              })
-            }
+            that.taskData.splice(index, 1)
+            that.$message({
+              type: "success",
+              message: "退出课题成功!"
+            })
           })
       })
     },
@@ -391,21 +378,17 @@ export default {
       }).then(() => {
         this.MyAxios.delete("/api/answerRecord/" + id)
           .catch(function(error) {
-            alert("数据获取发生了错误,请联系管理员 QQ:1450872874")
+            that.$message({
+              type: "info",
+              message: "删除课程失败了!" + error.response.data.errmsg
+            })
           })
           .then(function(response) {
-            if (response.data.errcode == 0) {
-              that.ansRecData.splice(index, 1)
-              that.$message({
-                type: "success",
-                message: "删除成功!"
-              })
-            } else {
-              that.$message({
-                type: "info",
-                message: "删除失败了!"
-              })
-            }
+            that.ansRecData.splice(index, 1)
+            that.$message({
+              type: "success",
+              message: "删除课程成功!"
+            })
           })
       })
     },
@@ -419,23 +402,17 @@ export default {
       }).then(() => {
         this.MyAxios.delete("/api/team/" + teamId)
           .catch(function(error) {
-            if (error.response.data.status != 200) {
-              alert(error.response.data.errmsg)
-            }
+            that.$message({
+              type: "info",
+              message: "解散团队失败了!" + error.response.data.errmsg
+            })
           })
           .then(function(response) {
-            if (response.data.errcode == 0) {
-              that.teamData.splice(index, 1)
-              that.$message({
-                type: "success",
-                message: "删除成功!"
-              })
-            } else {
-              that.$message({
-                type: "info",
-                message: "删除失败了!"
-              })
-            }
+            that.teamData.splice(index, 1)
+            that.$message({
+              type: "success",
+              message: "解散团队成功!"
+            })
           })
       })
     },
@@ -449,23 +426,17 @@ export default {
       }).then(() => {
         this.MyAxios.delete("/api/user/team/" + teamId)
           .catch(function(error) {
-            if (error.response.data.status != 200) {
-              alert(error.response.data.errmsg)
-            }
+            that.$message({
+              type: "info",
+              message: "退出团队失败了!" + error.response.data.errmsg
+            })
           })
           .then(function(response) {
-            if (response.data.errcode == 0) {
-              that.teamData.splice(index, 1)
-              that.$message({
-                type: "success",
-                message: "删除成功!"
-              })
-            } else {
-              that.$message({
-                type: "info",
-                message: "删除失败了!"
-              })
-            }
+            that.teamData.splice(index, 1)
+            that.$message({
+              type: "success",
+              message: "退出团队成功!"
+            })
           })
       })
     },
@@ -473,33 +444,30 @@ export default {
       let that = this
       this.MyAxios.get("/api/user/results")
         .then(function(response) {
-          if (response.data.errcode == 0) that.resData = response.data.data
-          else console.log(response.data.errmsg)
+          that.resData = response.data.data
         })
         .catch(function(error) {
-          console.log(error)
+          alert(error.response.data.errmsg)
         })
     },
     initAnsRec() {
       let that = this
       this.MyAxios.get("/api/user/ansrecs")
         .then(function(response) {
-          if (response.data.errcode == 0) that.ansRecData = response.data.data
-          else console.log(response.data.errmsg)
+          that.ansRecData = response.data.data
         })
         .catch(function(error) {
-          console.log(error)
+          alert(error.response.data.errmsg)
         })
     },
     initTeam() {
       let that = this
       this.MyAxios.get("/api/user/teams")
         .then(function(response) {
-          if (response.data.errcode == 0) that.teamData = response.data.data
-          else console.log(response.data.errmsg)
+          that.teamData = response.data.data
         })
         .catch(function(error) {
-          console.log(error)
+          alert(error.response.data.errmsg)
         })
     },
     handleClick(tab, event) {
@@ -512,22 +480,16 @@ export default {
       }
     },
     teamActionFilter(value, row) {
-      if (value == 'myCreate') 
-        return row.isLeader === true
-      else if (value == 'myPartic')
-        return row.isLeader === false
+      if (value == "myCreate") return row.isLeader === true
+      else if (value == "myPartic") return row.isLeader === false
     },
     taskStatusFilter(value, row) {
-      if (value == 'past') 
-        return row.time == '已过期'
-      else if  (value == 'working')
-        return row.time != '已过期'
+      if (value == "past") return row.time == "已过期"
+      else if (value == "working") return row.time != "已过期"
     },
     taskSubmitFilter(value, row) {
-      if (value == 'submit') 
-        return row.isSubmit == true
-      else if  (value == 'nosubmit')
-        return row.isSubmit == false
+      if (value == "submit") return row.isSubmit == true
+      else if (value == "nosubmit") return row.isSubmit == false
     }
   },
   computed: {

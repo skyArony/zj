@@ -17,8 +17,8 @@ class CreateUsersTable extends Migration
             $table->unsignedinteger('id')->unique()->comment("用户ID");
             $table->string('name');
             $table->string('email')->unique();
-            $table->string('phone', 11)->default(null)->unique()->comment("手机号");
-            $table->string('QQ', 20)->default(null)->unique()->comment("QQ号");
+            $table->string('phone', 11)->nullable()->unique()->comment("手机号");
+            $table->string('QQ', 20)->nullable()->unique()->comment("QQ号");
             $table->string('org_id')->comment("所属组织id");
             $table->string('org_avatar')->comment("组织头像");
             $table->string('password');

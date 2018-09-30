@@ -92,21 +92,21 @@ class Login extends Model
         $resArr = json_decode($resJson, true);
         $cookieJar = serialize($guzzleClient->getConfig()['cookies']);
 
-        // 获取用户身份
-        $userInfoUrl = "http://worlduc.com/SpaceManage/Space/UserBase.aspx";
-        $response = $guzzleClient->request('GET', $userInfoUrl, ['http_errors' => false]);
-        if ($response->getStatusCode() != 200) {
-            return [
-                "code" => -1,
-                "msg" => $response->getStatusCode()
-            ];
-        }
-        $bodyInfo = $response->getBody()->getContents();
-        preg_match('/<span id="ctl00_ContentPlaceHolderMain_ShenFen">(.*?)<\/span>/', $bodyInfo, $matches);
-        if ($matches[1] == "学生") $role = 4;
-        else if( $matches[1] == "教师") $role = 3;
-
         if ($resArr['flag'] == 1) {
+            // 获取用户身份
+            $userInfoUrl = "http://worlduc.com/SpaceManage/Space/UserBase.aspx";
+            $response = $guzzleClient->request('GET', $userInfoUrl, ['http_errors' => false]);
+            if ($response->getStatusCode() != 200) {
+                return [
+                    "code" => -1,
+                    "msg" => $response->getStatusCode()
+                ];
+            }
+            $bodyInfo = $response->getBody()->getContents();
+            preg_match('/<span id="ctl00_ContentPlaceHolderMain_ShenFen">(.*?)<\/span>/', $bodyInfo, $matches);
+            if ($matches[1] == "学生") $role = 4;
+            else if( $matches[1] == "教师") $role = 3;
+
             // 更新数据库
             if ($user = User::where('email', $email)->first()) {
                 $user->id = $resArr['link1']['userid'];

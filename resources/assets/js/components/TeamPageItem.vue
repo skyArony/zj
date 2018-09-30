@@ -29,21 +29,32 @@
                           trigger="click">
                 <div class="leader-info">
                   <div class="info-item">
-                    <img width="19px"
-                         height="19px"
-                         src="/storage/img/user.png">{{item.name}}&nbsp;
+                    <svg class="iconIn"
+                         slot="reference"
+                         aria-hidden="true">
+                      <use xlink:href="#icon-user"></use>
+                    </svg>
+                    {{item.name}}&nbsp;
                     <el-tag v-if="item.isLeader"
                             size="mini"
                             type="info">队长</el-tag>
                   </div>
                   <div class="info-item">
-                    <img width="19px"
-                         height="19px"
-                         src="/storage/img/phone.png">{{item.phone}}</div>
+                    <svg class="iconIn"
+                         slot="reference"
+                         aria-hidden="true">
+                      <use xlink:href="#icon-phone"></use>
+                    </svg>
+                    {{item.phone}}
+                  </div>
                   <div class="info-item">
-                    <img width="19px"
-                         height="19px"
-                         src="/storage/img/QQ.png">{{item.QQ}}</div>
+                    <svg class="iconIn"
+                         slot="reference"
+                         aria-hidden="true">
+                      <use xlink:href="#icon-qq"></use>
+                    </svg>
+                    {{item.QQ}}
+                  </div>
                 </div>
                 <img slot="reference"
                      class="member-img"
@@ -100,6 +111,11 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+.iconIn
+  font-size 18px
+  margin-right 5px
+  color #48aefb
+
 .card
   padding 10px
   box-sizing border-box
@@ -174,9 +190,6 @@ export default {
   .info-item
     display flex
     align-items center
-
-    img
-      margin-right 10px
 
     & + .info-item
       margin-top 4px

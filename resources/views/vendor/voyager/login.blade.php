@@ -35,6 +35,7 @@
     </style>
 
     <link href="/css/font-css.css" rel="stylesheet">
+    <!-- 以后可以把下面 js 加到 config/voyager.php 里 -->
     <style>
         .iconIn {
             width:1em;

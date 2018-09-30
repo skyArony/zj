@@ -385,6 +385,126 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2018-07-26 10:58:16',
                 'updated_at' => '2018-07-26 10:58:16',
             ),
+            46 => 
+            array (
+                'id' => 57,
+                'key' => 'browse_tasks',
+                'table_name' => 'tasks',
+                'created_at' => '2018-08-21 03:51:06',
+                'updated_at' => '2018-08-21 03:51:06',
+            ),
+            47 => 
+            array (
+                'id' => 58,
+                'key' => 'read_tasks',
+                'table_name' => 'tasks',
+                'created_at' => '2018-08-21 03:51:06',
+                'updated_at' => '2018-08-21 03:51:06',
+            ),
+            48 => 
+            array (
+                'id' => 59,
+                'key' => 'edit_tasks',
+                'table_name' => 'tasks',
+                'created_at' => '2018-08-21 03:51:06',
+                'updated_at' => '2018-08-21 03:51:06',
+            ),
+            49 => 
+            array (
+                'id' => 60,
+                'key' => 'add_tasks',
+                'table_name' => 'tasks',
+                'created_at' => '2018-08-21 03:51:06',
+                'updated_at' => '2018-08-21 03:51:06',
+            ),
+            50 => 
+            array (
+                'id' => 61,
+                'key' => 'delete_tasks',
+                'table_name' => 'tasks',
+                'created_at' => '2018-08-21 03:51:06',
+                'updated_at' => '2018-08-21 03:51:06',
+            ),
+            51 => 
+            array (
+                'id' => 62,
+                'key' => 'browse_teams',
+                'table_name' => 'teams',
+                'created_at' => '2018-08-21 08:26:14',
+                'updated_at' => '2018-08-21 08:26:14',
+            ),
+            52 => 
+            array (
+                'id' => 63,
+                'key' => 'read_teams',
+                'table_name' => 'teams',
+                'created_at' => '2018-08-21 08:26:14',
+                'updated_at' => '2018-08-21 08:26:14',
+            ),
+            53 => 
+            array (
+                'id' => 64,
+                'key' => 'edit_teams',
+                'table_name' => 'teams',
+                'created_at' => '2018-08-21 08:26:14',
+                'updated_at' => '2018-08-21 08:26:14',
+            ),
+            54 => 
+            array (
+                'id' => 65,
+                'key' => 'add_teams',
+                'table_name' => 'teams',
+                'created_at' => '2018-08-21 08:26:14',
+                'updated_at' => '2018-08-21 08:26:14',
+            ),
+            55 => 
+            array (
+                'id' => 66,
+                'key' => 'delete_teams',
+                'table_name' => 'teams',
+                'created_at' => '2018-08-21 08:26:14',
+                'updated_at' => '2018-08-21 08:26:14',
+            ),
+            56 => 
+            array (
+                'id' => 67,
+                'key' => 'browse_research_results',
+                'table_name' => 'research_results',
+                'created_at' => '2018-08-21 08:38:07',
+                'updated_at' => '2018-08-21 08:38:07',
+            ),
+            57 => 
+            array (
+                'id' => 68,
+                'key' => 'read_research_results',
+                'table_name' => 'research_results',
+                'created_at' => '2018-08-21 08:38:07',
+                'updated_at' => '2018-08-21 08:38:07',
+            ),
+            58 => 
+            array (
+                'id' => 69,
+                'key' => 'edit_research_results',
+                'table_name' => 'research_results',
+                'created_at' => '2018-08-21 08:38:07',
+                'updated_at' => '2018-08-21 08:38:07',
+            ),
+            59 => 
+            array (
+                'id' => 70,
+                'key' => 'add_research_results',
+                'table_name' => 'research_results',
+                'created_at' => '2018-08-21 08:38:07',
+                'updated_at' => '2018-08-21 08:38:07',
+            ),
+            60 => 
+            array (
+                'id' => 71,
+                'key' => 'delete_research_results',
+                'table_name' => 'research_results',
+                'created_at' => '2018-08-21 08:38:07',
+                'updated_at' => '2018-08-21 08:38:07',
+            ),
         ));
         
         

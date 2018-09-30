@@ -387,22 +387,6 @@ class DataRowsTableSeeder extends Seeder
             ),
             23 => 
             array (
-                'id' => 24,
-                'data_type_id' => 5,
-                'field' => 'course_id',
-                'type' => 'text',
-                'display_name' => 'Course Id',
-                'required' => 1,
-                'browse' => 0,
-                'read' => 1,
-                'edit' => 0,
-                'add' => 0,
-                'delete' => 0,
-                'details' => NULL,
-                'order' => 3,
-            ),
-            24 => 
-            array (
                 'id' => 25,
                 'data_type_id' => 5,
                 'field' => 'name',
@@ -415,9 +399,9 @@ class DataRowsTableSeeder extends Seeder
                 'add' => 0,
                 'delete' => 0,
                 'details' => NULL,
-                'order' => 4,
+                'order' => 2,
             ),
-            25 => 
+            24 => 
             array (
                 'id' => 26,
                 'data_type_id' => 5,
@@ -431,9 +415,9 @@ class DataRowsTableSeeder extends Seeder
                 'add' => 1,
                 'delete' => 1,
                 'details' => NULL,
-                'order' => 7,
+                'order' => 6,
             ),
-            26 => 
+            25 => 
             array (
                 'id' => 27,
                 'data_type_id' => 5,
@@ -449,23 +433,7 @@ class DataRowsTableSeeder extends Seeder
                 'details' => NULL,
                 'order' => 5,
             ),
-            27 => 
-            array (
-                'id' => 28,
-                'data_type_id' => 5,
-                'field' => 'teacher',
-                'type' => 'text',
-                'display_name' => '授课教师',
-                'required' => 1,
-                'browse' => 1,
-                'read' => 1,
-                'edit' => 0,
-                'add' => 0,
-                'delete' => 0,
-                'details' => NULL,
-                'order' => 6,
-            ),
-            28 => 
+            26 => 
             array (
                 'id' => 29,
                 'data_type_id' => 5,
@@ -479,9 +447,9 @@ class DataRowsTableSeeder extends Seeder
                 'add' => 0,
                 'delete' => 0,
                 'details' => NULL,
-                'order' => 2,
+                'order' => 3,
             ),
-            29 => 
+            27 => 
             array (
                 'id' => 30,
                 'data_type_id' => 5,
@@ -495,9 +463,9 @@ class DataRowsTableSeeder extends Seeder
                 'add' => 0,
                 'delete' => 0,
                 'details' => NULL,
-                'order' => 8,
+                'order' => 7,
             ),
-            30 => 
+            28 => 
             array (
                 'id' => 31,
                 'data_type_id' => 5,
@@ -511,9 +479,9 @@ class DataRowsTableSeeder extends Seeder
                 'add' => 0,
                 'delete' => 0,
                 'details' => NULL,
-                'order' => 9,
+                'order' => 8,
             ),
-            31 => 
+            29 => 
             array (
                 'id' => 37,
                 'data_type_id' => 7,
@@ -529,7 +497,7 @@ class DataRowsTableSeeder extends Seeder
                 'details' => NULL,
                 'order' => 1,
             ),
-            32 => 
+            30 => 
             array (
                 'id' => 38,
                 'data_type_id' => 7,
@@ -545,7 +513,7 @@ class DataRowsTableSeeder extends Seeder
                 'details' => NULL,
                 'order' => 2,
             ),
-            33 => 
+            31 => 
             array (
                 'id' => 39,
                 'data_type_id' => 7,
@@ -561,7 +529,7 @@ class DataRowsTableSeeder extends Seeder
                 'details' => NULL,
                 'order' => 3,
             ),
-            34 => 
+            32 => 
             array (
                 'id' => 40,
                 'data_type_id' => 7,
@@ -577,7 +545,7 @@ class DataRowsTableSeeder extends Seeder
                 'details' => NULL,
                 'order' => 4,
             ),
-            35 => 
+            33 => 
             array (
                 'id' => 41,
                 'data_type_id' => 7,
@@ -593,7 +561,7 @@ class DataRowsTableSeeder extends Seeder
                 'details' => NULL,
                 'order' => 5,
             ),
-            36 => 
+            34 => 
             array (
                 'id' => 42,
                 'data_type_id' => 8,
@@ -609,7 +577,7 @@ class DataRowsTableSeeder extends Seeder
                 'details' => NULL,
                 'order' => 1,
             ),
-            37 => 
+            35 => 
             array (
                 'id' => 43,
                 'data_type_id' => 8,
@@ -625,7 +593,7 @@ class DataRowsTableSeeder extends Seeder
                 'details' => NULL,
                 'order' => 3,
             ),
-            38 => 
+            36 => 
             array (
                 'id' => 44,
                 'data_type_id' => 8,
@@ -639,9 +607,9 @@ class DataRowsTableSeeder extends Seeder
                 'add' => 0,
                 'delete' => 0,
                 'details' => NULL,
-                'order' => 7,
+                'order' => 6,
             ),
-            39 => 
+            37 => 
             array (
                 'id' => 45,
                 'data_type_id' => 8,
@@ -657,7 +625,7 @@ class DataRowsTableSeeder extends Seeder
                 'details' => NULL,
                 'order' => 2,
             ),
-            40 => 
+            38 => 
             array (
                 'id' => 46,
                 'data_type_id' => 8,
@@ -671,9 +639,9 @@ class DataRowsTableSeeder extends Seeder
                 'add' => 0,
                 'delete' => 1,
                 'details' => NULL,
-                'order' => 4,
+                'order' => 5,
             ),
-            41 => 
+            39 => 
             array (
                 'id' => 47,
                 'data_type_id' => 8,
@@ -689,7 +657,7 @@ class DataRowsTableSeeder extends Seeder
                 'details' => NULL,
                 'order' => 9,
             ),
-            42 => 
+            40 => 
             array (
                 'id' => 48,
                 'data_type_id' => 8,
@@ -705,7 +673,7 @@ class DataRowsTableSeeder extends Seeder
                 'details' => NULL,
                 'order' => 10,
             ),
-            43 => 
+            41 => 
             array (
                 'id' => 51,
                 'data_type_id' => 8,
@@ -721,39 +689,7 @@ class DataRowsTableSeeder extends Seeder
                 'details' => NULL,
                 'order' => 8,
             ),
-            44 => 
-            array (
-                'id' => 54,
-                'data_type_id' => 8,
-                'field' => 'creater',
-                'type' => 'text',
-                'display_name' => '创建者',
-                'required' => 1,
-                'browse' => 1,
-                'read' => 1,
-                'edit' => 0,
-                'add' => 0,
-                'delete' => 1,
-                'details' => NULL,
-                'order' => 6,
-            ),
-            45 => 
-            array (
-                'id' => 55,
-                'data_type_id' => 8,
-                'field' => 'course',
-                'type' => 'text',
-                'display_name' => '所属课程',
-                'required' => 1,
-                'browse' => 1,
-                'read' => 1,
-                'edit' => 0,
-                'add' => 0,
-                'delete' => 1,
-                'details' => NULL,
-                'order' => 5,
-            ),
-            46 => 
+            42 => 
             array (
                 'id' => 56,
                 'data_type_id' => 10,
@@ -769,23 +705,7 @@ class DataRowsTableSeeder extends Seeder
                 'details' => NULL,
                 'order' => 1,
             ),
-            47 => 
-            array (
-                'id' => 57,
-                'data_type_id' => 10,
-                'field' => 'id',
-                'type' => 'text',
-                'display_name' => 'User Id',
-                'required' => 1,
-                'browse' => 0,
-                'read' => 1,
-                'edit' => 0,
-                'add' => 0,
-                'delete' => 1,
-                'details' => NULL,
-                'order' => 2,
-            ),
-            48 => 
+            43 => 
             array (
                 'id' => 58,
                 'data_type_id' => 10,
@@ -801,7 +721,7 @@ class DataRowsTableSeeder extends Seeder
                 'details' => NULL,
                 'order' => 4,
             ),
-            49 => 
+            44 => 
             array (
                 'id' => 59,
                 'data_type_id' => 10,
@@ -817,7 +737,7 @@ class DataRowsTableSeeder extends Seeder
                 'details' => NULL,
                 'order' => 5,
             ),
-            50 => 
+            45 => 
             array (
                 'id' => 60,
                 'data_type_id' => 10,
@@ -833,7 +753,7 @@ class DataRowsTableSeeder extends Seeder
                 'details' => NULL,
                 'order' => 6,
             ),
-            51 => 
+            46 => 
             array (
                 'id' => 61,
                 'data_type_id' => 10,
@@ -849,7 +769,7 @@ class DataRowsTableSeeder extends Seeder
                 'details' => NULL,
                 'order' => 9,
             ),
-            52 => 
+            47 => 
             array (
                 'id' => 63,
                 'data_type_id' => 10,
@@ -862,26 +782,10 @@ class DataRowsTableSeeder extends Seeder
                 'edit' => 0,
                 'add' => 0,
                 'delete' => 1,
-                'details' => '{"model":"App\\\\User","table":"users","type":"belongsTo","column":"user_primary_id","key":"id","label":"name","pivot_table":"answer_records","pivot":"0","taggable":"0"}',
+                'details' => '{"model":"App\\\\User","table":"users","type":"belongsTo","column":"creater_id","key":"id","label":"name","pivot_table":"answer_records","pivot":"0","taggable":"0"}',
                 'order' => 8,
             ),
-            53 => 
-            array (
-                'id' => 64,
-                'data_type_id' => 10,
-                'field' => 'user_primary_id',
-                'type' => 'text',
-                'display_name' => 'User Primary Id',
-                'required' => 1,
-                'browse' => 1,
-                'read' => 1,
-                'edit' => 0,
-                'add' => 0,
-                'delete' => 1,
-                'details' => NULL,
-                'order' => 3,
-            ),
-            54 => 
+            48 => 
             array (
                 'id' => 65,
                 'data_type_id' => 10,
@@ -897,7 +801,7 @@ class DataRowsTableSeeder extends Seeder
                 'details' => '{"model":"App\\\\Models\\\\DB\\\\Survey","table":"surveys","type":"belongsTo","column":"survey_id","key":"id","label":"title","pivot_table":"answer_records","pivot":"0","taggable":"0"}',
                 'order' => 7,
             ),
-            55 => 
+            49 => 
             array (
                 'id' => 66,
                 'data_type_id' => 8,
@@ -912,6 +816,614 @@ class DataRowsTableSeeder extends Seeder
                 'delete' => 1,
                 'details' => NULL,
                 'order' => 11,
+            ),
+            50 => 
+            array (
+                'id' => 73,
+                'data_type_id' => 14,
+                'field' => 'id',
+                'type' => 'text',
+                'display_name' => 'Id',
+                'required' => 1,
+                'browse' => 0,
+                'read' => 1,
+                'edit' => 0,
+                'add' => 0,
+                'delete' => 0,
+                'details' => NULL,
+                'order' => 1,
+            ),
+            51 => 
+            array (
+                'id' => 74,
+                'data_type_id' => 14,
+                'field' => 'title',
+                'type' => 'text',
+                'display_name' => '课题名',
+                'required' => 1,
+                'browse' => 1,
+                'read' => 1,
+                'edit' => 1,
+                'add' => 1,
+                'delete' => 1,
+                'details' => NULL,
+                'order' => 4,
+            ),
+            52 => 
+            array (
+                'id' => 75,
+                'data_type_id' => 14,
+                'field' => 'desc',
+                'type' => 'text_area',
+                'display_name' => '简介',
+                'required' => 1,
+                'browse' => 1,
+                'read' => 1,
+                'edit' => 1,
+                'add' => 1,
+                'delete' => 1,
+                'details' => NULL,
+                'order' => 5,
+            ),
+            53 => 
+            array (
+                'id' => 76,
+                'data_type_id' => 14,
+                'field' => 'detail',
+                'type' => 'rich_text_box',
+                'display_name' => '课题详情',
+                'required' => 1,
+                'browse' => 1,
+                'read' => 1,
+                'edit' => 1,
+                'add' => 1,
+                'delete' => 1,
+                'details' => NULL,
+                'order' => 6,
+            ),
+            54 => 
+            array (
+                'id' => 77,
+                'data_type_id' => 14,
+                'field' => 'file',
+                'type' => 'file',
+                'display_name' => '课题附件',
+                'required' => 0,
+                'browse' => 1,
+                'read' => 1,
+                'edit' => 1,
+                'add' => 1,
+                'delete' => 0,
+                'details' => NULL,
+                'order' => 7,
+            ),
+            55 => 
+            array (
+                'id' => 78,
+                'data_type_id' => 14,
+                'field' => 'created_at',
+                'type' => 'timestamp',
+                'display_name' => 'Created At',
+                'required' => 0,
+                'browse' => 0,
+                'read' => 1,
+                'edit' => 0,
+                'add' => 0,
+                'delete' => 1,
+                'details' => NULL,
+                'order' => 10,
+            ),
+            56 => 
+            array (
+                'id' => 79,
+                'data_type_id' => 14,
+                'field' => 'updated_at',
+                'type' => 'timestamp',
+                'display_name' => 'Updated At',
+                'required' => 0,
+                'browse' => 0,
+                'read' => 1,
+                'edit' => 0,
+                'add' => 0,
+                'delete' => 1,
+                'details' => NULL,
+                'order' => 11,
+            ),
+            57 => 
+            array (
+                'id' => 80,
+                'data_type_id' => 14,
+                'field' => 'creater_id',
+                'type' => 'hidden',
+                'display_name' => '创建者',
+                'required' => 1,
+                'browse' => 1,
+                'read' => 1,
+                'edit' => 0,
+                'add' => 1,
+                'delete' => 0,
+                'details' => NULL,
+                'order' => 2,
+            ),
+            58 => 
+            array (
+                'id' => 81,
+                'data_type_id' => 14,
+                'field' => 'regist_end_at',
+                'type' => 'timestamp',
+                'display_name' => '组队截止时间',
+                'required' => 1,
+                'browse' => 1,
+                'read' => 1,
+                'edit' => 1,
+                'add' => 1,
+                'delete' => 1,
+                'details' => NULL,
+                'order' => 8,
+            ),
+            59 => 
+            array (
+                'id' => 82,
+                'data_type_id' => 14,
+                'field' => 'submit_end_at',
+                'type' => 'timestamp',
+                'display_name' => '课题结束时间',
+                'required' => 1,
+                'browse' => 1,
+                'read' => 1,
+                'edit' => 1,
+                'add' => 1,
+                'delete' => 1,
+                'details' => NULL,
+                'order' => 9,
+            ),
+            60 => 
+            array (
+                'id' => 83,
+                'data_type_id' => 15,
+                'field' => 'id',
+                'type' => 'text',
+                'display_name' => 'Id',
+                'required' => 1,
+                'browse' => 0,
+                'read' => 1,
+                'edit' => 0,
+                'add' => 0,
+                'delete' => 0,
+                'details' => NULL,
+                'order' => 1,
+            ),
+            61 => 
+            array (
+                'id' => 84,
+                'data_type_id' => 15,
+                'field' => 'creater_id',
+                'type' => 'hidden',
+                'display_name' => '创建者',
+                'required' => 1,
+                'browse' => 1,
+                'read' => 1,
+                'edit' => 0,
+                'add' => 1,
+                'delete' => 0,
+                'details' => NULL,
+                'order' => 3,
+            ),
+            62 => 
+            array (
+                'id' => 85,
+                'data_type_id' => 15,
+                'field' => 'team_name',
+                'type' => 'text',
+                'display_name' => '队名',
+                'required' => 1,
+                'browse' => 1,
+                'read' => 1,
+                'edit' => 1,
+                'add' => 1,
+                'delete' => 1,
+                'details' => NULL,
+                'order' => 5,
+            ),
+            63 => 
+            array (
+                'id' => 86,
+                'data_type_id' => 15,
+                'field' => 'team_desc',
+                'type' => 'text_area',
+                'display_name' => '介绍',
+                'required' => 1,
+                'browse' => 1,
+                'read' => 1,
+                'edit' => 1,
+                'add' => 1,
+                'delete' => 1,
+                'details' => NULL,
+                'order' => 6,
+            ),
+            64 => 
+            array (
+                'id' => 87,
+                'data_type_id' => 15,
+                'field' => 'created_at',
+                'type' => 'timestamp',
+                'display_name' => '创建时间',
+                'required' => 0,
+                'browse' => 0,
+                'read' => 1,
+                'edit' => 0,
+                'add' => 0,
+                'delete' => 1,
+                'details' => NULL,
+                'order' => 7,
+            ),
+            65 => 
+            array (
+                'id' => 88,
+                'data_type_id' => 15,
+                'field' => 'updated_at',
+                'type' => 'timestamp',
+                'display_name' => 'Updated At',
+                'required' => 0,
+                'browse' => 0,
+                'read' => 1,
+                'edit' => 0,
+                'add' => 0,
+                'delete' => 1,
+                'details' => NULL,
+                'order' => 8,
+            ),
+            66 => 
+            array (
+                'id' => 89,
+                'data_type_id' => 15,
+                'field' => 'deleted_at',
+                'type' => 'timestamp',
+                'display_name' => 'Deleted At',
+                'required' => 0,
+                'browse' => 0,
+                'read' => 1,
+                'edit' => 0,
+                'add' => 0,
+                'delete' => 1,
+                'details' => NULL,
+                'order' => 9,
+            ),
+            67 => 
+            array (
+                'id' => 90,
+                'data_type_id' => 14,
+                'field' => 'deleted_at',
+                'type' => 'timestamp',
+                'display_name' => 'Deleted At',
+                'required' => 0,
+                'browse' => 0,
+                'read' => 1,
+                'edit' => 0,
+                'add' => 0,
+                'delete' => 1,
+                'details' => NULL,
+                'order' => 12,
+            ),
+            68 => 
+            array (
+                'id' => 91,
+                'data_type_id' => 17,
+                'field' => 'id',
+                'type' => 'text',
+                'display_name' => 'Id',
+                'required' => 1,
+                'browse' => 0,
+                'read' => 1,
+                'edit' => 0,
+                'add' => 0,
+                'delete' => 0,
+                'details' => NULL,
+                'order' => 1,
+            ),
+            69 => 
+            array (
+                'id' => 92,
+                'data_type_id' => 17,
+                'field' => 'team_id',
+                'type' => 'text',
+                'display_name' => 'Team Id',
+                'required' => 1,
+                'browse' => 1,
+                'read' => 1,
+                'edit' => 0,
+                'add' => 1,
+                'delete' => 1,
+                'details' => NULL,
+                'order' => 2,
+            ),
+            70 => 
+            array (
+                'id' => 93,
+                'data_type_id' => 17,
+                'field' => 'task_id',
+                'type' => 'text',
+                'display_name' => 'Task Id',
+                'required' => 1,
+                'browse' => 1,
+                'read' => 1,
+                'edit' => 0,
+                'add' => 1,
+                'delete' => 1,
+                'details' => NULL,
+                'order' => 4,
+            ),
+            71 => 
+            array (
+                'id' => 94,
+                'data_type_id' => 17,
+                'field' => 'title',
+                'type' => 'text',
+                'display_name' => '标题',
+                'required' => 1,
+                'browse' => 1,
+                'read' => 1,
+                'edit' => 1,
+                'add' => 1,
+                'delete' => 1,
+                'details' => NULL,
+                'order' => 8,
+            ),
+            72 => 
+            array (
+                'id' => 95,
+                'data_type_id' => 17,
+                'field' => 'desc',
+                'type' => 'text_area',
+                'display_name' => '简介',
+                'required' => 1,
+                'browse' => 1,
+                'read' => 1,
+                'edit' => 1,
+                'add' => 1,
+                'delete' => 1,
+                'details' => NULL,
+                'order' => 9,
+            ),
+            73 => 
+            array (
+                'id' => 96,
+                'data_type_id' => 17,
+                'field' => 'detail',
+                'type' => 'rich_text_box',
+                'display_name' => '详情',
+                'required' => 1,
+                'browse' => 1,
+                'read' => 1,
+                'edit' => 1,
+                'add' => 1,
+                'delete' => 1,
+                'details' => NULL,
+                'order' => 10,
+            ),
+            74 => 
+            array (
+                'id' => 97,
+                'data_type_id' => 17,
+                'field' => 'file',
+                'type' => 'file',
+                'display_name' => '附件',
+                'required' => 0,
+                'browse' => 1,
+                'read' => 1,
+                'edit' => 1,
+                'add' => 1,
+                'delete' => 0,
+                'details' => NULL,
+                'order' => 11,
+            ),
+            75 => 
+            array (
+                'id' => 98,
+                'data_type_id' => 17,
+                'field' => 'created_at',
+                'type' => 'timestamp',
+                'display_name' => 'Created At',
+                'required' => 0,
+                'browse' => 0,
+                'read' => 1,
+                'edit' => 0,
+                'add' => 0,
+                'delete' => 1,
+                'details' => NULL,
+                'order' => 12,
+            ),
+            76 => 
+            array (
+                'id' => 99,
+                'data_type_id' => 17,
+                'field' => 'updated_at',
+                'type' => 'timestamp',
+                'display_name' => 'Updated At',
+                'required' => 0,
+                'browse' => 0,
+                'read' => 1,
+                'edit' => 0,
+                'add' => 0,
+                'delete' => 1,
+                'details' => NULL,
+                'order' => 13,
+            ),
+            77 => 
+            array (
+                'id' => 100,
+                'data_type_id' => 5,
+                'field' => 'course_belongsto_user_relationship',
+                'type' => 'relationship',
+                'display_name' => '授课教师',
+                'required' => 0,
+                'browse' => 1,
+                'read' => 1,
+                'edit' => 1,
+                'add' => 1,
+                'delete' => 1,
+                'details' => '{"model":"App\\\\User","table":"users","type":"belongsTo","column":"teacher_id","key":"id","label":"name","pivot_table":"answer_records","pivot":"0","taggable":"0"}',
+                'order' => 4,
+            ),
+            78 => 
+            array (
+                'id' => 101,
+                'data_type_id' => 10,
+                'field' => 'creater_id',
+                'type' => 'text',
+                'display_name' => 'Creater Id',
+                'required' => 1,
+                'browse' => 1,
+                'read' => 1,
+                'edit' => 1,
+                'add' => 1,
+                'delete' => 1,
+                'details' => NULL,
+                'order' => 2,
+            ),
+            79 => 
+            array (
+                'id' => 102,
+                'data_type_id' => 8,
+                'field' => 'survey_belongsto_course_relationship',
+                'type' => 'relationship',
+                'display_name' => '所属课程',
+                'required' => 0,
+                'browse' => 1,
+                'read' => 1,
+                'edit' => 1,
+                'add' => 1,
+                'delete' => 1,
+                'details' => '{"model":"App\\\\Models\\\\DB\\\\Course","table":"courses","type":"belongsTo","column":"course_id","key":"id","label":"name","pivot_table":"answer_records","pivot":"0","taggable":"0"}',
+                'order' => 4,
+            ),
+            80 => 
+            array (
+                'id' => 103,
+                'data_type_id' => 8,
+                'field' => 'survey_belongsto_user_relationship',
+                'type' => 'relationship',
+                'display_name' => '创建者',
+                'required' => 0,
+                'browse' => 1,
+                'read' => 1,
+                'edit' => 1,
+                'add' => 1,
+                'delete' => 1,
+                'details' => '{"model":"App\\\\User","table":"users","type":"belongsTo","column":"creater_id","key":"id","label":"name","pivot_table":"answer_records","pivot":"0","taggable":"0"}',
+                'order' => 7,
+            ),
+            81 => 
+            array (
+                'id' => 104,
+                'data_type_id' => 14,
+                'field' => 'task_belongsto_user_relationship',
+                'type' => 'relationship',
+                'display_name' => '创建者',
+                'required' => 0,
+                'browse' => 1,
+                'read' => 1,
+                'edit' => 0,
+                'add' => 0,
+                'delete' => 0,
+                'details' => '{"model":"App\\\\User","table":"users","type":"belongsTo","column":"creater_id","key":"id","label":"name","pivot_table":"answer_records","pivot":"0","taggable":"0"}',
+                'order' => 3,
+            ),
+            82 => 
+            array (
+                'id' => 105,
+                'data_type_id' => 15,
+                'field' => 'team_belongsto_user_relationship',
+                'type' => 'relationship',
+                'display_name' => '创建者/队长',
+                'required' => 0,
+                'browse' => 1,
+                'read' => 1,
+                'edit' => 0,
+                'add' => 0,
+                'delete' => 0,
+                'details' => '{"model":"App\\\\User","table":"users","type":"belongsTo","column":"creater_id","key":"id","label":"name","pivot_table":"answer_records","pivot":"0","taggable":"0"}',
+                'order' => 4,
+            ),
+            83 => 
+            array (
+                'id' => 106,
+                'data_type_id' => 17,
+                'field' => 'research_result_belongsto_team_relationship',
+                'type' => 'relationship',
+                'display_name' => '研究团队',
+                'required' => 0,
+                'browse' => 1,
+                'read' => 1,
+                'edit' => 0,
+                'add' => 1,
+                'delete' => 1,
+                'details' => '{"model":"App\\\\Models\\\\DB\\\\Team","table":"teams","type":"belongsTo","column":"team_id","key":"id","label":"team_name","pivot_table":"answer_records","pivot":"0","taggable":"0"}',
+                'order' => 3,
+            ),
+            84 => 
+            array (
+                'id' => 107,
+                'data_type_id' => 17,
+                'field' => 'research_result_belongsto_task_relationship',
+                'type' => 'relationship',
+                'display_name' => '研究课题',
+                'required' => 0,
+                'browse' => 1,
+                'read' => 1,
+                'edit' => 0,
+                'add' => 1,
+                'delete' => 1,
+                'details' => '{"model":"App\\\\Models\\\\DB\\\\Task","table":"tasks","type":"belongsTo","column":"task_id","key":"id","label":"title","pivot_table":"answer_records","pivot":"0","taggable":"0"}',
+                'order' => 5,
+            ),
+            85 => 
+            array (
+                'id' => 108,
+                'data_type_id' => 15,
+                'field' => 'avatar',
+                'type' => 'image',
+                'display_name' => '头像',
+                'required' => 1,
+                'browse' => 1,
+                'read' => 1,
+                'edit' => 1,
+                'add' => 1,
+                'delete' => 1,
+                'details' => NULL,
+                'order' => 2,
+            ),
+            86 => 
+            array (
+                'id' => 109,
+                'data_type_id' => 17,
+                'field' => 'research_result_belongsto_user_relationship',
+                'type' => 'relationship',
+                'display_name' => 'users',
+                'required' => 0,
+                'browse' => 0,
+                'read' => 1,
+                'edit' => 0,
+                'add' => 0,
+                'delete' => 0,
+                'details' => '{"model":"App\\\\User","table":"users","type":"belongsTo","column":"creater_id","key":"id","label":"name","pivot_table":"answer_records","pivot":"0","taggable":"0"}',
+                'order' => 7,
+            ),
+            87 => 
+            array (
+                'id' => 110,
+                'data_type_id' => 17,
+                'field' => 'creater_id',
+                'type' => 'hidden',
+                'display_name' => 'Creater Id',
+                'required' => 1,
+                'browse' => 0,
+                'read' => 1,
+                'edit' => 0,
+                'add' => 1,
+                'delete' => 0,
+                'details' => NULL,
+                'order' => 6,
             ),
         ));
         

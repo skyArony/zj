@@ -25,7 +25,7 @@ class SpiderController extends ApiController
         $mooc_course_detail = "http://worlduc.com/APP/OnlineCourse/teaching/base.aspx?op=getmodel&courseID=";
 
         $cookieJar = new CookieJar;
-        if (Cookie::get('id')) $userId = Crypt::decrypt(Cookie::get('id'));
+        if (Cookie::get('id')) $userId = Cookie::get('id');
         else return self::setResponse(null, 400, -4007);    // 未登录
 
         $cookieJar = unserialize(User::where('id', $userId)->first()->cookies);
@@ -66,8 +66,8 @@ class SpiderController extends ApiController
 
         // 登录检查
         if (Cookie::get('id') && Cookie::get('role')) {
-            $userId = Crypt::decrypt(Cookie::get('id'));
-            $role = Crypt::decrypt(Cookie::get('role'));
+            $userId = Cookie::get('id');
+            $role = Cookie::get('role');
         } 
         else return self::setResponse(null, 400, -4007);    // 未登录
 

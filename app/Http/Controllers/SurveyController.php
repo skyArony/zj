@@ -21,7 +21,7 @@ class SurveyController extends ApiController
         $survey->title = $request->title;
         $survey->desc = $request->desc;
         $survey->course_id = $request->course_id;
-        $survey->creater_id = Crypt::decrypt(Cookie::get('id'));
+        $survey->creater_id = Cookie::get('id');
         $survey->questions = json_encode($request->questions, JSON_UNESCAPED_UNICODE);
         if ($survey->save()) {
             return self::setResponse($survey, 200, 0);
@@ -36,8 +36,8 @@ class SurveyController extends ApiController
 
         // 登录检查
         if (Cookie::get('id') && Cookie::get('role')) {
-            $userId = Crypt::decrypt(Cookie::get('id'));
-            $role = Crypt::decrypt(Cookie::get('role'));
+            $userId = Cookie::get('id');
+            $role = Cookie::get('role');
         } 
         else return self::setResponse(null, 400, -4007);    // 未登录
 

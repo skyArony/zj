@@ -156,7 +156,7 @@ return [
     */
 
     'middleware' => [
-
+        \App\Http\Middleware\EncryptCookies::class,
     ],
 
     /*

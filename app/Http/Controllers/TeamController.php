@@ -56,8 +56,8 @@ class TeamController extends ApiController
 
         // 登录检查
         if (Cookie::get('id') && Cookie::get('role')) {
-            $userId = Crypt::decrypt(Cookie::get('id'));
-            $role = Crypt::decrypt(Cookie::get('role'));
+            $userId = Cookie::get('id');
+            $role = Cookie::get('role');
         } 
         else return self::setResponse(null, 400, -4007);    // 未登录
 
@@ -86,8 +86,8 @@ class TeamController extends ApiController
 
         // 登录检查
         if (Cookie::get('id') && Cookie::get('role')) {
-            $userId = Crypt::decrypt(Cookie::get('id'));
-            $role = Crypt::decrypt(Cookie::get('role'));
+            $userId = Cookie::get('id');
+            $role = Cookie::get('role');
         } 
         else return self::setResponse(null, 400, -4007);    // 未登录
 
@@ -116,7 +116,7 @@ class TeamController extends ApiController
     // 退出团队
     public function leaveTeam(Request $request) {
         // TODO validate
-        if (Cookie::get('id')) $userId = Crypt::decrypt(Cookie::get('id'));
+        if (Cookie::get('id')) $userId = Cookie::get('id');
         else return self::setResponse(null, 400, -4007);    // 未登录
 
         $teamId = $request->teamId;
@@ -139,7 +139,7 @@ class TeamController extends ApiController
     public function signTask(Request $request) {
         // TODO validate
 
-        if (Cookie::get('id')) $userId = Crypt::decrypt(Cookie::get('id'));
+        if (Cookie::get('id')) $userId = Cookie::get('id');
         else return self::setResponse(null, 400, -4007);    // 未登录
 
         $teamId = $request->teamId;
@@ -162,7 +162,7 @@ class TeamController extends ApiController
     public function leaveTask(Request $request) {
         // TODO validate
 
-        if (Cookie::get('id')) $userId = Crypt::decrypt(Cookie::get('id'));
+        if (Cookie::get('id')) $userId = Cookie::get('id');
         else return self::setResponse(null, 400, -4007);    // 未登录
 
         $teamId = $request->teamId;
@@ -188,7 +188,7 @@ class TeamController extends ApiController
     public function deleteTeam(Request $request) {
         // TODO validate
 
-        if (Cookie::get('id')) $userId = Crypt::decrypt(Cookie::get('id'));
+        if (Cookie::get('id')) $userId = Cookie::get('id');
         else return self::setResponse(null, 400, -4007);    // 未登录
 
         $teamId = $request->teamId;

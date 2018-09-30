@@ -15,7 +15,7 @@ class ResearchResultsController extends ApiController
     public function getTeamsByUserId() {
         // TODO validate
 
-        if (Cookie::get('id')) $userId = Crypt::decrypt(Cookie::get('id'));
+        if (Cookie::get('id')) $userId = Cookie::get('id');
         else return self::setResponse(null, 400, -4007);    // 未登录
 
         $user = User::find($userId);
@@ -41,7 +41,7 @@ class ResearchResultsController extends ApiController
     public function getResults(Request $request) {
         // TODO validate
 
-        if (Cookie::get('id')) $userId = Crypt::decrypt(Cookie::get('id'));
+        if (Cookie::get('id')) $userId = Cookie::get('id');
         else return self::setResponse(null, 400, -4007);    // 未登录
 
         if ($user = User::with('belongsToManyTeams')->find($userId)) {

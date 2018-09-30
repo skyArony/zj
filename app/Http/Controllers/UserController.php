@@ -31,7 +31,7 @@ class UserController extends ApiController
     public function bindContact(Request $request) {
         // TODO validate
 
-        if (Cookie::get('id')) $userId = Crypt::decrypt(Cookie::get('id'));
+        if (Cookie::get('id')) $userId = Cookie::get('id');
         else return self::setResponse(null, 400, -4007);    // 未登录
 
         $type = $request->type;
@@ -56,7 +56,7 @@ class UserController extends ApiController
     public function getAnswerRecord() {
         // TODO validate
 
-        if (Cookie::get('id')) $userId = Crypt::decrypt(Cookie::get('id'));
+        if (Cookie::get('id')) $userId = Cookie::get('id');
         else return self::setResponse(null, 400, -4007);    // 未登录
 
         $ansRecs = AnswerRecord::with('belongsToSurvey.belongsToCourse')->where('creater_id', $userId)->get();
@@ -75,7 +75,7 @@ class UserController extends ApiController
     public function getMyTeams() {
         // TODO validate
 
-        if (Cookie::get('id')) $userId = Crypt::decrypt(Cookie::get('id'));
+        if (Cookie::get('id')) $userId = Cookie::get('id');
         else return self::setResponse(null, 400, -4007);    // 未登录
 
         if ($user = User::with('belongsToManyTeams.belongsToManyUsers')->find($userId)) {

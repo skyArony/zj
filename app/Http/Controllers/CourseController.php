@@ -13,7 +13,7 @@ class CourseController extends ApiController
     public function getAllCourseByUserId(Request $request) {
         // TODO validate
 
-        if (Cookie::get('id')) $userId = Crypt::decrypt(Cookie::get('id'));
+        if (Cookie::get('id')) $userId = Cookie::get('id');
         else return self::setResponse(null, 400, -4007);    // 未登录
 
         $courses = Course::where('teacher_id', $userId)->get();

@@ -21,7 +21,7 @@ class LoginController extends ApiController
     // 获取当前登录的用户信息
     public function me(Request $request) {
         if (Cookie::get('id')) {
-            $id = Crypt::decrypt(Cookie::get('id'));
+            $id = Cookie::get('id');
             $user = User::where("id", $id)->first();
             return self::setResponse($user, 200, 0);
         } else {

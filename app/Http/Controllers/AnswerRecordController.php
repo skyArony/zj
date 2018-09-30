@@ -14,7 +14,7 @@ class AnswerRecordController extends ApiController
         // TODO validata
 
         if (Cookie::get('id')) {
-            $userId = Crypt::decrypt(Cookie::get('id'));
+            $userId = Cookie::get('id');
         } else return self::setResponse(null, 400, -4007);    // 未登录
 
         $surveyId = $request->surveyId;
@@ -45,7 +45,7 @@ class AnswerRecordController extends ApiController
     public function checkRecord(Request $request) {
         // TODO validate
 
-        if (Cookie::get('id')) $userId = Crypt::decrypt(Cookie::get('id'));
+        if (Cookie::get('id')) $userId = Cookie::get('id');
         else return self::setResponse(null, 400, -4007);    // 未登录
 
         $answerRecord = AnswerRecord::where("id", $userId)->where("survey_id", $request->surveyId)->get();
@@ -59,7 +59,7 @@ class AnswerRecordController extends ApiController
     public function delete(Request $request) {
         // TODO validate
 
-        if (Cookie::get('id')) $userId = Crypt::decrypt(Cookie::get('id'));
+        if (Cookie::get('id')) $userId = Cookie::get('id');
         else return self::setResponse(null, 400, -4007);    // 未登录
 
         $surveyId = $request->surveyId;

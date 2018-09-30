@@ -30,8 +30,8 @@ class CourseTreeController extends ApiController
 
         // 登录检查
         if (Cookie::get('id') && Cookie::get('role')) {
-            $userId = Crypt::decrypt(Cookie::get('id'));
-            $role = Crypt::decrypt(Cookie::get('role'));
+            $userId = Cookie::get('id');
+            $role = Cookie::get('role');
         } 
         else return self::setResponse(null, 400, -4007);    // 未登录
 

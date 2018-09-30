@@ -95,7 +95,7 @@ class TaskController extends ApiController
     public function getTasksByUserId(Request $request)
     {
         if (Cookie::get('id')) {
-            $userId = Crypt::decrypt(Cookie::get('id'));
+            $userId = Cookie::get('id');
         } else {
             return self::setResponse(null, 400, -4007);
         }    // 未登录

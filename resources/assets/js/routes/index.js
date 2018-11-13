@@ -2,7 +2,9 @@ export default [
     { path: "/", component: require("../components/Redirect.vue") },
     {
         path: "/index",
-        component: require("../components/Index.vue"),
+        component: function(resolve) {
+            require(["../components/Index.vue"], resolve);
+        },
         children: [
             {
                 path: "",
@@ -10,39 +12,57 @@ export default [
             },
             {
                 path: "task",
-                component: require("../components/Index-TaskPage.vue")
+                component: function(resolve) {
+                    require(["../components/Index-TaskPage.vue"], resolve);
+                },
             },
             {
                 path: "team",
-                component: require("../components/Index-TeamPage.vue")
+                component: function(resolve) {
+                    require(["../components/Index-TeamPage.vue"], resolve);
+                },
             },
             {
                 path: "course",
-                component: require("../components/Index-CoursePage.vue")
+                component: function(resolve) {
+                    require(["../components/Index-CoursePage.vue"], resolve);
+                },
             },
             {
                 path: "me",
-                component: require("../components/Index-UserPage.vue")
+                component: function(resolve) {
+                    require(["../components/Index-UserPage.vue"], resolve);
+                },
             },
             {
                 path: "video/course/:courseId",
-                component: require("../components/Index-Video.vue")
+                component: function(resolve) {
+                    require(["../components/Index-Video.vue"], resolve);
+                },
             },
             {
                 path: "video/customCourse/:courseId",
-                component: require("../components/Index-Video.vue")
+                component: function(resolve) {
+                    require(["../components/Index-Video.vue"], resolve);
+                },
             },
             {
                 path: "task/:taskId",
-                component: require("../components/Index-Task.vue")
+                component: function(resolve) {
+                    require(["../components/Index-Task.vue"], resolve);
+                },
             },
             {
                 path: "customCourse/:customCourseId",
-                component: require("../components/CustomCourse.vue")
+                component: function(resolve) {
+                    require(["../components/CustomCourse.vue"], resolve);
+                },
             },
             {
                 path: "result/:resultId",
-                component: require("../components/Index-Result.vue")
+                component: function(resolve) {
+                    require(["../components/Index-Result.vue"], resolve);
+                },
             }
         ]
     }

@@ -46,3 +46,5 @@ Route::get('/socialite/callback', 'SocialiteController@callback');
 Route::get('/socialite/bind/qq', 'SocialiteController@bindQQ');
 Route::get('/socialite/login/qq', 'SocialiteController@loginQQ');
 
+// 大学城直接登陆
+Route::view('/worlduc/login', 'worlducLogin');

@@ -40,6 +40,7 @@ Vue.component('worlduc-userpage', require('./components/Index-UserPage.vue'));
 Vue.component('worlduc-teampageitem', require('./components/TeamPageItem.vue'));
 Vue.component('worlduc-coursepageitem', require('./components/CoursePageItem.vue'));
 Vue.component('worlduc-addmember', require('./components/AddMember.vue'));
+Vue.component('worlduc-login', require('./components/WorlducLogin.vue'));
 
 // element ui
 import ElementUI from 'element-ui';

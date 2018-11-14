@@ -23,6 +23,7 @@ class CreateUsersTable extends Migration
             $table->string('org_avatar')->comment("组织头像");
             $table->string('password');
             $table->text('cookies')->comment("上一次登录获取的 cookies");
+            $table->string('login_key')->default("")->comment("大学城登陆系统的key");
             $table->rememberToken();
             $table->timestamps();
             $table->primary('id');

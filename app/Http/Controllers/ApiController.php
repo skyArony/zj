@@ -39,6 +39,7 @@ class ApiController extends Controller
             -4011 => '参数不能为空',
             -4012 => '参数错误!',
             -4013 => '已过期, 无法操作!',
+            -4014 => '登陆 key 校验不通过'
         );
         return $msgForCode[$errcode];
     }

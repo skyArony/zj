@@ -107,7 +107,7 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'], function ($api) {
     $api->delete('/user/team/{teamId}', 'TeamController@leaveTeam');
     // 根据 id 获取一个科研成果的详细信息
     $api->get('/result/{resultId}', 'ResearchResultsController@getResultDetail');
-
-
-    $api->get('/test', "UserController@test");
+    // 获取大学城登陆校验的随机 key
+    $api->get('/loginKey', "LoginController@loginKey");
+    $api->get('/loginKeyCheck', "LoginController@loginKeyCheck");
 });

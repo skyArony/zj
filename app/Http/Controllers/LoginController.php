@@ -10,6 +10,7 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Auth;
+use GuzzleHttp\Client as GuzzleClient;
 
 
 class LoginController extends ApiController
@@ -107,4 +108,50 @@ class LoginController extends ApiController
         return config('voyager.user.redirect', route('voyager.dashboard'));
     }
 
+    // 获取登陆 key
+    public function loginKey(Request $request)
+    {
+        $uid = $request->uid;
+        $user = User::find($uid);
+        if ($user) {
+            $key = md5(time() + rand(0, 10000));
+            $user->login_key = $key;
+            $user->save();
+            return self::setResponse($key, 200, 0);
+        } else {
+            return self::setResponse(null, 404, -4005);
+        }
+    }
+
+    public function loginKeyCheck(Request $request)
+    {
+        $uid = $request->uid;
+        $user = User::find($uid);
+        if ($user) {
+            $key = $user->login_key;
+            $worlduc_login = 'http://worlduc.com/index.aspx?op=Login&email=' . env("worlduc_email") . '&pass=' . env("worlduc_pass");
+            $guzzleClient = new GuzzleClient(['cookies' => true]);
+            $guzzleClient->request('POST', $worlduc_login, ['http_errors' => false]);
+            $infoUrl = "http://worlduc.com/SpaceShow/UserInfo.aspx?uid=" . $uid;
+            $response = $guzzleClient->request('GET', $infoUrl, ['http_errors' => false]);
+            if ($response->getStatusCode() != 200) {
+                return self::setResponse(null, 404, -4005);
+            }
+            $bodyInfo = $response->getBody()->getContents();
+            preg_match('/<span class="ml10">(.*?)<\/span><\/li><\/ul>/', $bodyInfo, $matches);
+            if ($matches && $matches[1] == $key) {
+                $user = User::find($uid);
+                Cookie::queue('id', $uid, null, null, null, false, true);
+                Cookie::queue('role', $user->role_id, null, null, null, false, true);
+                if ($this->guard()->loginUsingId($uid)) return $this->sendLoginResponse($request);
+                else {
+                    return redirect('/admin/login?error=未知原因登陆失败!');
+                }
+            } else {
+                return self::setResponse(null, 400, -4014);
+            }
+        } else {
+            return self::setResponse(null, 404, -4005);
+        }
+    }
 }

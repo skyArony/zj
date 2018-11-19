@@ -71,7 +71,7 @@ export default {
       this.fullscreenLoading = true
       let that = this
       setTimeout(() => {
-        this.MyAxios.get("/api/loginKeyCheck?uid=" + this.uid)
+        this.MyAxios.get("/loginKeyCheck?uid=" + this.uid)
           .then(function(response) {
             that.fullscreenLoading = false
             location.href = "/admin/"

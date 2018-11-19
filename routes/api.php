@@ -109,5 +109,4 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'], function ($api) {
     $api->get('/result/{resultId}', 'ResearchResultsController@getResultDetail');
     // 获取大学城登陆校验的随机 key
     $api->get('/loginKey', "LoginController@loginKey");
-    $api->get('/loginKeyCheck', "LoginController@loginKeyCheck");
 });

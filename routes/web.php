@@ -48,3 +48,4 @@ Route::get('/socialite/login/qq', 'SocialiteController@loginQQ');
 
 // 大学城直接登陆
 Route::view('/worlduc/login', 'worlducLogin');
+Route::get('/loginKeyCheck', "LoginController@loginKeyCheck");

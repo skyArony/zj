@@ -258,7 +258,7 @@ export default {
 .title {
   font-size: 40px;
   font-weight: 700;
-  margin-top: 20%;
+  margin-top: 12%;
 }
 .desc {
   margin-top: 3%;
@@ -398,10 +398,10 @@ export default {
 
 @media screen and (max-width: 840px) and (min-width: 481px) {
   #shareCard {
-    display: none;
+    /* display: none; */
   }
   #qrcodeIcon {
-    display: none;
+    /* display: none; */
     position: absolute;
     right: -40px;
     top: 3px;
@@ -477,6 +477,15 @@ export default {
   }
   #copyShareText:hover {
     background-image: url("/storage/img/share-h.png");
+  }
+  #qrcodeIcon {
+    display: none;
+    position: absolute;
+    right: -40px;
+    top: 3px;
+    width: 32px;
+    height: 32px;
+    background-image: url("/storage/img/qrcode.png");
   }
   .main {
     width: 100%;

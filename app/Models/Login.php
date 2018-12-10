@@ -130,10 +130,17 @@ class Login extends Model
                 $user->cookies = $cookieJar;
                 $user->save();
             }
+
+            // 设置 JWT token
+            $customClaims = ['id' => $resArr['link1']['userid'], 'role' => $user->role_id];
+            $credentials = ['email' => $email, 'password' => $pass];
+            $token = auth('api')->claims($customClaims)->attempt($credentials);
+            Cookie::queue('token', $token);
             
-            // 存储 email 到 cookies
+            // 存储 email 到 cookies，部署完token后记得删除
             Cookie::queue('id', $resArr['link1']['userid'], null, null, null, false, true);
             Cookie::queue('role', $user->role_id, null, null, null, false, true);
+
             return [
                 "code" => 0,
                 "msg" => "success"
@@ -145,4 +152,5 @@ class Login extends Model
             ];
         }
     }
+
 }

@@ -17,18 +17,18 @@ use Illuminate\Http\Request;
 //     return $request->user();
 // });
 
-// Route::group([
-//     'prefix' => 'auth'
-// ], function ($router) {
-//     Route::post('login', 'AuthController@login');
-//     Route::post('logout', 'AuthController@logout');
-//     Route::post('refresh', 'AuthController@refresh');
-//     Route::post('me', 'AuthController@me');
-// });
+Route::group([
+    'prefix' => 'auth'
+], function ($router) {
+    Route::post('login', 'AuthController@login');
+    Route::post('logout', 'AuthController@logout');
+    Route::post('refresh', 'AuthController@refresh');
+    Route::post('me', 'AuthController@me');
+});
 
 
 $api = app('Dingo\Api\Routing\Router');
-$api->version('v1', ['namespace' => 'App\Http\Controllers'], function ($api) {
+$api->version('v1', ['namespace' => 'App\Http\Controllers', 'middleware' => ['jwt.check', 'token']], function ($api) {
     // 爬取课程信息[需要带 cookie 访问]
     $api->post('/course', 'SpiderController@getCourseInfo');
     // 根据课程 ID 查看课程信息

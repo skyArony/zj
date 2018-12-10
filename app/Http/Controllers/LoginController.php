@@ -19,22 +19,12 @@ class LoginController extends ApiController
 
     protected $redirectUrl = '';
 
-    // 获取当前登录的用户信息
-    public function me(Request $request) {
-        if (Cookie::get('id')) {
-            $id = Cookie::get('id');
-            $user = User::where("id", $id)->first();
-            return self::setResponse($user, 200, 0);
-        } else {
-            return self::setResponse(null, 400, -4007);
-        }
-    }
-
-    // session方式: 登录，并设置 cookie
+    // 登陆方式一：账密方式登陆
     public function postLogin(Request $request){
         // 设置回调
         if($request->has("redirectUrl")) $this->redirectUrl = $request->redirectUrl;
 
+        // 验证输入是否符合表单规则
         $this->validateLogin($request);
 
         // If the class is using the ThrottlesLogins trait, we can automatically throttle
@@ -45,18 +35,11 @@ class LoginController extends ApiController
             return $this->sendLockoutResponse($request);
         }
 
-        $credentials = $this->credentials($request);
+        // 在模型 Login 中进行两次登陆验证
         $thirdStatus = Login::loginCheck($request->email, $request->password);
 
         if ($thirdStatus['code'] == 0) {
             // 校验通过，放行
-
-            // 设置 token
-            // $customClaims = ['email' => $request->email];
-            // $credentials = request(['email', 'password']);
-            // $token = auth('api')->claims($customClaims)->attempt($credentials);
-            // Cookie::queue('token', $token);
-
             return $this->sendLoginResponse($request);
         } elseif ($thirdStatus['code'] == -4001) {
             // 用户改过密码，但是还是用旧密码在登录
@@ -90,25 +73,13 @@ class LoginController extends ApiController
     public function postLogout()
     {
         Auth::logout();
-
         foreach ($_COOKIE as $key => $value) {
             setcookie($key, "", time()-3600, '/');
         }
-
         return redirect()->route('voyager.login');
     }
 
-    // 回调：如果给定 redirectUrl 参数则跳转到指定路由,否则跳转到首页
-    public function redirectTo()
-    {
-        if ($this->redirectUrl) {
-            $url = $this->redirectUrl;
-            return $url;
-        }
-        return config('voyager.user.redirect', route('voyager.dashboard'));
-    }
-
-    // 获取登陆 key
+    // 登陆方式二：获取登陆 key
     public function loginKey(Request $request)
     {
         $uid = $request->uid;
@@ -123,6 +94,7 @@ class LoginController extends ApiController
         }
     }
 
+    // 登陆方式二：执行直接登陆
     public function loginKeyCheck(Request $request)
     {
         $uid = $request->uid;
@@ -141,8 +113,14 @@ class LoginController extends ApiController
             preg_match('/<span class="ml10">(.*?)<\/span><\/li><\/ul>/', $bodyInfo, $matches);
             if ($matches && $matches[1] == $key) {
                 $user = User::find($uid);
+                // 到时候全换过来记得删
                 Cookie::queue('id', $uid, null, null, null, false, true);
                 Cookie::queue('role', $user->role_id, null, null, null, false, true);
+                // 设置 JWT token
+                $customClaims = ['id' => $uid, 'role' => $user->role_id];
+                $token = auth('api')->claims($customClaims)->tokenById($uid);
+                Cookie::queue('token', $token);
+                // 进行登陆
                 if ($this->guard()->loginUsingId($uid)) return $this->sendLoginResponse($request);
                 else {
                     return redirect('/admin/login?error=未知原因登陆失败!');
@@ -153,5 +131,15 @@ class LoginController extends ApiController
         } else {
             return self::setResponse(null, 404, -4005);
         }
+    }
+
+    // 回调：如果给定 redirectUrl 参数则跳转到指定路由,否则跳转到首页
+    public function redirectTo()
+    {
+        if ($this->redirectUrl) {
+            $url = $this->redirectUrl;
+            return $url;
+        }
+        return config('voyager.user.redirect', route('voyager.dashboard'));
     }
 }

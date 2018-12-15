@@ -84,7 +84,9 @@
                                 <tbody>
                                     <!-- 过滤 -->
                                     @php
-                                        if (Cookie::get('role') == 1 || Cookie::get('role') == 2) {
+                                        $uid = auth('api')->parseToken()->payload()->get('sub');
+                                        $role = auth('api')->parseToken()->payload()->get('role');
+                                        if ($role == 1 || $role == 2) {
                                             if (isset($_GET['surveyId'])) {
                                                 for ($i = 0, $len = count($dataTypeContent); $i < $len; $i++) {
                                                     if ($dataTypeContent[$i]->survey_id != $_GET['surveyId']) {
@@ -101,7 +103,7 @@
                                                 }
                                             } else {
                                                 for ($i = 0, $len = count($dataTypeContent); $i < $len; $i++) {
-                                                    if ($dataTypeContent[$i]->creater_id != Cookie::get('id')) {
+                                                    if ($dataTypeContent[$i]->creater_id != $uid) {
                                                         unset($dataTypeContent[$i]);
                                                     }
                                                 }

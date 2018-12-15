@@ -11,7 +11,7 @@ class ResearchResult extends Model
 
     public function setCreaterIdAttribute($value)
     {
-        $this->attributes['creater_id'] = Cookie::get('id');
+        $this->attributes['creater_id'] = auth('api')->parseToken()->payload()->get('sub');
     }
 
     public function belongsToTeam()

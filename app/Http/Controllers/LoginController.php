@@ -21,9 +21,9 @@ class LoginController extends ApiController
 
     // 获取当前登录的用户信息
     public function me(Request $request) {
-        if (Cookie::get('id')) {
-            $id = Cookie::get('id');
-            $user = User::where("id", $id)->first();
+        $uid = auth('api')->parseToken()->payload()->get('sub');
+        if ($uid) {
+            $user = User::where("id", $uid)->first();
             return self::setResponse($user, 200, 0);
         } else {
             return self::setResponse(null, 400, -4007);
@@ -125,8 +125,8 @@ class LoginController extends ApiController
             if ($matches && $matches[1] == $key) {
                 $user = User::find($uid);
                 // 到时候全换过来记得删
-                Cookie::queue('id', $uid, null, null, null, false, true);
-                Cookie::queue('role', $user->role_id, null, null, null, false, true);
+                // Cookie::queue('id', $uid, null, null, null, false, true);
+                // Cookie::queue('role', $user->role_id, null, null, null, false, true);
                 // 设置 JWT token
                 $customClaims = ['role' => $user->role_id];
                 $token = auth('api')->claims($customClaims)->tokenById($uid);

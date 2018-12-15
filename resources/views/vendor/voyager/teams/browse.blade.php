@@ -89,9 +89,11 @@
                                 <tbody>
                                     <!-- 过滤 -->
                                     @php
-                                        if (Cookie::get('role') == 3 || Cookie::get('role') == 4) {
+                                        $uid = auth('api')->parseToken()->payload()->get('sub');
+                                        $role = auth('api')->parseToken()->payload()->get('role');
+                                        if ($role) == 3 || $role) == 4) {
                                             for ($i = 0, $len = count($dataTypeContent); $i < $len; $i++) {
-                                                    if ($dataTypeContent[$i]->creater_id != Cookie::get('id')) {
+                                                    if ($dataTypeContent[$i]->creater_id != $uid) {
                                                         unset($dataTypeContent[$i]);
                                                     }
                                                 }

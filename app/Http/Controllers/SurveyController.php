@@ -21,7 +21,7 @@ class SurveyController extends ApiController
         $survey->title = $request->title;
         $survey->desc = $request->desc;
         $survey->course_id = $request->course_id;
-        $survey->creater_id = Cookie::get('id');
+        $survey->creater_id = auth('api')->parseToken()->payload()->get('sub');
         $survey->questions = json_encode($request->questions, JSON_UNESCAPED_UNICODE);
         if ($survey->save()) {
             return self::setResponse($survey, 200, 0);

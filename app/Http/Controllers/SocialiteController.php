@@ -73,8 +73,8 @@ class SocialiteController extends ApiController
                 $uid = $item->user_id;
                 $user = User::find($uid);
                 // 到时候记得删
-                Cookie::queue('id', $uid, null, null, null, false, true);
-                Cookie::queue('role', $user->role_id, null, null, null, false, true);
+                // Cookie::queue('id', $uid, null, null, null, false, true);
+                // Cookie::queue('role', $user->role_id, null, null, null, false, true);
                 // 设置 JWT token
                 $customClaims = ['role' => $user->role_id];
                 $token = auth('api')->claims($customClaims)->tokenById($uid);

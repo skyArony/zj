@@ -16,7 +16,7 @@ class Team extends Model
     public function setTeamNameAttribute($value)
     {
         $this->attributes['team_name'] = $value;
-        $this->attributes['creater_id'] = Cookie::get('id');
+        $this->attributes['creater_id'] = auth('api')->parseToken()->payload()->get('sub');
     }
 
     public function belongsToUser()

@@ -25,10 +25,9 @@ class SpiderController extends ApiController
         $mooc_course_detail = "http://worlduc.com/APP/OnlineCourse/teaching/base.aspx?op=getmodel&courseID=";
 
         $cookieJar = new CookieJar;
-        if (Cookie::get('id')) $userId = Cookie::get('id');
-        else return self::setResponse(null, 400, -4007);    // 未登录
+        $uid = auth('api')->parseToken()->payload()->get('sub');
 
-        $cookieJar = unserialize(User::where('id', $userId)->first()->cookies);
+        $cookieJar = unserialize(User::where('id', $uid)->first()->cookies);
         $guzzleClient = new GuzzleClient(['cookies' => true]);
         $response = $guzzleClient->request('GET', $mooc_course, ['cookies' => $cookieJar, 'http_errors' => false]);
         preg_match_all('/\/APP\/OnlineCourse\/course\/course.aspx\?courseID=(\d+)/', $response->getBody()->getContents(), $matches);
@@ -64,17 +63,13 @@ class SpiderController extends ApiController
         if($request->courseId) $courseId = $request->courseId;
         else return self::setResponse(null, 400, -4004);    // 缺失必要参数
 
-        // 登录检查
-        if (Cookie::get('id') && Cookie::get('role')) {
-            $userId = Cookie::get('id');
-            $role = Cookie::get('role');
-        } 
-        else return self::setResponse(null, 400, -4007);    // 未登录
+        $uid = auth('api')->parseToken()->payload()->get('sub');
+        $role = auth('api')->parseToken()->payload()->get('role');
 
         // 权限检验
         if ($role != 1) {
             $course = Course::where("id", $courseId)->first();
-            if ($course->teacher_id != $userId) return self::setResponse(null, 400, -4009);    // 非法操作
+            if ($course->teacher_id != $uid) return self::setResponse(null, 400, -4009);    // 非法操作
         }
 
         $guzzleClient = new GuzzleClient(['cookies' => true]);

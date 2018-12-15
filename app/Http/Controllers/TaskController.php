@@ -94,13 +94,9 @@ class TaskController extends ApiController
 
     public function getTasksByUserId(Request $request)
     {
-        if (Cookie::get('id')) {
-            $userId = Cookie::get('id');
-        } else {
-            return self::setResponse(null, 400, -4007);
-        }    // 未登录
+        $uid = auth('api')->parseToken()->payload()->get('sub');
 
-        if ($user = User::with('belongsToManyTeams.belongsToManyTasks.belongsToUser')->find($userId)) {
+        if ($user = User::with('belongsToManyTeams.belongsToManyTasks.belongsToUser')->find($uid)) {
             // 自己作为队员的组
             $teams = $user->belongsToManyTeams;
             $tasksRes1 = $teams->map(function ($item) {
@@ -124,7 +120,7 @@ class TaskController extends ApiController
             });
 
             // 自己作为队长的组
-            $user = User::with('hasManyTeams.belongsToManyTasks.belongsToUser')->find($userId);
+            $user = User::with('hasManyTeams.belongsToManyTasks.belongsToUser')->find($uid);
             $teams2 = $user->hasManyTeams;
             $tasksRes2 = $teams2->map(function ($item) {
                 $tasks2 = $item->belongsToManyTasks;

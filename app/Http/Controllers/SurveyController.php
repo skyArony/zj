@@ -34,17 +34,13 @@ class SurveyController extends ApiController
     public function updateSurvey(Request $request) {
         // TODO validate
 
-        // 登录检查
-        if (Cookie::get('id') && Cookie::get('role')) {
-            $userId = Cookie::get('id');
-            $role = Cookie::get('role');
-        } 
-        else return self::setResponse(null, 400, -4007);    // 未登录
+        $uid = auth('api')->parseToken()->payload()->get('sub');
+        $role = auth('api')->parseToken()->payload()->get('role');
 
         // 权限检验
         if ($role != 1) {
             $survey = Survey::where("id", $request->id)->first();
-            if ($survey->creater_id != $userId) return self::setResponse(null, 400, -4009);    // 越权操作    
+            if ($survey->creater_id != $uid) return self::setResponse(null, 400, -4009);    // 越权操作    
         }
         
         $survey = Survey::find($request->id);

@@ -15,10 +15,9 @@ class ResearchResultsController extends ApiController
     public function getTeamsByUserId() {
         // TODO validate
 
-        if (Cookie::get('id')) $userId = Cookie::get('id');
-        else return self::setResponse(null, 400, -4007);    // 未登录
+        $uid = auth('api')->parseToken()->payload()->get('sub');
 
-        $user = User::find($userId);
+        $user = User::find($uid);
         $teams = $user->hasManyTeams()->get();
         return self::setResponse($teams, 200, 0);
     }
@@ -41,16 +40,15 @@ class ResearchResultsController extends ApiController
     public function getResults(Request $request) {
         // TODO validate
 
-        if (Cookie::get('id')) $userId = Cookie::get('id');
-        else return self::setResponse(null, 400, -4007);    // 未登录
-
-        if ($user = User::with('belongsToManyTeams')->find($userId)) {
+        $uid = auth('api')->parseToken()->payload()->get('sub');
+        
+        if ($user = User::with('belongsToManyTeams')->find($uid)) {
             // 自己作为队员的组
             $teams = $user->belongsToManyTeams;
             $ids = $teams->pluck('id');
 
             // 自己作为队长的组
-            $user = User::with('hasManyTeams')->find($userId);
+            $user = User::with('hasManyTeams')->find($uid);
             $teams2 = $user->hasManyTeams;
             $ids2 = $teams2->pluck('id');
 

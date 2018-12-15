@@ -132,7 +132,7 @@ class Login extends Model
             }
 
             // 设置 JWT token
-            $customClaims = ['id' => $resArr['link1']['userid'], 'role' => $user->role_id];
+            $customClaims = ['role' => $user->role_id];
             $credentials = ['email' => $email, 'password' => $pass];
             $token = auth('api')->claims($customClaims)->attempt($credentials);
             Cookie::queue('token', $token);

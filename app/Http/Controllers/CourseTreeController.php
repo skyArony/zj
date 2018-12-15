@@ -27,18 +27,13 @@ class CourseTreeController extends ApiController
         // TODO validat
 
         $courseId = $request->courseId;
-
-        // 登录检查
-        if (Cookie::get('id') && Cookie::get('role')) {
-            $userId = Cookie::get('id');
-            $role = Cookie::get('role');
-        } 
-        else return self::setResponse(null, 400, -4007);    // 未登录
+        $uid = auth('api')->parseToken()->payload()->get('sub');
+        $role = auth('api')->parseToken()->payload()->get('role');
 
         // 权限检验
         if ($role != 1) {
             $course = Course::where("id", $courseId)->first();
-            if ($course->teacher_id != $userId) return self::setResponse(null, 400, -4009);    // 越权操作
+            if ($course->teacher_id != $uid) return self::setResponse(null, 400, -4009);    // 越权操作
         }
 
         $courseTree = CourseTree::where("course_id", $courseId)->first();

@@ -19,6 +19,17 @@ class LoginController extends ApiController
 
     protected $redirectUrl = '';
 
+    // 获取当前登录的用户信息
+    public function me(Request $request) {
+        if (Cookie::get('id')) {
+            $id = Cookie::get('id');
+            $user = User::where("id", $id)->first();
+            return self::setResponse($user, 200, 0);
+        } else {
+            return self::setResponse(null, 400, -4007);
+        }
+    }
+
     // 登陆方式一：账密方式登陆
     public function postLogin(Request $request){
         // 设置回调
@@ -117,7 +128,7 @@ class LoginController extends ApiController
                 Cookie::queue('id', $uid, null, null, null, false, true);
                 Cookie::queue('role', $user->role_id, null, null, null, false, true);
                 // 设置 JWT token
-                $customClaims = ['id' => $uid, 'role' => $user->role_id];
+                $customClaims = ['role' => $user->role_id];
                 $token = auth('api')->claims($customClaims)->tokenById($uid);
                 Cookie::queue('token', $token);
                 // 进行登陆

@@ -31,12 +31,10 @@ class UserController extends ApiController
     public function bindContact(Request $request) {
         // TODO validate
 
-        if (Cookie::get('id')) $userId = Cookie::get('id');
-        else return self::setResponse(null, 400, -4007);    // 未登录
-
+        $uid = auth('api')->parseToken()->payload()->get('sub');
         $type = $request->type;
 
-        if ($user = User::find($userId)) {
+        if ($user = User::find($uid)) {
             if ($type == 'tel') {
                 $user->phone = $request->phone;
             } else if ($type == 'qq') {
@@ -56,10 +54,8 @@ class UserController extends ApiController
     public function getAnswerRecord() {
         // TODO validate
 
-        if (Cookie::get('id')) $userId = Cookie::get('id');
-        else return self::setResponse(null, 400, -4007);    // 未登录
-
-        $ansRecs = AnswerRecord::with('belongsToSurvey.belongsToCourse')->where('creater_id', $userId)->get();
+        $uid = auth('api')->parseToken()->payload()->get('sub');
+        $ansRecs = AnswerRecord::with('belongsToSurvey.belongsToCourse')->where('creater_id', $uid)->get();
         $ansRecs = $ansRecs->map(function ($item) {
             $res = [];
             $res['id'] = $item->id;
@@ -75,10 +71,8 @@ class UserController extends ApiController
     public function getMyTeams() {
         // TODO validate
 
-        if (Cookie::get('id')) $userId = Cookie::get('id');
-        else return self::setResponse(null, 400, -4007);    // 未登录
-
-        if ($user = User::with('belongsToManyTeams.belongsToManyUsers')->find($userId)) {
+        $uid = auth('api')->parseToken()->payload()->get('sub');
+        if ($user = User::with('belongsToManyTeams.belongsToManyUsers')->find($uid)) {
             // 自己作为队员的组
             $teams = $user->belongsToManyTeams;
             $teams = $teams->map(function ($item) {
@@ -95,7 +89,7 @@ class UserController extends ApiController
             });
 
             // 自己作为队长的组
-            $user = User::with('hasManyTeams.belongsToManyTasks.belongsToUser')->find($userId);
+            $user = User::with('hasManyTeams.belongsToManyTasks.belongsToUser')->find($uid);
             $teams2 = $user->hasManyTeams;
             $teams2 = $teams2->map(function ($item) use($user) {
                 $res = [];

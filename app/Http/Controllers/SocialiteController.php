@@ -20,6 +20,7 @@ class SocialiteController extends ApiController
 
     public function __construct()
     {
+        $this->middleware('jwt.auth', ['except' => 'loginQQ']);
         $this->config = [
             'qq' => [
                 'client_id'     => env('client_id_qq'),
@@ -27,17 +28,14 @@ class SocialiteController extends ApiController
                 'redirect'      => env('APP_URL').'/socialite/callback',
             ],
         ];
-
         $this->socialite = new SocialiteManager($this->config);
     }
 
     public function bindQQ(Request $request)
     {
-        if (Cookie::get('id')) {
-            $userId = Cookie::get('id');
-        } else {
-            header("location: " . env('APP_URL'));
-        }
+        $uid = auth('api')->parseToken()->payload()->get('sub');
+        if (!$uid) header("location: " . env('APP_URL'));
+
         $this->config['qq']['redirect'] = env('APP_URL').'/socialite/callback?action=bind';
         $this->socialite = new SocialiteManager($this->config);
         $response = $this->socialite->driver('qq')->redirect();
@@ -57,10 +55,10 @@ class SocialiteController extends ApiController
     {
         $userInfo = $this->socialite->driver('qq')->user();
         if ($request->action == 'bind') {
-            $userId = Cookie::get('id');
+            $uid = auth('api')->parseToken()->payload()->get('sub');
             $item = QQ::updateOrCreate(
               ['qq_id' => $userInfo['id']],
-              ['user_id' => $userId, 'user_info' => json_encode($userInfo, JSON_UNESCAPED_UNICODE)]
+              ['user_id' => $uid, 'user_info' => json_encode($userInfo, JSON_UNESCAPED_UNICODE)]
             );
             return redirect("/#/index/me");
         } elseif ($request->action == 'login') {
@@ -72,17 +70,17 @@ class SocialiteController extends ApiController
                 // ]);
                 return redirect('/admin/login?error=该QQ暂未绑定大学城!');
             } else {
-                $userId = $item->user_id;
-                $user = User::find($userId);
+                $uid = $item->user_id;
+                $user = User::find($uid);
                 // 到时候记得删
-                Cookie::queue('id', $userId, null, null, null, false, true);
+                Cookie::queue('id', $uid, null, null, null, false, true);
                 Cookie::queue('role', $user->role_id, null, null, null, false, true);
                 // 设置 JWT token
-                $customClaims = ['id' => $userId, 'role' => $user->role_id];
-                $token = auth('api')->claims($customClaims)->tokenById($userId);
+                $customClaims = ['role' => $user->role_id];
+                $token = auth('api')->claims($customClaims)->tokenById($uid);
                 Cookie::queue('token', $token);
                 // 进行登录
-                if ($this->guard()->loginUsingId($userId)) return $this->sendLoginResponse($request);
+                if ($this->guard()->loginUsingId($uid)) return $this->sendLoginResponse($request);
                 else {
                     // throw ValidationException::withMessages([
                     //     $this->username() => '未知原因登陆失败!',

@@ -13,15 +13,12 @@ class AnswerRecordController extends ApiController
     public function addRecord(Request $request) {
         // TODO validata
 
-        if (Cookie::get('id')) {
-            $userId = Cookie::get('id');
-        } else return self::setResponse(null, 400, -4007);    // 未登录
-
+        $uid = auth('api')->parseToken()->payload()->get('sub');
         $surveyId = $request->surveyId;
         $tags = json_encode($request->tags, JSON_UNESCAPED_UNICODE);
 
         $answerRecord = AnswerRecord::updateOrCreate(
-            ['creater_id' => $userId],
+            ['creater_id' => $uid],
             ['survey_id' => $surveyId, 'tags' => $tags]
         );
         if ($answerRecord) {
@@ -45,10 +42,9 @@ class AnswerRecordController extends ApiController
     public function checkRecord(Request $request) {
         // TODO validate
 
-        if (Cookie::get('id')) $userId = Cookie::get('id');
-        else return self::setResponse(null, 400, -4007);    // 未登录
+        $uid = auth('api')->parseToken()->payload()->get('sub');
 
-        $answerRecord = AnswerRecord::where("id", $userId)->where("survey_id", $request->surveyId)->get();
+        $answerRecord = AnswerRecord::where("id", $uid)->where("survey_id", $request->surveyId)->get();
         if (count($answerRecord))
             return self::setResponse(true, 200, 0);
         else
@@ -59,12 +55,9 @@ class AnswerRecordController extends ApiController
     public function delete(Request $request) {
         // TODO validate
 
-        if (Cookie::get('id')) $userId = Cookie::get('id');
-        else return self::setResponse(null, 400, -4007);    // 未登录
-
+        $uid = auth('api')->parseToken()->payload()->get('sub');
         $surveyId = $request->surveyId;
-
-        $ansRecIds = AnswerRecord::where('creater_id', $userId)->get(['id'])->toArray();
+        $ansRecIds = AnswerRecord::where('creater_id', $uid)->get(['id'])->toArray();
 
         $ids = [];
         foreach ($ansRecIds as $key => $value) {

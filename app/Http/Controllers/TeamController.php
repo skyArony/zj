@@ -54,12 +54,8 @@ class TeamController extends ApiController
     public function addMember(Request $request) {
         // TODO validate
 
-        // 登录检查
-        if (Cookie::get('id') && Cookie::get('role')) {
-            $userId = Cookie::get('id');
-            $role = Cookie::get('role');
-        } 
-        else return self::setResponse(null, 400, -4007);    // 未登录
+        $uid = auth('api')->parseToken()->payload()->get('sub');
+        $role = auth('api')->parseToken()->payload()->get('role');
 
         $memberId = $request->userId;
         $teamId = $request->teamId;
@@ -67,7 +63,7 @@ class TeamController extends ApiController
 
         // 权限检验
         if ($role != 1)
-            if ($team->creater_id != $userId) return self::setResponse(null, 400, -4009);    // 越权操作   
+            if ($team->creater_id != $uid) return self::setResponse(null, 400, -4009);    // 越权操作   
 
         if ($team) {
             if ($team->creater_id == $memberId) {
@@ -84,12 +80,8 @@ class TeamController extends ApiController
     public function deleteMember(Request $request) {
         // TODO validate
 
-        // 登录检查
-        if (Cookie::get('id') && Cookie::get('role')) {
-            $userId = Cookie::get('id');
-            $role = Cookie::get('role');
-        } 
-        else return self::setResponse(null, 400, -4007);    // 未登录
+        $uid = auth('api')->parseToken()->payload()->get('sub');
+        $role = auth('api')->parseToken()->payload()->get('role');
 
         $memberId = $request->userId;
         $teamId = $request->teamId;
@@ -97,7 +89,7 @@ class TeamController extends ApiController
 
         // 权限检验
         if ($role != 1)
-            if ($team->creater_id != $userId) return self::setResponse(null, 400, -4009);    // 越权操作   
+            if ($team->creater_id != $uid) return self::setResponse(null, 400, -4009);    // 越权操作   
 
         if ($team) {
             if ($team->creater_id == $memberId) {
@@ -116,16 +108,15 @@ class TeamController extends ApiController
     // 退出团队
     public function leaveTeam(Request $request) {
         // TODO validate
-        if (Cookie::get('id')) $userId = Cookie::get('id');
-        else return self::setResponse(null, 400, -4007);    // 未登录
+        $uid = auth('api')->parseToken()->payload()->get('sub');
 
         $teamId = $request->teamId;
 
         if ($team = Team::find($teamId)) {
-            if ($team->creater_id == $userId) {
+            if ($team->creater_id == $uid) {
                 return self::setResponse(null, 400, -4010);
             }
-            if ($team->belongsToManyUsers()->detach($userId)) {
+            if ($team->belongsToManyUsers()->detach($uid)) {
                 return self::setResponse(null, 200, 0);
             } else {
                 return self::setResponse(null, 500, -4006);
@@ -139,13 +130,11 @@ class TeamController extends ApiController
     public function signTask(Request $request) {
         // TODO validate
 
-        if (Cookie::get('id')) $userId = Cookie::get('id');
-        else return self::setResponse(null, 400, -4007);    // 未登录
-
+        $uid = auth('api')->parseToken()->payload()->get('sub');
         $teamId = $request->teamId;
         $taskId = $request->taskId;
 
-        $user = User::find($userId);
+        $user = User::find($uid);
         $team = Team::find($teamId);
         $task = Task::find($taskId);
 
@@ -162,13 +151,11 @@ class TeamController extends ApiController
     public function leaveTask(Request $request) {
         // TODO validate
 
-        if (Cookie::get('id')) $userId = Cookie::get('id');
-        else return self::setResponse(null, 400, -4007);    // 未登录
-
+        $uid = auth('api')->parseToken()->payload()->get('sub');
         $teamId = $request->teamId;
         $taskId = $request->taskId;
 
-        $user = User::find($userId);
+        $user = User::find($uid);
         $teams = $user->hasManyTeams()->pluck("id")->toArray();
 
         if (!in_array($teamId, $teams)) {
@@ -188,12 +175,10 @@ class TeamController extends ApiController
     public function deleteTeam(Request $request) {
         // TODO validate
 
-        if (Cookie::get('id')) $userId = Cookie::get('id');
-        else return self::setResponse(null, 400, -4007);    // 未登录
-
+        $uid = auth('api')->parseToken()->payload()->get('sub');
         $teamId = $request->teamId;
 
-        $user = User::find($userId);
+        $user = User::find($uid);
         $teams = $user->hasManyTeams()->pluck("id")->toArray();
 
         if (!in_array($teamId, $teams)) {

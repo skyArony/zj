@@ -93,13 +93,24 @@
                                         $role = auth('api')->parseToken()->payload()->get('role');
                                         if ($role == 3 || $role == 4) {
                                             for ($i = 0, $len = count($dataTypeContent); $i < $len; $i++) {
-                                                    if ($dataTypeContent[$i]->creater_id != $uid) {
-                                                        unset($dataTypeContent[$i]);
-                                                    }
+                                                if ($dataTypeContent[$i]->creater_id != $uid) {
+                                                    unset($dataTypeContent[$i]);
                                                 }
+                                                if (isset($_GET['taskId'])) {
+                                                    if($dataTypeContent[$i]->task_id != $_GET['taskId']) {
+                                                        unset($dataTypeContent[$i]);
+                                                    }                                                    
+                                                }
+                                            }
+                                        } else if(isset($_GET['taskId'])) {
+                                            for ($i = 0, $len = count($dataTypeContent); $i < $len; $i++) {
+                                                if($dataTypeContent[$i]->task_id != $_GET['taskId']) {
+                                                    unset($dataTypeContent[$i]);
+                                                }  
+                                            }
                                         }
                                     @endphp
-                                    <!-- /过滤 -->                                    
+                                    <!-- /过滤 -->                       
                                     @foreach($dataTypeContent as $data)
                                     <tr>
                                         @can('delete',app($dataType->model_name))
@@ -198,21 +209,8 @@
                                         @endforeach
                                         <td class="no-sort no-click" id="bread-actions">
                                             @foreach(Voyager::actions() as $action)
-                                                @php
-                                                    if ($action == 'TCG\Voyager\Actions\ViewAction')
-                                                        continue;
-                                                @endphp                                            
                                                 @include('voyager::bread.partials.actions', ['action' => $action])
                                             @endforeach
-                                            <a target="_blank" href="@php echo "/#/index/task/".$data->id; @endphp" title="详情" class="btn btn-sm btn-warning pull-right edit">
-                                                <i class="voyager-eye"></i> <span class="hidden-xs hidden-sm">详情</span>
-                                            </a>
-                                            <a href="/admin/research-results?taskId=@php echo $data->id;  @endphp" title="成果" class="btn btn-sm btn-warning pull-right edit">
-                                                <i class="voyager-eye"></i> <span class="hidden-xs hidden-sm">成果</span>
-                                            </a>
-                                            <a href="/admin/requests?taskId=@php echo $data->id;  @endphp" title="申请" class="btn btn-sm btn-warning pull-right edit">
-                                                <i class="voyager-eye"></i> <span class="hidden-xs hidden-sm">申请</span>
-                                            </a>
                                         </td>
                                     </tr>
                                     @endforeach

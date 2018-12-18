@@ -102,11 +102,11 @@
                                                     }                                                    
                                                 }
                                             }
-                                        } else {
-                                            if (isset($_GET['taskId'])) {
+                                        } else if(isset($_GET['taskId'])) {
+                                            for ($i = 0, $len = count($dataTypeContent); $i < $len; $i++) {
                                                 if($dataTypeContent[$i]->task_id != $_GET['taskId']) {
                                                     unset($dataTypeContent[$i]);
-                                                }                                                    
+                                                }  
                                             }
                                         }
                                     @endphp

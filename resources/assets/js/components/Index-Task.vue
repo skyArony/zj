@@ -10,6 +10,9 @@
         <div class="task-info-item regist-end-time">距报名截止:
           <span>{{taskData.regist_end_at}}</span>
         </div>
+        <div class="task-info-item regist-end-time">距申请截止:
+          <span>{{taskData.request_end_at}}</span>
+        </div>
         <div class="task-info-item submit-end-time">距课题截止:
           <span>{{taskData.submit_end_at}}</span>
         </div>
@@ -48,6 +51,9 @@
                      @click.stop=";"
                      plain>报名</el-button>
         </el-popover>
+        <el-tooltip content="报名 → 提交课题申请计划书 → 教师通过申请,给予提交资格 → 提交成果" placement="top">
+          <i class="el-icon-question"></i>
+        </el-tooltip>
       </div>
       <div class="task-detail"
            v-html="taskData.detail">
@@ -192,6 +198,10 @@ export default {
 
   h1
     font-size 1.5rem
+
+.el-icon-question
+  font-size 20px
+  margin-left 20px
 
 .pannel
   background-color #fff

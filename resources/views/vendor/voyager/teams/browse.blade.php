@@ -91,7 +91,7 @@
                                     @php
                                         $uid = auth('api')->parseToken()->payload()->get('sub');
                                         $role = auth('api')->parseToken()->payload()->get('role');
-                                        if ($role) == 3 || $role) == 4) {
+                                        if ($role == 3 || $role == 4) {
                                             for ($i = 0, $len = count($dataTypeContent); $i < $len; $i++) {
                                                     if ($dataTypeContent[$i]->creater_id != $uid) {
                                                         unset($dataTypeContent[$i]);

@@ -62,6 +62,20 @@ class TaskController extends ApiController
             }
         }
 
+        $requestRemain = strtotime($task->request_end_at) - time();
+        if ($requestRemain < 0) {
+            $task->request_end_at = "已过期";
+        } else {
+            $days = floor($requestRemain / 86400);
+            $hours = floor(($requestRemain - $days * 86400) / 3600);
+            $mins = floor(($requestRemain - $days * 86400 - $hours * 3600) / 60);
+            if (!$days && !$hours) {
+                $task->request_end_at = $hours . "时" . $mins . "分";
+            } else {
+                $task->request_end_at = $days . "天" . $hours . "时";
+            }
+        }
+
         $submitRemain = strtotime($task->submit_end_at) - time();
         if ($submitRemain < 0) {
             $task->submit_end_at = "已过期";

@@ -175,6 +175,38 @@ class TaskController extends ApiController
         }
     }
 
+    // 根据队伍 ID 获取未过提交期的课题
+    public function getSubmitingTaskByTeamId(Request $request){
+        // TODO validate
+
+        if ($request->teamId) {
+            $team = Team::find($request->teamId);
+            $tasks = $team->belongsToManyTasks;
+            $tasks = $tasks->filter(function($item) {
+                if ($item->submit_end_at >= date("Y-m-d H:i:s")) return true;
+            });
+            return self::setResponse($tasks, 200, 0);
+        } else {
+            return self::setResponse(null, 400, -4004);    // 未登录
+        }
+    }
+
+    // 根据队伍 ID 获取未过申请期的课题
+    public function getRequestingTaskByTeamId(Request $request){
+        // TODO validate
+
+        if ($request->teamId) {
+            $team = Team::find($request->teamId);
+            $tasks = $team->belongsToManyTasks;
+            $tasks = $tasks->filter(function($item) {
+                if ($item->request_end_at >= date("Y-m-d H:i:s")) return true;
+            });
+            return self::setResponse($tasks, 200, 0);
+        } else {
+            return self::setResponse(null, 400, -4004);    // 未登录
+        }
+    }
+
     // 传入结束时间的 str 形式
     protected function timeFormat($end)
     {

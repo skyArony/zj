@@ -266,7 +266,7 @@
                 // var type = window.location.href.match(/.*?research-results(?:\/\d)?\/(edit|create)/)[1]
                 if (teamId) {
                     $.ajax({
-                        url : '/api/team/task',
+                        url : '/api/task/submit',
                         data: {
                             teamId: teamId
                         },

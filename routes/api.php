@@ -65,8 +65,12 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers', 'middleware' => ['jw
     $api->get('/me', 'LoginController@me');
     // 根据用户 ID 返回其创建的所有队伍
     $api->get('/user/team', 'ResearchResultsController@getTeamsByUserId');
-    // 根据队伍 ID 返回其所参加的所有课题
-    $api->get('/team/task', 'ResearchResultsController@getTasksByTeamId');
+    // 根据队伍 ID 返回其所参加的所有(未过期)课题
+    // $api->get('/team/task', 'ResearchResultsController@getTasksByTeamId');
+    // 根据队伍 ID 返回所有未过提交期的课题
+    $api->get('/task/submit', 'TaskController@getSubmitingTaskByTeamId');
+    // 根据队伍 ID 返回所有未过申请期的课题
+    $api->get('/task/request', 'TaskController@getRequestingTaskByTeamId');
     // 获取系统中所有的课程
     $api->get('/course', 'CourseController@getAllCourse');
     // 获取系统中所有的研究课题

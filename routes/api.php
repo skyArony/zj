@@ -113,4 +113,6 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers', 'middleware' => ['jw
     $api->get('/result/{resultId}', 'ResearchResultsController@getResultDetail');
     // 获取大学城登陆校验的随机 key
     $api->get('/loginKey', "LoginController@loginKey");
+    // 根据 id 获取一个 申请书 的详细内容
+    $api->get('/request/{id}', "RequestController@getRequest");
 });

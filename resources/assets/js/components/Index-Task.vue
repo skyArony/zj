@@ -111,7 +111,6 @@ export default {
           let teams = response.data.data
           for (let index in teams) that.$set(teams[index], "isSign", false)
           that.teamData = teams
-          console.log(that.teamData)
         })
         .catch(function(error) {
           alert(error.response.data.errmsg)
@@ -120,6 +119,7 @@ export default {
       this.MyAxios.get("/api/task/" + taskId)
         .then(function(response) {
           that.taskData = response.data.data
+          that.taskData.file = JSON.parse(that.taskData.file)
           let teams = that.teamData
           for (let index in teams) {
             if (that.taskData.signTeams.includes(teams[index].id))

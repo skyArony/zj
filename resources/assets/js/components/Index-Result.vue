@@ -48,6 +48,7 @@ export default {
       this.MyAxios.get("/api/result/" + resultId)
         .then(function(response) {
           that.resultData = response.data.data
+          that.resultData.file = JSON.parse(that.resultData.file)
         })
         .catch(function(error) {
           if (error.response.status == 404) location.href = "/404"

@@ -115,4 +115,6 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers', 'middleware' => ['jw
     $api->get('/loginKey', "LoginController@loginKey");
     // 根据 id 获取一个 申请书 的详细内容
     $api->get('/request/{id}', "RequestController@getRequest");
+    // 审查申请书
+    $api->patch('/request/{id}', "RequestController@reviewRequest");
 });

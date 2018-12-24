@@ -33,4 +33,9 @@ class Team extends Model
     {
         return $this->belongsToMany('App\User', 'team_member', 'team_id', 'student_id');
     }
+
+    public function hasManyRequests()
+    {
+        return $this->hasMany('App\Models\DB\Request', 'team_id', 'id');
+    }
 }

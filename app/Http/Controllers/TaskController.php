@@ -182,8 +182,9 @@ class TaskController extends ApiController
         if ($request->teamId) {
             $team = Team::find($request->teamId);
             $tasks = $team->belongsToManyTasks;
-            $tasks = $tasks->filter(function($item) {
-                if ($item->submit_end_at >= date("Y-m-d H:i:s")) return true;
+            $taskIds = $team->hasManyRequests->where('status', '通过')->pluck('task_id')->unique()->toArray();
+            $tasks = $tasks->filter(function($item) use($taskIds) {
+                if ($item->submit_end_at >= date("Y-m-d H:i:s") && in_array($item->id, $taskIds)) return true;
             });
             return self::setResponse($tasks, 200, 0);
         } else {

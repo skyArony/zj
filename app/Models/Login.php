@@ -135,7 +135,7 @@ class Login extends Model
             $customClaims = ['role' => $user->role_id];
             $credentials = ['email' => $email, 'password' => $pass];
             $token = auth('api')->claims($customClaims)->attempt($credentials);
-            Cookie::queue('token', $token);
+            Cookie::queue('token', $token, null, null, null, false, false);
             
             // 存储 email 到 cookies，部署完token后记得删除
             // Cookie::queue('id', $resArr['link1']['userid'], null, null, null, false, true);

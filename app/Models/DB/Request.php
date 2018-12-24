@@ -14,4 +14,10 @@ class Request extends Model
     {
         $this->attributes['creater_id'] = auth('api')->parseToken()->payload()->get('sub');
     }
+
+    // 关联到 task
+    public function belongsToTask()
+    {
+        return $this->belongsTo('App\Models\DB\Task', 'task_id', 'id');
+    }
 }

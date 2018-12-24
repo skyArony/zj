@@ -27,10 +27,12 @@
                     :rows="3"
                     :autosize="{ minRows: 3, maxRows: 5}"
                     placeholder="请输入点评内容"
-                    v-model="comment">
-          </el-input>
+                    v-if="sub == requestData.taskOwner"
+                    v-model="comment"></el-input>
+          <p v-else-if="sub != requestData.taskOwner">{{comment}}</p>
           <span slot="footer"
-                class="dialog-footer">
+                class="dialog-footer"
+                v-if="sub == requestData.taskOwner">
             <el-button type="primary"
                        plain
                        @click="review(true)">通 过</el-button>
@@ -65,7 +67,8 @@ export default {
       requestData: "",
       dialogVisible: false,
       comment: "",
-      id: ""
+      id: "",
+      sub: ""
     }
   },
   methods: {
@@ -120,7 +123,10 @@ export default {
     }
   },
   mounted: function() {
-    // 获取问卷数据,检查是否填写过问卷
+    // 基础数据获取
+    let cookie = document.cookie
+    let yyy = cookie.match(/token=(.*?)\.(.*?)\.(.*?);/)[2]
+    this.sub = JSON.parse(window.atob(yyy)).sub
     this.id = window.location.href.match(/.*\/requests\/(\d+)#?/)[1]
     this.init()
   }

@@ -60,25 +60,25 @@ export default {
     };
   },
   methods: {
-    // 增加一个 tag
+    // 增加一个 增tag
     handleAddTag(value) {
       this.$store.commit('addTagToOption', {
-        tag: value[1],
+        tag: value[0],
         type: 'add',
         option: this.option
       })
       this.addTag = []
     },
-    // 增加一个 tag
+    // 增加一个 减tag
     handleRemoveTag(value) {
       this.$store.commit('addTagToOption', {
-        tag: value[1],
+        tag: value[0],
         type: 'remove',
         option: this.option
       })
       this.removeTag = []
     },
-    // 删除一个 tag
+    // 增加一个选项
     addTagClose(index) {
       this.$store.commit('removeTagFromOption', {
         index: index,
@@ -86,7 +86,7 @@ export default {
         type: 'add'
       })
     },
-    // 删除一个 tag
+    // 删除一个选项
     removeTagClose(index) {
       this.$store.commit('removeTagFromOption', {
         index: index,
@@ -111,20 +111,20 @@ export default {
         options.push({
           value: this.$store.state.dynamicTags[j],
           label: this.$store.state.dynamicTags[j],
-          children: [
-            {
-              value: this.$store.state.dynamicTags[j] + "-easy",
-              label: this.$store.state.dynamicTags[j] + "-easy"
-            },
-            {
-              value: this.$store.state.dynamicTags[j] + "-normal",
-              label: this.$store.state.dynamicTags[j] + "-normal"
-            },
-            {
-              value: this.$store.state.dynamicTags[j] + "-hard",
-              label: this.$store.state.dynamicTags[j] + "-hard"
-            }
-          ]
+          // children: [
+          //   {
+          //     value: this.$store.state.dynamicTags[j] + "-easy",
+          //     label: this.$store.state.dynamicTags[j] + "-easy"
+          //   },
+          //   {
+          //     value: this.$store.state.dynamicTags[j] + "-normal",
+          //     label: this.$store.state.dynamicTags[j] + "-normal"
+          //   },
+          //   {
+          //     value: this.$store.state.dynamicTags[j] + "-hard",
+          //     label: this.$store.state.dynamicTags[j] + "-hard"
+          //   }
+          // ]
         });
       }
       return options;

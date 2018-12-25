@@ -183,16 +183,16 @@ export default {
     /* tag 选择输入相关 */
     // 增加一个 tag
     handleInputConfirm(value) {
-      this.selectedTags.push(value[1])
-      let index = this.$store.state.dynamicTags.indexOf(value[0])
-      this.waittingTags[index].disabled = true
+      this.selectedTags.push(value[0])
+      let pos = this.$store.state.dynamicTags.indexOf(value[0])
+      this.waittingTags[pos].disabled = true
       this.selectedOptions = []
     },
     // 删除一个 tag
     tagClose(index) {
-      let tag = this.selectedTags[index].split("-")
+      let tag = this.selectedTags[index]
       this.selectedTags.splice(index, 1)
-      let pos = this.$store.state.dynamicTags.indexOf(tag[0])
+      let pos = this.$store.state.dynamicTags.indexOf(tag)
       this.waittingTags[pos].disabled = false
     },
 
@@ -247,14 +247,8 @@ export default {
         // 去重
         tags = Array.from(new Set(tags))
         claims = Array.from(new Set(claims))
-        // 修正 waittingtags
-        let tagTemp = []
-        for (let item of tags) {
-          let tag = item.split("-")
-          tagTemp.push(tag[0])
-        }
         for (let item of this.waittingTags) {
-          if (tagTemp.indexOf(item.value) != -1) {
+          if (tags.indexOf(item.value) != -1) {
             let index = this.$store.state.dynamicTags.indexOf(item.value)
             this.waittingTags[index].disabled = true
           } else {
@@ -280,14 +274,8 @@ export default {
         }
         tags = Array.from(new Set(tags))
         claims = Array.from(new Set(claims))
-        // 修正 waittingtags
-        let tagTemp = []
-        for (let item of tags) {
-          let tag = item.split("-")
-          tagTemp.push(tag[0])
-        }
         for (let item of this.waittingTags) {
-          if (tagTemp.indexOf(item.value) != -1) {
+          if (tags.indexOf(item.value) != -1) {
             let index = this.$store.state.dynamicTags.indexOf(item.value)
             this.waittingTags[index].disabled = true
           } else {
@@ -356,20 +344,20 @@ export default {
         options.push({
           value: this.$store.state.dynamicTags[j],
           label: this.$store.state.dynamicTags[j],
-          children: [
-            {
-              value: this.$store.state.dynamicTags[j] + "-easy",
-              label: this.$store.state.dynamicTags[j] + "-easy"
-            },
-            {
-              value: this.$store.state.dynamicTags[j] + "-normal",
-              label: this.$store.state.dynamicTags[j] + "-normal"
-            },
-            {
-              value: this.$store.state.dynamicTags[j] + "-hard",
-              label: this.$store.state.dynamicTags[j] + "-hard"
-            }
-          ]
+          // children: [
+          //   {
+          //     value: this.$store.state.dynamicTags[j] + "-easy",
+          //     label: this.$store.state.dynamicTags[j] + "-easy"
+          //   },
+          //   {
+          //     value: this.$store.state.dynamicTags[j] + "-normal",
+          //     label: this.$store.state.dynamicTags[j] + "-normal"
+          //   },
+          //   {
+          //     value: this.$store.state.dynamicTags[j] + "-hard",
+          //     label: this.$store.state.dynamicTags[j] + "-hard"
+          //   }
+          // ]
         })
       }
       return options

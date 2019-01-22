@@ -27,4 +27,9 @@ class Course extends Model
         return $this->hasMany('App\Models\DB\Survey', 'course_id', 'id');
     }
 
+    public function hasManyQuestionsThroughTag()
+    {
+        return $this->hasManyThrough('App\Models\DB\Question', 'App\Models\DB\Tag', 'course_id', 'tag_id', 'id', 'id');
+    }
+
 }

@@ -25,7 +25,7 @@ class TagController extends ApiController
         if ($role != 1) {
             $course = Course::where("id", $courseId)->first();
             if ($course->teacher_id != $uid) {
-                return self::setResponse(null, 400, -4009);    // 越权操作  
+                return self::setResponse(null, 400, -4009);    // 越权操作
             }
         }
 
@@ -49,7 +49,9 @@ class TagController extends ApiController
         // 权限检验
         if ($role != 1) {
             $course = Course::where("id", $courseId)->first();
-            if ($course->teacher_id != $uid) return self::setResponse(null, 400, -4009);    // 越权操作  
+            if ($course->teacher_id != $uid) {
+                return self::setResponse(null, 400, -4009);
+            }    // 越权操作
         }
 
         // 删除 tag
@@ -67,6 +69,20 @@ class TagController extends ApiController
         $data = array();
         foreach ($tags as $value) {
             $data[] =  $value->value;
+        }
+        return self::setResponse($data, 200, 0);
+    }
+
+    // 获取详细的 tag
+    public function getTagsDetail(Request $request)
+    {
+        // TODO validate
+
+        $courseId = $request->courseId;
+        $tags = Tag::where("course_id", $courseId)->get();
+        $data = array();
+        foreach ($tags as $value) {
+            $data[$value->id] = array("label" => $value->value);
         }
         return self::setResponse($data, 200, 0);
     }

@@ -35,6 +35,8 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers', 'middleware' => ['jw
     $api->get('/course/{courseId}', 'CourseController@getCourse');
     // 查看一个用户的所有课程
     $api->get('/user/course', 'CourseController@getAllCourseByUserId');
+    // 获取一门课程的所有 tag (详细)
+    $api->get('/tag/detail/{courseId}', 'TagController@getTagsDetail');
     // 获取 tag
     $api->get('/tag/{courseId}', 'TagController@listTags');
     // 增加 tag 
@@ -117,4 +119,10 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers', 'middleware' => ['jw
     $api->get('/request/{id}', "RequestController@getRequest");
     // 审查申请书
     $api->patch('/request/{id}', "RequestController@reviewRequest");
+
+    // 题库-添加新题
+    $api->post('/question', "QuestionController@addQuestion");
+    // 题库-获取一门课程下的所有题
+    $api->get('/question/{courseId}', "QuestionController@getQuestionsByCourseId");
+    $api->delete('/question/{questionId}', "QuestionController@deleteQuestionById");
 });

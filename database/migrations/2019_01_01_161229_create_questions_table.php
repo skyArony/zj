@@ -15,11 +15,13 @@ class CreateQuestionsTable extends Migration
     {
         Schema::create('questions', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedinteger('survey_id')->comment("所属的问卷ID");
-            $table->string('desc')->comment('问题描述');
-            $table->boolean('isMulti')->default(false)->comment('是否为多选,默认为单选');
+            $table->string('title')->comment("题干");
             $table->json('option')->comment('选项');
-            $table->foreign('survey_id')->references('id')->on('surveys')->onDelete('cascade');
+            $table->enum('type', ['radio', 'multi'])->comment('单选或多选');
+            $table->enum('level', [1, 2, 3, 4, 5])->comment('难度');
+            $table->json('answer')->comment('答案');
+            $table->unsignedinteger('tag_id')->comment("知识点");
+            $table->foreign('tag_id')->references('id')->on('tags')->onDelete('cascade');
             $table->timestamps();
         });
     }

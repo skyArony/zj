@@ -125,4 +125,5 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers', 'middleware' => ['jw
     // 题库-获取一门课程下的所有题
     $api->get('/question/{courseId}', "QuestionController@getQuestionsByCourseId");
     $api->delete('/question/{questionId}', "QuestionController@deleteQuestionById");
+    $api->put('/question/{questionId}', "QuestionController@updateQuestion");
 });

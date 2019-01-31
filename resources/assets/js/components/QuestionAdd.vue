@@ -27,18 +27,10 @@
           </div>
         </div>
       </el-row>
-      <el-row class="tips">
-        <hr />
-        <ul>
-          <li v-if="!isOKForQuesNum">尚有知识点题数不足</li>
-          <li v-if="!isOkForLevelNum">尚有知识点星级不足</li>
-          <li v-if="!isOkForLevelNum || !isOKForQuesNum">请检查下方存在红色数字的对应知识点</li>
-        </ul>
-      </el-row>
       <el-row>
         <hr />
         <div class="input-title">知识点 Tag :
-          <el-tooltip content="每个知识点至少需要 4 道题,且难度总计为 20星级"
+          <el-tooltip content="每个知识点至少需要 4 道题,且难度总计为 20 星级,否则可能无法组卷成功"
                       placement="top">
             <i class="el-icon-question"></i>
           </el-tooltip>
@@ -62,7 +54,7 @@
       <div class="action">
         <el-button type="primary"
                    plain
-                   @click="dialogVisible = true">新建</el-button>
+                   @click="addQues">新建</el-button>
         <!-- <el-button type="danger"
                    plain>批量删除</el-button> -->
       </div>
@@ -116,7 +108,7 @@
             <div style="display:flex">
               <el-button size="mini"
                          type="primary"
-                         @click="toTask(scope.row.taskId)">查看 / 编辑
+                         @click="updateQues(scope.row, scope.$index)">查看 / 编辑
               </el-button>
               <el-button size="mini"
                          type="danger"
@@ -127,42 +119,62 @@
       </el-table>
     </div>
     <el-dialog class="detail"
-               title="新建问题"
+               :title="dialogType == 'add' ? '新建问题' : '修改问题'"
                :visible.sync="dialogVisible"
-               width="50%">
-      <span class="question-title">{{editingQuestion.title}}</span>
-      <el-input class="option-input"
-                size="mini"
-                placeholder="添加选项, 按 Enter 确认"
-                v-model="newOption"
-                @keyup.enter.native="claimsInputConfirm">
+               width="60%">
+      <el-input v-if="questionInputVisible"
+                placeholder="请输入问题"
+                size="small"
+                v-model="edittingQuestion.title"
+                ref="questionInput"
+                class="question-title"
+                @keyup.enter.native="handleQuestionTitleConfirm"
+                @blur="handleQuestionTitleConfirm">
       </el-input>
-      <el-checkbox-group v-if="editingQuestion.type == 'multi'"
-                      class="options"
-                      v-model="editingQuestion.answer">
-        <el-checkbox v-for="(item,index) in editingQuestion.options"
-                  :key="index"
-                  :label="item.value">{{item.label}}</el-checkbox>
-      </el-checkbox-group>
-      <el-radio-group v-else-if="editingQuestion.type == 'radio'"
-                      class="options"
-                      v-model="editingQuestion.answer">
-        <el-radio v-for="(item,index) in editingQuestion.options"
-                  :key="index"
-                  :label="item.value">{{item.label}}</el-radio>
-      </el-radio-group>
-      <ul class="options">
-        <div v-for="(claim, index)  in claims"
-             class="claim"
-             :key="index">
-          <span @click="removeClaim(index)">&nbsp;&nbsp;✕&nbsp;&nbsp;</span>
-          <label>{{ claim }}</label>
+      <span v-else
+            @dblclick="editQuestionTitleInput"
+            class="question-title">{{edittingQuestion.title}}</span>
+      <!-- <span >{{edittingQuestion.title}}</span> -->
+      <div class="addNewOption">
+        <el-input class="option-input"
+                  size="mini"
+                  placeholder="添加选项, 按 Enter 确认"
+                  v-model="newOption"
+                  @keyup.enter.native="newOptionInputConfirm">
+        </el-input>
+        <el-tooltip content="确定前请先选择正确答案, 直接在选项上选择即可"
+                    placement="top">
+          <i class="el-icon-question"></i>
+        </el-tooltip>
+      </div>
+      <el-checkbox-group v-if="edittingQuestion.type == 'multi'"
+                         class="options"
+                         v-model="edittingQuestion.answer">
+        <div class="option-item"
+             v-for="(value, key) in edittingQuestion.options"
+             :key="key">
+          <el-checkbox :label="key">
+            {{value}}</el-checkbox>
+          <i class="el-icon-close option-item-close"
+             @click="removeOption(key)"></i>
         </div>
-      </ul>
+      </el-checkbox-group>
+      <el-radio-group v-else-if="edittingQuestion.type == 'radio'"
+                      v-model="edittingQuestion.answer"
+                      class="options">
+        <div class="option-item"
+             v-for="(value, key) in edittingQuestion.options"
+             :key="key">
+          <el-radio :label="key">
+            {{value}}</el-radio>
+          <i class="el-icon-close option-item-close"
+             @click="removeOption(key)"></i>
+        </div>
+      </el-radio-group>
       <span slot="footer"
             class="dialog-footer">
         <div class="dialog-footer-left">
-          <el-select v-model="editingQuestion.tagId"
+          <el-select v-model="edittingQuestion.tagId"
                      placeholder="请选择知识点"
                      size="mini"
                      class="selectTag">
@@ -172,19 +184,19 @@
                        :value="item.value">
             </el-option>
           </el-select>
-          <el-radio-group v-model="editingQuestion.type"
+          <el-radio-group v-model="edittingQuestion.type"
                           size="mini"
                           @change="changeType">
             <el-radio-button label="radio">单选</el-radio-button>
             <el-radio-button label="multi">多选</el-radio-button>
           </el-radio-group>
           <el-rate class="question-level"
-                   v-model="editingQuestion.level"></el-rate>
+                   v-model="edittingQuestion.level"></el-rate>
         </div>
         <div>
           <el-button @click="dialogVisible = false">取 消</el-button>
-          <el-button type="primary"
-                     @click="dialogVisible = false">确 定</el-button>
+          <el-button :type="dialogType == 'add' ? 'primary' : 'warning'"
+                     @click="ensureQues">{{dialogType == 'add' ? '确定' : '修改'}}</el-button>
         </div>
       </span>
     </el-dialog>
@@ -204,38 +216,26 @@ export default {
       questionsData: [], // 该课程下的所有问题数据
       totalLevels: 0, // 该课程下的所有问题难度星数
       tagsData: {}, // 该课程下的所有 tag 的 id 和 value 对应数据
-      isOKForQuesNum: true,  // 题目数是否达到要求
-      isOkForLevelNum: true,  // 题目难度是否达到要求
-      editingQuestion: {
+      questionInputVisible: false, // 编辑框的题目标题当前是否正在编辑
+      search: "", // 表格搜索框
+      dialogVisible: false, // 新建和编辑的 dialog 显示控制
+      newOption: "", // 要新添加的选项
+      dialogType: "add", // 当前 dialog 的状态
+      edittingRowIndex: "", // 当前编辑的行的索引
+      edittingQuesLevel: "", // 当前编辑的问题的星级难度
+      edittingQuesTag: "",  // 当前编辑的问题的知识点 tag
+      edittingQuestion: {
         title: "-------- 双击编辑你的问题 --------",
-        options: [
-          {
-            value: "a",
-            label: "选项 A"
-          },
-          {
-            value: "b",
-            label: "选项 B"
-          },
-          {
-            value: "c",
-            label: "选项 C"
-          },
-        ],
+        options: {},
         type: "radio",
-        tag: "",
         tagId: "",
         level: 0,
         answer: []
-      },            // 当前新建或编辑的问题
-      search: "",  // 表格搜索框
-      dialogVisible: false,   // 新建和编辑的 dialog 显示控制
-      newOption: "" // 要新添加的选项
+      } // 当前编辑的问题
     }
   },
   computed: {
-    // 对 tagData 进行格式化1️以
-
+    
   },
   methods: {
     // 初始化:获取用户的课程信息
@@ -260,8 +260,6 @@ export default {
       this.totalLevels = 0
       this.questionsData = []
       this.tagsData = {}
-      this.isOKForQuesNum = true
-      this.isOkForLevelNum = true
       // 获取课程的题目信息,一些通用计算处理
       var that = this
       await this.MyAxios.get("/api/tag/detail/" + this.courseId)
@@ -276,36 +274,133 @@ export default {
         .catch(function(error) {
           alert(error.response.data.errmsg)
         })
-      this.MyAxios.get("/api/question/" + this.courseId).then(function(
-        response
-      ) {
-        for (var index in response.data.data) {
-          that.tagsData[response.data.data[index].tag_id].totalQues += 1
-          that.tagsData[
-            response.data.data[index].tag_id
-          ].totalLevels += parseInt(response.data.data[index].level)
-          that.totalLevels += parseInt(response.data.data[index].level)
-          that.questionsData.push({
-            level: response.data.data[index].level,
-            type: response.data.data[index].type,
-            title: response.data.data[index].title,
-            tag: that.tagsData[response.data.data[index].tag_id].label,
-            tagId: response.data.data[index].tag_id,
-            id: response.data.data[index].id
-          })
-        }
-        // 检查各个 tag 的题目数和难度星级数是否达到要求
-        for(var index in that.tagsData) {
-          if (that.tagsData[index].totalQues < 4) that.isOKForQuesNum = false
-          if (that.tagsData[index].totalLevels < 20) that.isOkForLevelNum = false
-        }
-      })
-      .catch(function(error) {
-        alert(error.response.data.errmsg)
-      })
+      this.MyAxios.get("/api/question/" + this.courseId)
+        .then(function(response) {
+          for (var index in response.data.data) {
+            that.tagsData[response.data.data[index].tag_id].totalQues += 1
+            that.tagsData[
+              response.data.data[index].tag_id
+            ].totalLevels += parseInt(response.data.data[index].level)
+            that.totalLevels += parseInt(response.data.data[index].level)
+            that.questionsData.push({
+              level: parseInt(response.data.data[index].level),
+              type: response.data.data[index].type,
+              title: response.data.data[index].title,
+              tag: that.tagsData[response.data.data[index].tag_id].label,
+              tagId: response.data.data[index].tag_id + "",
+              id: response.data.data[index].id,
+              options: JSON.parse(response.data.data[index].option),
+              answer: JSON.parse(response.data.data[index].answer)
+            })
+          }
+        })
+        .catch(function(error) {
+          alert(error.response.data.errmsg)
+        })
     },
-    // 新建一个问题
+    // 点击新建问题
+    addQues() {
+      if (this.dialogType == "update") {
+        this.edittingQuestion = {
+          title: "-------- 双击编辑你的问题 --------",
+          options: {},
+          type: "radio",
+          tagId: "",
+          level: 0,
+          answer: []
+        }
+      }
+      this.dialogType = "add"
+      this.dialogVisible = true
+    },
+    // 确定新建/修改一个问题
+    ensureQues() {
+      let ques = this.edittingQuestion
+      let that = this
+      if (
+        ques.title != "" &&
+        ques.options != {} &&
+        (ques.type == "radio" || ques.type == "multi") &&
+        ques.tagId != "" &&
+        ques.level != "" &&
+        (ques.answer != "" && ques.answer != [])
+      ) {
+        let reuqestData = {
+          title: ques.title,
+          type: ques.type,
+          level: ques.level,
+          tag_id: ques.tagId,
+          option: ques.options,
+          answer: ques.answer
+        }
+        if (this.dialogType == "add") {
+          this.MyAxios.post("/api/question/", reuqestData)
+            .then(function(response) {
+              that.questionsData.push({
+                level: parseInt(response.data.data.level),
+                type: response.data.data.type,
+                title: response.data.data.title,
+                tag: that.tagsData[response.data.data.tag_id].label,
+                tagId: response.data.data.tag_id,
+                id: response.data.data.id,
+                options: JSON.parse(response.data.data.option),
+                answer: JSON.parse(response.data.data.answer)
+              })
+              that.tagsData[response.data.data.tag_id].totalQues += 1
+              that.tagsData[response.data.data.tag_id].totalLevels += parseInt(response.data.data.level)
+              that.totalLevels += parseInt(response.data.data.level)
+              that.dialogVisible = false
+              that.edittingQuestion = {
+                title: "-------- 双击编辑你的问题 --------",
+                options: {},
+                type: "radio",
+                tagId: "",
+                level: 0,
+                answer: []
+              }
+            })
+            .catch(function(error) {
+              alert(error.response.data.errmsg)
+            })
+        } else {
+          this.MyAxios.put("/api/question/" + ques.id, reuqestData)
+            .then(function(response) {
+              that.questionsData[that.edittingRowIndex] = {
+                level: parseInt(response.data.data.level),
+                type: response.data.data.type,
+                title: response.data.data.title,
+                tag: that.tagsData[response.data.data.tag_id].label,
+                tagId: response.data.data.tag_id,
+                id: response.data.data.id,
+                options: JSON.parse(response.data.data.option),
+                answer: JSON.parse(response.data.data.answer)
+              }
+              that.tagsData[that.edittingQuesTag].totalLevels -= that.edittingQuesLevel
+              that.tagsData[response.data.data.tag_id].totalLevels += parseInt(response.data.data.level)
 
+              that.totalLevels -= that.edittingQuesLevel
+              that.totalLevels += parseInt(response.data.data.level)
+
+              that.tagsData[that.edittingQuesTag].totalQues -= 1
+              that.tagsData[response.data.data.tag_id].totalQues += 1
+
+              that.dialogVisible = false
+            })
+            .catch(function(error) {
+              alert(error.response.data.errmsg)
+            })
+        }
+      } else {
+        this.$notify({
+          title: "警告",
+          message:
+            "缺失参数！请确认：<strong><br/>题干<br/>知识点<br/>难度星级<br/>至少一个选项<br/>正确答案(直接在选项上选择)</strong>",
+          type: "warning",
+          dangerouslyUseHTMLString: true,
+          duration: 10000
+        })
+      }
+    },
     // 删除一个问题
     deleteQues(questionId, tagId, level, index) {
       let that = this
@@ -320,8 +415,6 @@ export default {
             that.tagsData[tagId].totalQues -= 1
             that.tagsData[tagId].totalLevels -= level
             that.totalLevels -= level
-            if (that.tagsData[tagId].totalQues < 4) thta.isOKForQuesNum = false
-            if (that.tagsData[tagId].totalLevels < 20) thta.isOkForLevelNum = false
             that.$message({
               type: "success",
               message: "删除成功!"
@@ -335,16 +428,53 @@ export default {
           })
       })
     },
+    // 点击更新问题
+    updateQues(ques, $index) {
+      this.edittingQuesLevel = ques.level
+      this.edittingQuesTag = ques.tagId
+      this.dialogVisible = true
+      this.dialogType = "update"
+      this.edittingQuestion = JSON.parse(JSON.stringify(ques)) // 深拷贝
+      this.edittingRowIndex = $index
+    },
     // 修改问题的类型
     changeType(type) {
-      if (type == "multi") this.editingQuestion.answer = []
+      if (type == "multi") this.edittingQuestion.answer = []
+    },
+    // 添加一个新的选项
+    newOptionInputConfirm() {
+      if (this.newOption) {
+        this.edittingQuestion.options[
+          Math.random()
+            .toString(36)
+            .substr(2)
+        ] = this.newOption
+        this.newOption = ""
+      }
+    },
+    // 删除一个新的选项
+    removeOption(key) {
+      this.$delete(this.edittingQuestion.options, key)
+      if (this.edittingQuestion.type == "multi") this.edittingQuestion.answer = []
+      else if (this.edittingQuestion.type == "radio") this.edittingQuestion.answer = ""
+    },
+    // 失焦或确定后修改题目标题
+    handleQuestionTitleConfirm() {
+      if (this.edittingQuestion.title != "") this.questionInputVisible = false
+    },
+    // 开始编辑题目标题
+    editQuestionTitleInput() {
+      this.questionInputVisible = true
+      this.$nextTick(_ => {
+        this.$refs.questionInput.focus()
+      })
     },
     // 以下为表格过滤
     filterType(value, row) {
-      return row.type === value
+      return row.type == value
     },
     filterLevel(value, row) {
-      return row.level === value
+      return row.level == value
     }
   },
   mounted: function() {
@@ -383,7 +513,6 @@ export default {
     padding-bottom 5.5px
     padding-top 5.5px
     border-bottom dashed 1px #ddd
-    
 
     .tag-content
       width 60%
@@ -443,25 +572,41 @@ export default {
     font-size 16px
     font-weight 400
     margin-bottom 20px
+    height 32px
 
-  .option-input
-    margin-bottom 10px
+  .addNewOption
+    display flex
+    align-items baseline
+
+    .option-input
+      margin-bottom 10px
+      margin-right 10px
 
   .options
-    display flex
-    flex-direction column
+    height 183px
+    overflow auto
 
-    .el-radio
-      height 23px
+    .option-item
+      width 100%
       display flex
       align-items center
+      justify-content space-between
 
-    .el-checkbox
-      height 23px
+      .option-item-close
+        width 5%
+        font-size 20px
 
-    label
-      margin-left 0
-      margin-top 10px
+        &:hover
+          color #f44336
+
+      .el-radio, .el-checkbox
+        width 95%
+        height 25px
+        display flex
+
+      label
+        margin-left 0
+        margin-top 10px
 
   .dialog-footer
     display flex
@@ -493,5 +638,20 @@ th,
 .el-scrollbar,
 .el-select {
   font-weight: 400;
+}
+.options .el-radio__label,
+.options .el-checkbox__label {
+  width: 95%;
+  height: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+}
+.options .el-checkbox__input,
+.options .el-radio__input {
+  display: flex;
+  align-items: center;
 }
 </style>

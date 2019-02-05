@@ -30,7 +30,7 @@
       <el-row>
         <hr />
         <div class="input-title">知识点 Tag :
-          <el-tooltip content="每个知识点至少需要 4 道题,且难度总计为 20 星级,否则可能无法组卷成功"
+          <el-tooltip content="每个知识点每个星级难度至少需要一个题，否则无法组卷成功，红色字体表示该难度尚需一个题"
                       placement="top">
             <i class="el-icon-question"></i>
           </el-tooltip>
@@ -42,9 +42,10 @@
             <div class="tag-content">
               <el-tag>{{item.label}}</el-tag>
             </div>
-            <div class="tag-info">
-              <font :class="[item.totalQues >= 4 ? 'num-ok' : 'num-no']">{{item.totalQues}}</font> 题<br />
-              <font :class="[item.totalLevels >= 20 ? 'num-ok' : 'num-no']">{{item.totalLevels}}</font> 星</div>
+            <font :class="[tip(item) != 'OK' ? 'num-no' : 'num-ok']">{{tip(item)}}</font>
+            <!-- <div class="tag-info"> -->
+            <!-- <font :class="[item.totalLevels >= 20 ? 'num-ok' : 'num-no']">{{item.totalLevels}}</font> 星 -->
+            <!-- </div> -->
           </div>
           <!-- <hr /> -->
         </div>
@@ -82,7 +83,10 @@
         </el-table-column>
         <el-table-column prop="tag"
                          label="知识点"
-                         align="center">
+                         align="center"
+                         :filters="filtersTagsData"
+                         :filter-method="filterTag"
+                         filter-placement="bottom-end">
         </el-table-column>
         <el-table-column prop="level"
                          align="center"
@@ -223,7 +227,7 @@ export default {
       dialogType: "add", // 当前 dialog 的状态
       edittingRowIndex: "", // 当前编辑的行的索引
       edittingQuesLevel: "", // 当前编辑的问题的星级难度
-      edittingQuesTag: "",  // 当前编辑的问题的知识点 tag
+      edittingQuesTag: "",  // 当前编辑的问题的知识点 tag的 ID
       edittingQuestion: {
         title: "-------- 双击编辑你的问题 --------",
         options: {},
@@ -235,7 +239,16 @@ export default {
     }
   },
   computed: {
-    
+    filtersTagsData: function() {
+      let res = []
+      for(let index in this.tagsData) {
+        res.push({
+          "text": this.tagsData[index].label,
+          "value": this.tagsData[index].value
+        })
+      }
+      return res
+    }
   },
   methods: {
     // 初始化:获取用户的课程信息
@@ -266,9 +279,9 @@ export default {
         .then(function(response) {
           that.tagsData = response.data.data
           for (var index in that.tagsData) {
-            that.tagsData[index].totalQues = 0
-            that.tagsData[index].totalLevels = 0
             that.tagsData[index].value = index
+            that.tagsData[index].requirement = [0, 0, 0 ,0 ,0]
+            that.tagsData[index].status = false // 状态,用于生成 tip时的状态标识,防止出现闪一下的情况
           }
         })
         .catch(function(error) {
@@ -277,11 +290,8 @@ export default {
       this.MyAxios.get("/api/question/" + this.courseId)
         .then(function(response) {
           for (var index in response.data.data) {
-            that.tagsData[response.data.data[index].tag_id].totalQues += 1
-            that.tagsData[
-              response.data.data[index].tag_id
-            ].totalLevels += parseInt(response.data.data[index].level)
             that.totalLevels += parseInt(response.data.data[index].level)
+            that.tagsData[response.data.data[index].tag_id].requirement[parseInt(response.data.data[index].level) - 1] += 1
             that.questionsData.push({
               level: parseInt(response.data.data[index].level),
               type: response.data.data[index].type,
@@ -292,6 +302,7 @@ export default {
               options: JSON.parse(response.data.data[index].option),
               answer: JSON.parse(response.data.data[index].answer)
             })
+            that.tagsData[response.data.data[index].tag_id].status = true
           }
         })
         .catch(function(error) {
@@ -346,9 +357,8 @@ export default {
                 options: JSON.parse(response.data.data.option),
                 answer: JSON.parse(response.data.data.answer)
               })
-              that.tagsData[response.data.data.tag_id].totalQues += 1
-              that.tagsData[response.data.data.tag_id].totalLevels += parseInt(response.data.data.level)
               that.totalLevels += parseInt(response.data.data.level)
+              that.tagsData[response.data.data.tag_id].requirement[parseInt(response.data.data.level) - 1] += 1
               that.dialogVisible = false
               that.edittingQuestion = {
                 title: "-------- 双击编辑你的问题 --------",
@@ -375,14 +385,12 @@ export default {
                 options: JSON.parse(response.data.data.option),
                 answer: JSON.parse(response.data.data.answer)
               }
-              that.tagsData[that.edittingQuesTag].totalLevels -= that.edittingQuesLevel
-              that.tagsData[response.data.data.tag_id].totalLevels += parseInt(response.data.data.level)
 
               that.totalLevels -= that.edittingQuesLevel
               that.totalLevels += parseInt(response.data.data.level)
 
-              that.tagsData[that.edittingQuesTag].totalQues -= 1
-              that.tagsData[response.data.data.tag_id].totalQues += 1
+              that.tagsData[response.data.data.tag_id].requirement[that.edittingQuesLevel - 1] -= 1
+              that.tagsData[response.data.data.tag_id].requirement[parseInt(response.data.data.level) - 1] += 1
 
               that.dialogVisible = false
             })
@@ -412,9 +420,8 @@ export default {
         this.MyAxios.delete("/api/question/" + questionId)
           .then(function(response) {
             that.questionsData.splice(index, 1)
-            that.tagsData[tagId].totalQues -= 1
-            that.tagsData[tagId].totalLevels -= level
             that.totalLevels -= level
+            that.tagsData[tagId].requirement[level - 1] -= 1
             that.$message({
               type: "success",
               message: "删除成功!"
@@ -469,12 +476,30 @@ export default {
         this.$refs.questionInput.focus()
       })
     },
+    // 侧栏题目数要求提示
+    tip(item) {
+      if (!item.status) return ''
+      let count = 0
+      let tip = ''
+      for(let index in item.requirement) {
+        if (item.requirement[index] != 0) count++
+        else {
+          tip += (parseInt(index) + 1) + ", "
+        }
+      }
+      tip = tip.substr(0, tip.length - 2)
+      if (count == 5) return "OK"
+      else return tip  
+    },
     // 以下为表格过滤
     filterType(value, row) {
       return row.type == value
     },
     filterLevel(value, row) {
       return row.level == value
+    },
+    filterTag(value, row) {
+      return row.tagId == value
     }
   },
   mounted: function() {
@@ -526,15 +551,13 @@ export default {
         text-overflow ellipsis
         white-space nowrap
 
-    .tag-info
+    .num-ok
       font-weight 400
-      text-align right
+      color #409dfd
 
-      .num-ok
-        color #409dfd
-
-      .num-no
-        color #ff5722
+    .num-no
+      font-weight 400
+      color #ff5722
 
 .questions-info
   display flex

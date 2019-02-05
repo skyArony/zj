@@ -43,6 +43,7 @@ Vue.component('worlduc-addmember', require('./components/AddMember.vue'));
 Vue.component('worlduc-login', require('./components/WorlducLogin.vue'));
 Vue.component('worlduc-request', require('./components/Request.vue'));
 Vue.component('worlduc-questionadd', require('./components/QuestionAdd.vue'));
+Vue.component('worlduc-autosurvey', require('./components/AutoSurvey.vue'));
 
 // element ui
 import ElementUI from 'element-ui';

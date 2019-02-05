@@ -120,10 +120,16 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers', 'middleware' => ['jw
     // 审查申请书
     $api->patch('/request/{id}', "RequestController@reviewRequest");
 
-    // 题库-添加新题
+    // 题库-加题
     $api->post('/question', "QuestionController@addQuestion");
-    // 题库-获取一门课程下的所有题
-    $api->get('/question/{courseId}', "QuestionController@getQuestionsByCourseId");
+    // 题库-删题
     $api->delete('/question/{questionId}', "QuestionController@deleteQuestionById");
+    // 题库-改题
     $api->put('/question/{questionId}', "QuestionController@updateQuestion");
 });
+
+$api->version('v1', ['namespace' => 'App\Http\Controllers'], function ($api) {
+    // 题库-获取一门课程下的所有题
+    $api->get('/question/{courseId}', "QuestionController@getQuestionsByCourseId");
+});
+

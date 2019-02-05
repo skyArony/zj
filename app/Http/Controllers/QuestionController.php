@@ -35,6 +35,7 @@ class QuestionController extends ApiController
 
         $courseId = $request->courseId;
         $course = Course::find($courseId);
+        if (!$course) return self::setResponse(null, 404, -4005);
 
         $questions = $course->hasManyQuestionsThroughTag();
         return self::setResponse($questions->get(), 200, 0);

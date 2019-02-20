@@ -31,8 +31,6 @@ $api = app('Dingo\Api\Routing\Router');
 $api->version('v1', ['namespace' => 'App\Http\Controllers', 'middleware' => ['jwt.auth']], function ($api) {
     // 爬取课程信息
     $api->post('/course', 'SpiderController@getCourseInfo');
-    // 根据课程 ID 查看课程信息
-    $api->get('/course/{courseId}', 'CourseController@getCourse');
     // 查看一个用户的所有课程
     $api->get('/user/course', 'CourseController@getAllCourseByUserId');
     // 获取一门课程的所有 tag (详细)
@@ -55,12 +53,21 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers', 'middleware' => ['jw
     $api->put('/survey', 'SurveyController@updateSurvey');
     // 查看一个问卷的数据
     $api->get('/survey/{id}', 'SurveyController@getSurvey');
+
+    // 填写问卷[入学, 期中, 期末]
+    $api->post('/surveyRecord/{courseId}', 'SurveyRecordController@addRecord');
+    // 检查一个用户是否填写过某个问卷
+    $api->get('/surveyRecord/check/{courseId}', 'SurveyRecordController@checkRecord');
+
+
     // 检查一个用户是否填写过某一个问卷
     $api->get('/answerRecord/{surveyId}', 'AnswerRecordController@checkRecord');
     // 填写一个问卷,记录结果
     $api->post('/answerRecord/{surveyId}', 'AnswerRecordController@addRecord');
     // 删除一个问卷填写记录
     $api->delete('/answerRecord/{surveyId}', 'AnswerRecordController@delete');
+
+
     // 获取一个定制化课程的数据
     $api->get('/customCourse/{id}', 'CustomCourseController@getCustomCourse');
     // 获取已经登录的用户信息
@@ -131,5 +138,7 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers', 'middleware' => ['jw
 $api->version('v1', ['namespace' => 'App\Http\Controllers'], function ($api) {
     // 题库-获取一门课程下的所有题
     $api->get('/question/{courseId}', "QuestionController@getQuestionsByCourseId");
+    // 根据课程 ID 查看课程信息
+    $api->get('/course/{courseId}', 'CourseController@getCourse');
 });
 

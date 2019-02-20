@@ -34,7 +34,7 @@ Route::group(['middleware' => 'admin.user'], function () {
 
 // 问卷预览和填写页
 Route::view('/survey/{id}', 'survey');
-Route::view('/autosurvey', 'autoSurvey');
+Route::view('/autosurvey/{id}', 'autoSurvey');
 
 // 获取生成的 PDF
 Route::get('pdf/{id}', 'CustomCourseController@getPDF');

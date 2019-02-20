@@ -30,7 +30,7 @@
       <el-row>
         <hr />
         <div class="input-title">知识点 Tag :
-          <el-tooltip content="每个知识点每个星级难度至少需要一个题，否则无法组卷成功，红色字体表示该难度尚需一个题"
+          <el-tooltip content="每个知识点每个难度至少要一个题，缺题的知识点不参与组卷，红色字体表示该难度尚需一个题"
                       placement="top">
             <i class="el-icon-question"></i>
           </el-tooltip>

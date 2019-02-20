@@ -38,7 +38,7 @@
       <div class="body">
         <div v-if="!isComplete"
              class="questions">
-          <worlduc-question v-for="item in questions"
+          <worlduc-question v-for="item in surveyQuesList"
                             :key="item.id"
                             :question="item"
                             @setAnswer="setAnswerData"></worlduc-question>
@@ -55,7 +55,7 @@
             <el-button type="info"
                        icon="el-icon-refresh"
                        round
-                       @click="again">我想再填一次</el-button>
+                       @click="again">我想重做一次</el-button>
             <el-button type="success"
                        icon="el-icon-view"
                        round
@@ -84,20 +84,82 @@ export default {
         headers: { "Content-Type": "application/json" }
       }),
       courseId: "", // 课程 ID
+      courseName: '', // 课程名
+      // courseTeacher: '', // 课程教师
       questionList: [], // 当前课程所有问题
-
-      title: "",
-      desc: "",
-      questions: [], // 问卷上的问题
-      answer: {},
-      id: "", // 问卷 id
+      surveyQuesList: [], // 显示在页面上的问卷题
       isComplete: false, // 是否填写完问卷
-      customCourseId: "", // 填写完成的定制化课程 ID
-      shareText: "填写问卷『』,定制化『』课程大纲.",
-      qrcodeVisible: false // 是否显示分享框
+      qrcodeVisible: false, // 是否显示二维码分享框
+      desc: "填写问卷,定制课程大纲",   // 问卷简介
+    }
+  },
+  computed: {
+    // 分享文字内容
+    shareText: function() {
+      return "填写问卷,定制化『" + this.courseName + "』课程大纲.";
+    },
+    // 问卷标题
+    title: function() {
+      return this.courseName + "课程问卷"
     }
   },
   methods: {
+    // 问题的填写状态结果
+    setAnswerData(data) {
+      this.surveyQuesList[data.id].status = data.status
+    },
+    // 提交
+    submit() {
+      // 检查填写状态
+      for (let key in this.surveyQuesList) {
+        if (this.surveyQuesList[key].status == null) {
+          this.$notify({
+              title: "提示",
+              message: "存在题目没选择答案!",
+              type: "info",
+              duration: "2000",
+              position: "top-left"
+          })
+          return
+        }
+      }
+      // 检查得分状态
+      let score = {}
+      for(let key in this.surveyQuesList) {
+        if (this.surveyQuesList[key].status == true) {
+          if (!score.hasOwnProperty(this.surveyQuesList[key].tag_id)) score[this.surveyQuesList[key].tag_id] = 0
+          score[this.surveyQuesList[key].tag_id] += parseInt(this.surveyQuesList[key].level)
+        }
+      }
+      let res = []
+      for(let key in score) {
+        if (score[key] >= 5) res.push(key)
+      }
+      // 发送结果到后台
+      let that = this
+      this.MyAxios.post("/api/surveyRecord/" + this.courseId, {
+        tags: res
+      })
+        .then(function(response) {
+          that.isComplete = true
+        })
+        .catch(function(error) {
+          if (error.response.data.errcode == -4007) alert("请先登录!")
+          else alert(error.response.data.errmsg)
+        })
+    },
+    // 重新做
+    again() {
+      this.isComplete = false
+      for (let key in this.surveyQuesList) {
+        this.surveyQuesList[key].status = null
+      }
+    },
+    // 查看定制课程
+    view() {
+      location.href = "/#/index/customCourse/" + this.courseId
+    },
+    // 复制分享文字内容
     copyText() {
       var clipboard = new Clipboard("#copyQRText")
       var clipboard = new Clipboard("#copyShareText")
@@ -108,7 +170,8 @@ export default {
         position: "top-left"
       })
     },
-    showQRcode(data) {
+    // 显示二维码分享框
+    showQRcode() {
       this.qrcodeVisible = !this.qrcodeVisible
       if (this.$refs.qrcode.childNodes.length == 0) {
         let qrcode = new QRCode("qrcode", {
@@ -118,34 +181,71 @@ export default {
         qrcode.makeCode(window.location.href)
       }
     },
-    setAnswerData(data) {
-      this.answer[data.id] = data
+    // 生成随机问卷
+    generateSurvey() {
+      let surveyQuesList = {}
+      let quesTypeList = [
+        [1, 2, 3, 4],
+        [5, 2, 3],
+        [5, 4, 1]
+      ]
+      for (let key in this.questionList) {
+        let quesType = quesTypeList[Math.round(Math.random() * 10) % 3]
+        for (let index in quesType) {
+          let questions = this.questionList[key][quesType[index]]
+          let question = questions[Math.round(Math.random() * 10) % questions.length]
+          surveyQuesList[question.id] = question
+        }
+      }
+      this.surveyQuesList = surveyQuesList
     },
-    getSurvey() {
-      var that = this
-      let MyAxios = axios.create()
-      // 获取当前问卷的ID
-      this.id = window.location.href.match(/.*\/survey\/(\d+)/)[1]
-      // 获取问卷的数据
-      MyAxios.get("/api/survey/" + this.id)
+    // 检查当前课程题库数目是否符合要求,对题目进行处理
+    isMeetRequirement() {
+      let quesCount = {}
+      let questionList = {}
+      let isOk = false
+      // 检查数目是否符合湖基本要求
+      for (let key in this.questionList) {
+        if (quesCount.hasOwnProperty(this.questionList[key].tag_id)) {
+          quesCount[this.questionList[key].tag_id] += 1
+        } else quesCount[this.questionList[key].tag_id] = 1
+      }
+      for (let key in quesCount) {
+        if (quesCount[key] >= 5) isOk = true
+      }
+      // 数据格式再处理
+      for (let key in this.questionList) {
+        let tagId = this.questionList[key].tag_id
+        let level = this.questionList[key].level
+        if (quesCount[tagId] >= 5) {
+          if (!questionList.hasOwnProperty(tagId)) questionList[tagId] = {}
+          if (!questionList[tagId].hasOwnProperty(level)) questionList[tagId][level] = []
+          this.questionList[key].status = null
+          questionList[tagId][level].push(this.questionList[key])
+        }
+      }
+      // 难度分区
+      this.questionList = questionList
+      return isOk
+    },
+    // 获取课程 Id 和课程名
+    getCourseId() {
+      this.courseId = window.location.href.match(/.*?\/autosurvey#?\/(\d+)?/)[1]
+      if (!this.courseId) location.href = "/404"
+      // 获取课程信息
+      let that = this
+      this.MyAxios.get("/api/course/" + this.courseId)
         .then(function(response) {
-          that.shareText =
-            "填写问卷「" +
-            response.data.data.title +
-            "」, 定制化「" +
-            response.data.data.course +
-            "」课程大纲.\n" +
-            window.location.href
-          that.title = response.data.data.title
-          that.desc = response.data.data.desc
-          that.questions = JSON.parse(response.data.data.questions)
+          that.courseName = response.data.data.name
         })
         .catch(function(error) {
-          if (error.response.status == 404) location.href = "/404"
-          else alert(error.response.data.errmsg)
+          alert(error.response.data.errmsg)
         })
-      // 检查是否填写过当前问卷
-      MyAxios.get("/api/answerRecord/" + this.id)
+    },
+    // 检查是否填写过问卷
+    isFilled() {
+      let that = this
+      this.MyAxios.get("/api/surveyRecord/check/" + this.courseId)
         .then(function(response) {
           if (response.data.data) {
             that.$notify({
@@ -173,67 +273,39 @@ export default {
           } else alert(error.response.data.errmsg)
         })
     },
-    submit() {
-      let addTags = []
-      let removeTags = []
-      for (let key in this.answer) {
-        addTags = addTags.concat(this.answer[key]["addTags"])
-        removeTags = removeTags.concat(this.answer[key]["removeTags"])
-      }
-      addTags = Array.from(new Set(addTags))
-      removeTags = Array.from(new Set(removeTags))
-      // 交集
-      let intersection = addTags.filter(v => removeTags.includes(v))
-      // 差集-结果
-      let res = addTags
-        .concat(intersection)
-        .filter(v => !addTags.includes(v) || !intersection.includes(v))
-
-      // 发送结果到后台
-      let that = this
-      let MyAxios = axios.create({
-        headers: { "Content-Type": "application/json" }
-      })
-      MyAxios.post("/api/answerRecord/" + this.id, {
-        tags: res
-      })
-        .then(function(response) {
-          // 显示结果或跳转;
-          that.customCourseId = response.data.data.id
-          that.isComplete = true
-        })
-        .catch(function(error) {
-          if (error.response.data.errcode == -4007) alert("请先登录!")
-          else alert(error.response.data.errmsg)
-        })
-    },
-    again() {
-      this.isComplete = false
-    },
-    view() {
-      location.href = "/#/index/customCourse/" + this.customCourseId
-    },
-
-    
-    // 生成随机问卷
-    generateSurvey() {
-
-    },
-    init() {
-      // 获取课程 ID,不存在则 404
-      this.courseId = window.location.href.match(/.*?\/autosurvey#?\/(\d+)?/)[1]
-      if (!this.courseId) location.href = "/404"
-      // 获取当前课程的所有数据
+    // 获取课程题库数据
+    getCourseQusetion() {
       let that = this
       this.MyAxios.get("/api/question/" + this.courseId)
         .then(function(response) {
           that.questionList = response.data.data
-          // 开始组卷
+          // 检查题库题目数是否符合要求
+          let isMeet = that.isMeetRequirement()
+          // 自动组卷
+          if (!isMeet) {
+            that.$notify({
+              title: "提示",
+              message: "题库题数不符合最低要求,请课程管理员添加.",
+              type: "info",
+              duration: "2000",
+              position: "top-left"
+            })
+          }
+          // 生成问卷
+          that.generateSurvey()
         })
         .catch(function(error) {
           if (error.response.status == 404) location.href = "/404"
           else alert(error.response.data.errmsg)
         })
+    },
+    init() {
+      // 获取课程 ID,不存在则跳转404
+      this.getCourseId()
+      // 检查是否填写过问卷
+      this.isFilled()
+      // 获取当前课程的所有数据并自动组卷
+      this.getCourseQusetion()
     }
   },
   mounted: function() {
@@ -294,6 +366,7 @@ export default {
 .questions {
   display: flex;
   flex-direction: column;
+  padding-top: 10px;
 }
 .complete {
   padding-top: 30px;

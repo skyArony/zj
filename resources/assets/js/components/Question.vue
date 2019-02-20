@@ -1,20 +1,20 @@
 <template>
   <div class="question">
-    <font>{{question.question}}</font>
+    <font>{{question.title}}</font>
     <div class="option">
       <el-radio-group v-if="question.type == 'radio'"
                       v-model="radio"
                       @change="emitData">
-        <el-radio v-for="item in question.options"
-                  :key="item"
-                  :label="item">{{item}}</el-radio>
+        <el-radio v-for="(value, key) in options"
+                  :key="key"
+                  :label="key">{{value}}</el-radio>
       </el-radio-group>
-      <el-checkbox-group v-else-if="question.type == 'checkBox'"
+      <el-checkbox-group v-else-if="question.type == 'multi'"
                          v-model="checkList"
                          @change="emitData">
-        <el-checkbox v-for="item in question.options"
-                     :key="item"
-                     :label="item"></el-checkbox>
+        <el-checkbox v-for="(value, key) in options"
+                     :key="key"
+                     :label="key">{{value}}</el-checkbox>
       </el-checkbox-group>
     </div>
   </div>
@@ -31,27 +31,39 @@ export default {
       checkList: [],
     };
   },
+  computed: {
+    options: function() {
+      return JSON.parse(this.question.option)
+    }
+  },
   methods: {
     emitData (data) {
-      let addTags = []
-      let removeTags = []
-      if (typeof(data) === 'object') {
-        for(let index in data) { 
-          if (this.question.addTags[data[index]] !== undefined)
-            addTags = addTags.concat(this.question.addTags[data[index]])
-          if(this.question.removeTags[data[index]] !== undefined)
-            removeTags = removeTags.concat(this.question.removeTags[data[index]])
-        }
-      } else if (typeof(data) === 'string'){
-        addTags = this.question.addTags[data] ? this.question.addTags[data] : []
-        removeTags = this.question.removeTags[data] ? this.question.removeTags[data] : []
+      let answer = JSON.parse(this.question.answer)
+      let res = false
+      if (typeof(data) == 'string') {
+        if (data == '') res = null
+        else if (data == answer) res = true
+        else res = false
+      } else {
+        res = this.arrayEquals(data, answer)
       }
       this.$emit("setAnswer", {
         id: this.question.id,
-        addTags: addTags,
-        removeTags: removeTags
+        status: res
       })
     },
+    arrayEquals(arr1, arr2) {
+      if (arr1.length == 0) return null
+      else if (arr1.length != arr2.length) return false
+      else {
+        arr1.sort()
+        arr2.sort()
+        for(let i = 0; i < arr1.length; i++) {
+          if (arr1[i] != arr2[i]) return false
+        }
+        return true
+      }
+    }
   }
 };
 </script>

@@ -138,7 +138,7 @@ export default {
         MyAxios.get("/api/customCourse" + "/" + this.customCourseId)
           .then(function(response) {
             that.courseTreeData = that.customCourseTreeDataDeal(
-              response.data.data.courseTreeTags
+              response.data.data.courseTree
             )
             that.courseTitle = response.data.data.courseName
             that.courseImg = response.data.data.courseImg

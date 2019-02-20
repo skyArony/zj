@@ -69,7 +69,9 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers', 'middleware' => ['jw
 
 
     // 获取一个定制化课程的数据
-    $api->get('/customCourse/{id}', 'CustomCourseController@getCustomCourse');
+    $api->get('/customCourse/{courseId}', 'CustomCourseController@getCustomCourse');
+
+    
     // 获取已经登录的用户信息
     $api->get('/me', 'LoginController@me');
     // 根据用户 ID 返回其创建的所有队伍

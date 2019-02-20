@@ -7,9 +7,10 @@ require_once base_path('vendor/tecnickcom/tcpdf/tcpdf.php');
 use TCPDF;
 use TCPDF_FONTS;
 use Illuminate\Http\Request;
-use App\Models\DB\AnswerRecord;
+use App\Models\DB\SurveyRecord;
 use App\Models\DB\Survey;
 use App\Models\DB\Course;
+use App\Models\DB\Tag;
 
 class CustomCourseController extends ApiController
 {
@@ -100,47 +101,55 @@ p {
     public function getCustomCourse(Request $request)
     {
         // TODO validate
+        $uid = auth('api')->parseToken()->payload()->get('sub');
 
-        $answerRecord = AnswerRecord::find($request->id);
-        if (!$answerRecord) return self::setResponse(null, 404, -4005);
-        $survey = $answerRecord->belongsToSurvey;
-        $course = $survey->belongsToCourse;
-        $courseTree = $course->hasOneCourseTree;
-        $user = $course->belongsToUser;
+        // SurveyRecord 获取
+        $SurveyRecord = SurveyRecord::where("creater_id", $uid)->where("course_id", $request->courseId)->first();
+        if (!$SurveyRecord) return self::setResponse(null, 404, -4005);
 
-        // coursetag 和 问卷标记的 tag
-        $courseTreeTags = json_decode($courseTree->data, 1);
-        $answerRecordTags = json_decode($answerRecord->tags, 1);
+        // 课程信息获取
+        $courseId = $request->courseId;
+        $course = Course::find($courseId);
+        $teacher = $course->belongsToUser;
+        $courseName = $course->name;
+        $courseDesc = $course->intro;
+        $courseImg = $course->pic;
+        $courseTeacher = $teacher->name;
+        $courseId = $course->id;
+        $courseTree = json_decode($course->hasOneCourseTree->data, 1);   // 课程树目录
+
+        // tag 信息获取
+        $tags = json_decode($SurveyRecord->tags, 1);
+        $courseTags = Tag::where("course_id", $courseId)->get();
+        $courseTagsArr = array();
+        foreach ($courseTags as $value) {
+            $courseTagsArr[$value->id] = $value->value;
+        }
+        $tagsArr = array();
+        foreach ($tags as $value) {
+            $tagsArr[] = $courseTagsArr[$value];
+        }
 
         // 需要选择性展示的 tree 和 target 处理
-        foreach ($courseTreeTags as $key => $value) {
+        foreach ($courseTree as $key => $value) {
             foreach ($value as $key2 => $value2) {
                 if ($key2 == 'chapter_name') {
                     continue;
                 }
                 if (isset($value2['tags'])) {
-                    if (array_intersect($value2['tags'], $answerRecordTags)) {
-                        $courseTreeTags[$key][$key2]["status"] = true;
-                        $courseTreeTags[$key]["status"] = true;
+                    if (array_intersect($value2['tags'], $tagsArr)) {
+                        $courseTree[$key][$key2]["status"] = true;
+                        $courseTree[$key]["status"] = true;
                     } else {
-                        $courseTreeTags[$key][$key2]["status"] = false;
-                        $courseTreeTags[$key]["status"] = false;
+                        $courseTree[$key][$key2]["status"] = false;
+                        $courseTree[$key]["status"] = false;
                     }
                 } else {
-                    $courseTreeTags[$key][$key2]["status"] = false;
-                    $courseTreeTags[$key]["status"] = false;
+                    $courseTree[$key][$key2]["status"] = false;
+                    $courseTree[$key]["status"] = false;
                 }
             }
         }
-
-        // 课程信息
-        $courseName = $course->name;
-        $courseDesc = $course->intro;
-        $courseImg = $course->pic;
-        $courseTeacher = $user->name;
-        $courseId = $course->id;
-        // 问卷信息
-        $surveyName = $survey->title;
 
         $data = [
             'courseId' => $courseId,
@@ -148,9 +157,8 @@ p {
             'courseDesc' => $courseDesc,
             'courseImg' => $courseImg,
             'courseTeacher' => $courseTeacher,
-            'surveyName' => $surveyName,
-            'answerRecordTags' => $answerRecordTags,
-            'courseTreeTags' => $courseTreeTags,
+            'surveyRecordTags' => $tagsArr,
+            'courseTree' => $courseTree,
         ];
 
         return self::setResponse($data, 200, 0);

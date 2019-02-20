@@ -14,7 +14,12 @@
                  :src="data.teacher.avatar" />
             <div class="teacher-name">{{data.teacher.name}}</div>
           </div>
-          <el-popover placement="bottom"
+          <el-button type="primary"
+                     class="button"
+                     size="mini"
+                     @click.stop="toAutoSurvey(data.id)"
+                     plain>定制课程</el-button>
+          <!-- <el-popover placement="bottom"
                       trigger="hover">
             <el-table :data="data.surveys"
                       max-height="300">
@@ -25,8 +30,8 @@
                 <template slot-scope="scope">
                   <div class="surveyTitle" @click="toSurvey(scope.row.id)">{{scope.row.title}}</div>
                 </template>
-              </el-table-column>
-              <!-- <el-table-column fixed="right"
+              </el-table-column> -->
+          <!-- <el-table-column fixed="right"
                                label="操作">
                 <template slot-scope="scope">
                   <el-button @click.native.prevent="toSurvey(scope.row.id)"
@@ -36,14 +41,14 @@
                   </el-button>
                 </template>
               </el-table-column> -->
-            </el-table>
+          <!-- </el-table>
             <el-button slot="reference"
                        type="primary"
                        class="button"
                        size="mini"
                        @click.stop=";"
                        plain>定制课程</el-button>
-          </el-popover>
+          </el-popover> -->
         </div>
       </div>
     </el-card>
@@ -55,14 +60,12 @@ export default {
   props: {
     data: Object
   },
-  data() {
-  },
   methods: {
     toCourse(courseId) {
       this.$router.push({ path: `/index/video/course/${courseId}` })
     },
-    toSurvey(surveyId) {
-      location.href = "/survey/" + surveyId
+    toAutoSurvey(courseId) {
+      location.href = "/autosurvey/" + courseId
     }
   }
 }

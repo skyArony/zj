@@ -25,10 +25,9 @@
         </div>
       </div>
       <div class="yourTag panel">
-        <h3 style="margin:0px;">问卷: {{surveyName}}</h3>
-        <h4 style="margin:15px 0 10px 0">为你标记的 Tag:</h4>
+        <h4 style="margin:0px 0 10px 0">为你标记的知识点:</h4>
         <div v-if="isHasTag">
-          <el-tag v-for="(item, index) in answerRecordTags"
+          <el-tag v-for="(item, index) in surveyRecordTags"
                   size="small"
                   :key="index">{{item}}</el-tag>
         </div>
@@ -107,8 +106,7 @@ export default {
       courseImg: "",
       courseTeacher: "",
       courseVideo: "",
-      surveyName: "",
-      answerRecordTags: [],
+      surveyRecordTags: [],
       isHasTag: false,
       courseTreeData: [],
       courseTargetData: [],
@@ -116,10 +114,30 @@ export default {
     }
   },
   methods: {
+    // 获取课程 tag 信息
+    getCourseTags() {
+      // await this.MyAxios.get("/api/tag/detail/" + this.courseId)
+      //   .then(function(response) {
+      //     that.tagsData = response.data.data
+      //     for (var index in that.tagsData) {
+      //       that.tagsData[index].value = index
+      //       that.tagsData[index].requirement = [0, 0, 0 ,0 ,0]
+      //       that.tagsData[index].status = false // 状态,用于生成 tip时的状态标识,防止出现闪一下的情况
+      //     }
+      //   })
+      //   .catch(function(error) {
+      //     alert(error.response.data.errmsg)
+      //   })
+    },
+
+
+
+
     // 导出下载
     download() {
       window.open("/pdf/" + this.id)
     },
+    // 获取页面数据
     getData() {
       var that = this
       let MyAxios = axios.create()
@@ -134,22 +152,21 @@ export default {
           that.courseDesc = response.data.data.courseDesc
           that.courseImg = response.data.data.courseImg
           that.courseTeacher = response.data.data.courseTeacher
-          that.surveyName = response.data.data.surveyName
-          that.answerRecordTags = response.data.data.answerRecordTags
-          that.courseTreeData = that.treeData(response.data.data.courseTreeTags)
+          that.surveyRecordTags = response.data.data.surveyRecordTags
+          that.courseTreeData = that.treeData(response.data.data.courseTree)
           that.courseTargetData = that.targetData(
-            response.data.data.courseTreeTags,
+            response.data.data.courseTree,
             true
           )
           that.courseTargetData2 = that.targetData(
-            response.data.data.courseTreeTags,
+            response.data.data.courseTree,
             false
           )
-          if (that.answerRecordTags.length > 0) that.isHasTag = true
+          if (that.surveyRecordTags.length > 0) that.isHasTag = true
         })
         .catch(function(error) {
-          if (error.response.status == 404) location.href = "/404"
-          else alert(error.response.data.errmsg)
+          // if (error.response.status == 404) location.href = "/404"
+          // else alert(error.response.data.errmsg)
         })
     },
     treeData(sourceData) {

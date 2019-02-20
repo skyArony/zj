@@ -45,6 +45,7 @@
           <el-button type="primary"
                      plain
                      @click="submit"
+                     :disabled="isOpen"
                      class="submit">提交</el-button>
         </div>
         <div v-else
@@ -83,6 +84,7 @@ export default {
       MyAxios: axios.create({
         headers: { "Content-Type": "application/json" }
       }),
+      isOpen: true, // 是否开放提交
       courseId: "", // 课程 ID
       courseName: '', // 课程名
       // courseTeacher: '', // 课程教师
@@ -133,7 +135,7 @@ export default {
       }
       let res = []
       for(let key in score) {
-        if (score[key] >= 5) res.push(key)
+        if (score[key] < 5) res.push(key) // 阈值设置为 0.5
       }
       // 发送结果到后台
       let that = this
@@ -285,14 +287,16 @@ export default {
           if (!isMeet) {
             that.$notify({
               title: "提示",
-              message: "题库题数不符合最低要求,请课程管理员添加.",
+              message: "题库题数不符合最低要求,请课程教师添加.",
               type: "info",
-              duration: "2000",
+              duration: "0",
               position: "top-left"
             })
+          } else {
+            that.isOpen = false
+            // 生成问卷
+            that.generateSurvey()
           }
-          // 生成问卷
-          that.generateSurvey()
         })
         .catch(function(error) {
           if (error.response.status == 404) location.href = "/404"

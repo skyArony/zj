@@ -94,6 +94,7 @@
 </template>
 
 <script>
+// TODO 这里的 courseTreeData 和 courseTargetData 是 js 计算得到的,但是接口中有返回数据,后续可以换上,减少 js 的计算
 export default {
   data() {
     return {

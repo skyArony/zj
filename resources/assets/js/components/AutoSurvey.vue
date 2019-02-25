@@ -51,7 +51,7 @@
         <div v-else
              class="complete">
           <img src="/storage/img/complete.svg">
-          <h2>填写完成!</h2>
+          <h2>填写完成，<font style="color:#F44336;font-size:40px;">{{totalScore}}</font> 分！</h2>
           <div>
             <el-button type="info"
                        icon="el-icon-refresh"
@@ -93,6 +93,7 @@ export default {
       isComplete: false, // 是否填写完问卷
       qrcodeVisible: false, // 是否显示二维码分享框
       desc: "填写问卷,定制课程大纲",   // 问卷简介
+      totalScore: 0 // 得分
     }
   },
   computed: {
@@ -128,19 +129,28 @@ export default {
       // 检查得分状态
       let score = {}
       for(let key in this.surveyQuesList) {
+        if (!score.hasOwnProperty(this.surveyQuesList[key].tag_id)) score[this.surveyQuesList[key].tag_id] = 0
         if (this.surveyQuesList[key].status == true) {
-          if (!score.hasOwnProperty(this.surveyQuesList[key].tag_id)) score[this.surveyQuesList[key].tag_id] = 0
           score[this.surveyQuesList[key].tag_id] += parseInt(this.surveyQuesList[key].level)
         }
       }
-      let res = []
+      let resTag = [] // 需要学习的知识点 id
+      let detail = {} // 得分详情
+      let totalScore = 0  // 总得分
+      let tagNum = 0  // 知识点个数
       for(let key in score) {
-        if (score[key] < 5) res.push(key) // 阈值设置为 0.5
+        if (score[key] < 5) resTag.push(key) // 阈值设置为 0.5
+        detail[key] = score[key] * 10
+        totalScore += score[key]
+        tagNum++
       }
+      detail.totalScore = Math.round((totalScore / (tagNum * 10)) * 100)
+      this.totalScore = detail.totalScore
       // 发送结果到后台
       let that = this
       this.MyAxios.post("/api/surveyRecord/" + this.courseId, {
-        tags: res
+        tags: resTag,
+        detail: detail
       })
         .then(function(response) {
           that.isComplete = true

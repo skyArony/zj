@@ -18,6 +18,7 @@ class CreateSurveyRecordsTable extends Migration
             $table->unsignedinteger('creater_id')->comment("问卷填写者");
             $table->unsignedinteger('course_id')->comment("问卷所属课程");
             $table->json('tags')->comment("问卷填写结果 tag 的 id");
+            $table->json('detail')->comment("问卷填写详情");
             $table->foreign('creater_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('course_id')->references('id')->on('courses')->onDelete('cascade');
             $table->timestamps();

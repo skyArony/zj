@@ -21,11 +21,11 @@ class CustomCourseController extends ApiController
 
         $response = $this->getCustomCourse($request);
         $data = json_decode($response->getContent());
-        $surveyName = $data->data->surveyName;
+        $surveyName = "问卷名";
         $courseName = $data->data->courseName;
         $courseTeacher = $data->data->courseTeacher;
-        $courseTree = $this->treeData($data->data->courseTreeTags);
-        $courseTarget = $this->targetData($data->data->courseTreeTags);
+        $courseTree = $this->treeData($data->data->courseTree);
+        $courseTarget = $this->targetData($data->data->courseTree);
 
         $pdf = new TCPDF('P', 'mm', 'A4', true, 'UTF-8', false);
         // 基础信息
@@ -151,6 +151,9 @@ p {
             }
         }
 
+        $courseTreeFilter = $this->treeData($courseTree);
+        $courseTargetFilter = $this->targetData($courseTree);
+
         $data = [
             'courseId' => $courseId,
             'courseName' => $courseName,
@@ -159,6 +162,8 @@ p {
             'courseTeacher' => $courseTeacher,
             'surveyRecordTags' => $tagsArr,
             'courseTree' => $courseTree,
+            'courseTreeFilter' => $courseTreeFilter,
+            'courseTargetFilter' => $courseTargetFilter,
         ];
 
         return self::setResponse($data, 200, 0);
@@ -169,14 +174,14 @@ p {
     {
         $res = [];
         foreach ($data as $key => $value) {
-            if ($value->status) {
+            if ($value['status']) {
                 $children = [];
                 foreach ($value as $key2 => $value2) {
                     if ($key2 != "chapter_name" && $key2 != "status") {
-                        if ($value2->status) {
+                        if ($value2['status']) {
                             $obj2 = [
                                 "id" => $key2,
-                                "label" => $value2->period_title
+                                "label" => $value2['period_title']
                             ];
                             $children[] = $obj2;
                         }
@@ -184,7 +189,7 @@ p {
                 }
                 $res[] = [
                     "id" => $key,
-                    "label" => $value->chapter_name,
+                    "label" => $value['chapter_name'],
                     "children" => $children
                 ];
             }
@@ -197,15 +202,15 @@ p {
     {
         $res = [];
         foreach ($data as $key => $value) {
-            if ($value->status) {
+            if ($value['status']) {
                 $children = [];
                 foreach ($value as $key2 => $value2) {
                     if ($key2 != "chapter_name" && $key2 != "status") {
-                        if ($value2->status) {
+                        if ($value2['status']) {
                             $obj2 = [
                                 "id" => $key2,
-                                "label" => $value2->period_title,
-                                "children" => $value2->claims
+                                "label" => $value2['period_title'],
+                                "children" => $value2['claims']
                             ];
                             $children[] = $obj2;
                         }
@@ -213,7 +218,7 @@ p {
                 }
                 $res[] = [
                     "id" => $key,
-                    "label" => $value->chapter_name,
+                    "label" => $value['chapter_name'],
                     "children" => $children
                 ];
             }

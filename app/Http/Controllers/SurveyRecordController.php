@@ -16,10 +16,11 @@ class SurveyRecordController extends ApiController
         $uid = auth('api')->parseToken()->payload()->get('sub');
         $courseId = $request->courseId;
         $tagIdList = json_encode($request->tags);
+        $detail = json_encode($request->detail);
 
         $SurveyRecord = SurveyRecord::updateOrCreate(
             ['creater_id' => $uid, 'course_id' => $courseId],
-            [ 'tags' => $tagIdList]
+            [ 'tags' => $tagIdList, 'detail' => $detail]
         );
         if ($SurveyRecord) {
             return self::setResponse($SurveyRecord, 200, 0);

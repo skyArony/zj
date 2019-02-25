@@ -30,6 +30,10 @@ Route::group(['middleware' => 'admin.user'], function () {
     Route::view('/admin/teams/member/{teamId}', 'addMember');
     // 首页
     Route::view('/', 'index');
+    // 导出 PDF
+    Route::view('pdfpage/{courseId}', 'pdf');
+    // 导出简化版 PDF
+    Route::view('pdfeasypage/{courseId}', 'pdfEasy');
 });
 
 // 问卷预览和填写页
@@ -37,7 +41,7 @@ Route::view('/survey/{id}', 'survey');
 Route::view('/autosurvey/{courseId}', 'autoSurvey');
 
 // 获取生成的 PDF
-Route::get('pdf/{id}', 'CustomCourseController@getPDF');
+Route::get('pdf/{courseId}', 'CustomCourseController@getPDF');
 
 // 404
 Route::view("404", "404");
@@ -50,3 +54,4 @@ Route::get('/socialite/login/qq', 'SocialiteController@loginQQ');
 // 大学城直接登陆
 Route::view('/worlduc/login', 'worlducLogin');
 Route::get('/loginKeyCheck', "LoginController@loginKeyCheck");
+

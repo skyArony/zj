@@ -33,8 +33,6 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers', 'middleware' => ['jw
     $api->post('/course', 'SpiderController@getCourseInfo');
     // 查看一个用户的所有课程
     $api->get('/user/course', 'CourseController@getAllCourseByUserId');
-    // 获取一门课程的所有 tag (详细)
-    $api->get('/tag/detail/{courseId}', 'TagController@getTagsDetail');
     // 获取 tag
     $api->get('/tag/{courseId}', 'TagController@listTags');
     // 增加 tag 
@@ -71,7 +69,7 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers', 'middleware' => ['jw
     // 获取一个定制化课程的数据
     $api->get('/customCourse/{courseId}', 'CustomCourseController@getCustomCourse');
 
-    
+
     // 获取已经登录的用户信息
     $api->get('/me', 'LoginController@me');
     // 根据用户 ID 返回其创建的所有队伍
@@ -142,5 +140,7 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'], function ($api) {
     $api->get('/question/{courseId}', "QuestionController@getQuestionsByCourseId");
     // 根据课程 ID 查看课程信息
     $api->get('/course/{courseId}', 'CourseController@getCourse');
+    // 获取一门课程的所有 tag (详细)
+    $api->get('/tag/detail/{courseId}', 'TagController@getTagsDetail');
 });
 

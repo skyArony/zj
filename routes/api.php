@@ -56,6 +56,10 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers', 'middleware' => ['jw
     $api->post('/surveyRecord/{courseId}', 'SurveyRecordController@addRecord');
     // 检查一个用户是否填写过某个问卷
     $api->get('/surveyRecord/check/{courseId}', 'SurveyRecordController@checkRecord');
+    // 获取一个用户的所有填写记录
+    $api->get('/surveyRecord', 'SurveyRecordController@getRecord');
+    // 删除一条问卷填写记录
+    $api->delete('/surveyRecord/{surveyId}', 'SurveyRecordController@deleteRecord');
 
 
     // 检查一个用户是否填写过某一个问卷
@@ -112,8 +116,11 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers', 'middleware' => ['jw
     $api->get('/user/tasks', 'TaskController@getTasksByUserId');
     // 获取一个用户参加的所有组的所有研究成果
     $api->get('/user/results', 'ResearchResultsController@getResults');
+
     // 获取一个用户所有填写记录
     $api->get('/user/ansrecs', 'UserController@getAnswerRecord');
+
+
     // 获取一个用户所有的团队
     $api->get('/user/teams', 'UserController@getMyTeams');
     // 退出团队

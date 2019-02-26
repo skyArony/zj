@@ -92,9 +92,9 @@
 
 - 入学测验得分: <font class="red">{{$totalScore}} 分</font>
 
-- **教师寄语**
+<!-- - **教师寄语**
 
-  好好学习,天天向上
+  好好学习,天天向上 -->
 
 - **课程知识点及得分**
 
@@ -186,5 +186,8 @@
   <script src="{{ mix('js/app.js') }}"></script>
   <!-- MARKDOWN -->
   <script src="/js/strapdown/strapdown.js" ></script>
+  <script>
+    alert("使用快捷键『Ctrl + P』, 点击『更改』, 设置为『另存为 PDF』保存即可。")
+  </script>
 </body>
 </html>

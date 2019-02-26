@@ -8,15 +8,22 @@
         </div>
         <div class="courseDetail">
           <div class="targetHeader">
-            <h3 style="margin:0px 20px 0 0;">
+            <h3 style="margin:0px 20px 10px 0;">
               <a :href="courseVideo"
                  target="_blank">{{courseName}}</a>
             </h3>
             <el-button type="primary"
+                       class="export"
                        plain
                        round
                        size="mini"
-                       @click="download">导出个性化课程为 PDF</el-button>
+                       @click="toPDF">导出为 PDF</el-button>
+            <el-button type="primary"
+                       class="export"
+                       plain
+                       round
+                       size="mini"
+                       @click="toPDFEASY">导出为 PDF (简化版)</el-button>
           </div>
           <div>
             <h4 style="margin:15px 0 5px 0">课程介绍:</h4>
@@ -134,9 +141,13 @@ export default {
 
 
 
-    // 导出下载
-    download() {
-      window.open("/pdf/" + this.id)
+    // 导出为 PDF
+    toPDF() {
+      window.open("/pdfpage/" + this.id)
+    },
+    // 导出为 PDF-EASY
+    toPDFEASY() {
+      window.open("/pdfeasypage/" + this.id)
     },
     // 获取页面数据
     getData() {
@@ -448,6 +459,12 @@ ul {
 }
 .targetHeader {
   display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+.export {
+  max-height: 28px;
+  margin: 0 10px 10px 0;
 }
 .el-tree {
   color: #76838f;

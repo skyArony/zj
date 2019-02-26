@@ -186,15 +186,15 @@
                 <use xlink:href="#icon-course"></use>
               </svg>
               &nbsp;我的课程</span>
-            <el-table :data="ansRecData"
+            <el-table :data="surveyRecordList"
                       style="width: 100%">
-              <el-table-column prop="survey"
-                               label="问卷"
-                               min-width="180px">
-              </el-table-column>
               <el-table-column prop="course"
                                label="课程"
                                sortable>
+              </el-table-column>
+              <el-table-column prop="score"
+                               label="得分"
+                               min-width="50px">
               </el-table-column>
               <el-table-column prop="updated_at"
                                label="填写时间"
@@ -208,10 +208,10 @@
                   <div style="display:flex">
                     <el-button size="mini"
                                type="primary"
-                               @click="toCustomCourse(scope.row.id)">查看</el-button>
+                               @click="toCustomCourse(scope.row.course_id)">查看</el-button>
                     <el-button size="mini"
                                type="danger"
-                               @click="deleteAnsRec(scope.row.id, scope.$index)">删除</el-button>
+                               @click="deleteSurRec(scope.row.id, scope.$index)">删除</el-button>
                   </div>
                 </template>
               </el-table-column>
@@ -287,7 +287,7 @@ export default {
       activeName: "mytask",
       taskData: [],
       resData: [],
-      ansRecData: [],
+      surveyRecordList: [],
       teamData: [],
       isEdit: false
     }
@@ -339,9 +339,9 @@ export default {
       // window.open("/#/index/task/" + taskId)
       location.href = "/#/index/result/" + resultId
     },
-    toCustomCourse(customCourseId) {
+    toCustomCourse(courseId) {
       // window.open("/#/index/customCourse/" + customCourseId)
-      location.href = "/#/index/customCourse/" + customCourseId
+      location.href = "/#/index/customCourse/" + courseId
     },
     // 退出课题
     leaveTask(taskId, teamId, index) {
@@ -371,16 +371,16 @@ export default {
       })
     },
     // 删除问卷填写记录
-    deleteAnsRec(id, index) {
+    deleteSurRec(id, index) {
       let that = this
       this.$confirm("确定要删除这个定制课程吗?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
       }).then(() => {
-        this.MyAxios.delete("/api/answerRecord/" + id)
+        this.MyAxios.delete("/api/surveyRecord/" + id)
           .then(function(response) {
-            that.ansRecData.splice(index, 1)
+            that.surveyRecordList.splice(index, 1)
             that.$message({
               type: "success",
               message: "删除课程成功!"
@@ -454,9 +454,9 @@ export default {
     },
     initAnsRec() {
       let that = this
-      this.MyAxios.get("/api/user/ansrecs")
+      this.MyAxios.get("/api/surveyRecord")
         .then(function(response) {
-          that.ansRecData = response.data.data
+          that.surveyRecordList = response.data.data
         })
         .catch(function(error) {
           alert(error.response.data.errmsg)
@@ -475,7 +475,7 @@ export default {
     handleClick(tab, event) {
       if (tab.name == "myresult" && this.resData.length == 0) {
         this.initResults()
-      } else if (tab.name == "myansrec" && this.ansRecData.length == 0) {
+      } else if (tab.name == "myansrec" && this.surveyRecordList.length == 0) {
         this.initAnsRec()
       } else if (tab.name == "myteam" && this.teamData.length == 0) {
         this.initTeam()

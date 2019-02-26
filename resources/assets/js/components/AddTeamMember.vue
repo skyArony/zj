@@ -34,7 +34,7 @@
       </div>
     </div>
     <div class="pannel container">
-      {{teamName}}
+      {{teamName}} <font style="font-size:14px;color:#2196f3;">{{tableData.length}}人</font>
       <el-table :data="tableData"
                 style="width: 100%">
         <el-table-column label="头像"

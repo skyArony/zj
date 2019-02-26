@@ -11,7 +11,7 @@
 <div class="page-content edit-add container-fluid">
     <div class="col-md-12">
         <div id="app">
-            <worlduc-addmember></worlduc-addmember>
+            <worlduc-addteammember></worlduc-addteammember>
         </div>
     </div>
 </div>

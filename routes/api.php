@@ -140,6 +140,21 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers', 'middleware' => ['jw
     $api->delete('/question/{questionId}', "QuestionController@deleteQuestionById");
     // 题库-改题
     $api->put('/question/{questionId}', "QuestionController@updateQuestion");
+
+    // 班级-创建
+    $api->post('/class', "ClassGroupController@create");
+    // 班级-修改
+    $api->patch('/class/{classId}', "ClassGroupController@update");
+    // 班级-获取
+    $api->get('/class/{classId}', "ClassGroupController@show");
+    // 班级-列举一个用户创建的所有班级
+    $api->get('/classList', "ClassGroupController@browse");
+    // 班级-添加成员 [sid: 用户 ID, classId: 课程 ID]
+    $api->post('/class/member', "ClassGroupController@addStudent");
+    // 班级-删除成员 [sid: 用户 ID, classId: 课程 ID]
+    $api->delete('/class/member', "ClassGroupController@removeStudent");
+    // 班级-获取一个班级的所有成员
+    $api->get('/class/member/{classId}', "ClassGroupController@getMemberList");
 });
 
 $api->version('v1', ['namespace' => 'App\Http\Controllers'], function ($api) {

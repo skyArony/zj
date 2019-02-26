@@ -204,8 +204,8 @@
                                                 @endphp
                                                 @include('voyager::bread.partials.actions', ['action' => $action])
                                             @endforeach
-                                            <a href="@php echo "/admin/teams/member/".$data->id; @endphp" class="btn btn-sm btn-primary pull-right edit" style="margin-right:5px">
-                                                <i class="voyager-edit"></i> <span class="hidden-xs hidden-sm">编辑队员</span>
+                                            <a href="@php echo "/admin/class/member/".$data->id; @endphp" class="btn btn-sm btn-primary pull-right edit" style="margin-right:5px">
+                                                <i class="voyager-edit"></i> <span class="hidden-xs hidden-sm">编辑成员</span>
                                             </a>
                                         </td>
                                     </tr>

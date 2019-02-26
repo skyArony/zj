@@ -20,12 +20,12 @@ class Login extends Model
         $myCheck = self::myCheck($email, $pass);
 
         // 大学城崩了的时候
-        // if($myCheck) {
-        //     return [
-        //         "code" => 0,
-        //         'msg' => $thirdCheck['msg']
-        //     ];
-        // }
+        if($myCheck) {
+            return [
+                "code" => 0,
+                'msg' => $thirdCheck['msg'] . " | 大学城崩了,临时放行"
+            ];
+        }
 
         // 通过
         if ($myCheck && $thirdCheck['code'] == 0) {

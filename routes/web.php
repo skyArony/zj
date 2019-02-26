@@ -26,8 +26,10 @@ Route::group(['prefix' => 'admin'], function () {
 
 // 自定义的页要加到认证后的,就加到这个里面
 Route::group(['middleware' => 'admin.user'], function () {
-    // 课程信息页
-    Route::view('/admin/teams/member/{teamId}', 'addMember');
+    // 团队添加成员
+    Route::view('/admin/teams/member/{teamId}', 'addTeamMember');
+    // 班级添加成员
+    Route::view('/admin/class/member/{classId}', 'addClassMember');
     // 首页
     Route::view('/', 'index');
     // 导出 PDF

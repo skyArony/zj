@@ -20,18 +20,19 @@ class Login extends Model
         $myCheck = self::myCheck($email, $pass);
 
         // 大学城崩了的时候
-        if($myCheck) {
-            return [
-                "code" => 0,
-                'msg' => $thirdCheck['msg'] . " | 大学城崩了,临时放行"
-            ];
-        }
+        // if($myCheck) {
+        //     return [
+        //         "code" => 0,
+        //         'msg' => $thirdCheck['msg'] . " | 大学城崩了,临时放行"
+        //     ];
+        // }
 
         // 通过
         if ($myCheck && $thirdCheck['code'] == 0) {
             return [
                 "code" => 0,
-                'msg' => $thirdCheck['msg']
+                'msg' => $thirdCheck['msg'],
+                "isXTU" => $thirdCheck['isXTU']
             ];
         }
         // 用户改了新密码
@@ -141,9 +142,12 @@ class Login extends Model
             // Cookie::queue('id', $resArr['link1']['userid'], null, null, null, false, true);
             // Cookie::queue('role', $user->role_id, null, null, null, false, true);
 
+            // 湘潭大学的学生返回一个额外的字段
+
             return [
                 "code" => 0,
-                "msg" => "success"
+                "msg" => "success",
+                "isXTU" => ($user->org_id == 1315555 && $user->sid == null && $user->role_id == 4) ? true : false
             ];
         } else {
             return [

@@ -117,6 +117,8 @@ if (starts_with(Auth::user()->avatar, 'http://') || starts_with(Auth::user()->av
 
 <!-- Javascript Libs -->
 
+<!-- QRCODE -->
+<script src="/js/qrcode.min.js" ></script>
 <!-- VUE -->
 <script src="{{ mix('js/app.js') }}"></script>
 

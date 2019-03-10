@@ -58,14 +58,9 @@ class User extends \TCG\Voyager\Models\User implements JWTSubject
         return $this->belongsToMany('App\Models\DB\Team', 'team_member', 'student_id', 'team_id');
     }
 
-    // public function hasManyThroughTasks() {
-    //     return $this->hasManyThrough(
-    //         'App\Models\DB\Task',
-    //         'App\Models\DB\Team',
-    //         'creater_id',
-    //         'creater_id',
-    //         'id',
-    //         'id'
-    //     );
-    // }
+    public function belongsToManyClasses()
+    {
+        return $this->belongsToMany('App\Models\DB\ClassGroup', 'class_user', 'user_id', 'class_id');
+    }
+   
 }

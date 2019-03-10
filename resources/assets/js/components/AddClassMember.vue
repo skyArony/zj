@@ -18,6 +18,10 @@
                    icon="el-icon-search"
                    @click="search"></el-button>
       </el-input>
+      <el-button size="medium"
+                 type="primary"
+                 style="margin-left:20px"
+                 @click="showQRCode">扫码加入班级</el-button>
       <div class="search-res">
         <el-card v-for="(item, index) in searchRes"
                  :key="index"
@@ -34,7 +38,8 @@
       </div>
     </div>
     <div class="pannel container">
-      {{className}} <font style="font-size:14px;color:#2196f3;">{{tableData.length}}人</font>
+      {{className}}
+      <font style="font-size:14px;color:#2196f3;">{{tableData.length}}人</font>
       <el-table :data="tableData"
                 style="width: 100%">
         <el-table-column label="头像"
@@ -157,6 +162,29 @@ export default {
     },
     keywordCheck() {
       if (this.keyword == "") this.searchRes = ""
+    },
+    showQRCode() {
+      this.$alert("<div id='qrcode'></div>", "扫码加入班级", {
+        dangerouslyUseHTMLString: true
+      })
+        .then(() => {})
+        .catch(() => {})
+
+      // 这里有必要延时,否则会报错
+      setTimeout(function() {
+        let domain = window.location.href.match(/^(.*?)\/admin\/.*?/)[1]
+        let classId = window.location.href.match(
+          /^.*?\/admin\/class\/member\/(\d+)/
+        )[1]
+        let joinUrl = domain + "/joinclass/" + classId
+        if (document.getElementById("qrcode").innerHTML == "") {
+          let qrcode = new QRCode("qrcode", {
+            width: 350,
+            height: 350
+          })
+          qrcode.makeCode(joinUrl)
+        }
+      }, 50)
     }
   },
   mounted: function() {
@@ -222,6 +250,9 @@ export default {
 <style>
 .el-input-group__prepend {
   background-color: #fff;
+}
+#qrcode img {
+  margin: auto;
 }
 </style>
 

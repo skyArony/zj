@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
-use App\Models\DB\AnswerRecord;
+use App\Models\DB\SurveyRecord;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Cookie;
 
@@ -54,17 +54,18 @@ class UserController extends ApiController
     public function getAnswerRecord() {
         // TODO validate
 
-        $uid = auth('api')->parseToken()->payload()->get('sub');
-        $ansRecs = AnswerRecord::with('belongsToSurvey.belongsToCourse')->where('creater_id', $uid)->get();
-        $ansRecs = $ansRecs->map(function ($item) {
-            $res = [];
-            $res['id'] = $item->id;
-            $res['survey'] = $item->belongsToSurvey->title;
-            $res['course'] = $item->belongsToSurvey->belongsToCourse->name;
-            $res['updated_at'] = date("Y-m-d H:i:s", strtotime($item->updated_at));
-            return $res;
-        });
-        return self::setResponse($ansRecs, 200, 0);
+        // $uid = auth('api')->parseToken()->payload()->get('sub');
+        // $ansRecs = AnswerRecord::with('belongsToSurvey.belongsToCourse')->where('creater_id', $uid)->get();
+        // $ansRecs = $ansRecs->map(function ($item) {
+        //     $res = [];
+        //     $res['id'] = $item->id;
+        //     $res['survey'] = $item->belongsToSurvey->title;
+        //     $res['course'] = $item->belongsToSurvey->belongsToCourse->name;
+        //     $res['updated_at'] = date("Y-m-d H:i:s", strtotime($item->updated_at));
+        //     return $res;
+        // });
+        // return self::setResponse($ansRecs, 200, 0);
+        return self::setResponse(null, 200, 0);
     }
 
     // 获取一个用户参与的所有团队
@@ -112,7 +113,43 @@ class UserController extends ApiController
         }
     }
 
-    // public function test() {
-    //     return self::setResponse($_SERVER, 200, 0);
-    // }
+    public function bindSid(Request $request) {
+        // TODO validate
+
+        $sid = $request->sid;
+        $uid = auth('api')->parseToken()->payload()->get('sub');
+
+        $user = User::find($sid);
+
+        // 如果以学号为 ID 进行查找,发现存在这样的用户,表示曾经以游客方式填过问卷
+        if ($user) {
+            $user = User::find($uid);
+            if (!$user) return self::setResponse(null, 500, -5000);
+            $user->sid = $sid;
+            $user->save();
+
+            // 修改历史问卷记录
+            $surveyRecordList = SurveyRecord::where("creater_id", $sid)->get();
+            foreach ($surveyRecordList as $surveyRecord) {
+                $surveyRecord->creater_id = $uid;
+                $surveyRecord->save();
+            }
+
+            // 修改历史班级加入记录
+            $user = User::find($sid);
+            $classList = $user->belongsToManyClasses;
+            foreach ($classList as $class) {
+                $class->belongsToManyUsers()->syncWithoutDetaching($uid);
+            }
+
+            User::destroy($sid);
+        } else {
+            $user = User::find($uid);
+            if (!$user) return self::setResponse(null, 404, -4005);
+            $user->sid = $sid;
+            $user->save();
+        }
+
+        return self::setResponse(null, 200, 0);
+    }
 }

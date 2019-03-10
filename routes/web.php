@@ -38,8 +38,9 @@ Route::group(['middleware' => 'admin.user'], function () {
     Route::view('pdfeasypage/{courseId}', 'pdfEasy');
 });
 
-// 问卷预览和填写页
-Route::view('/survey/{id}', 'survey');
+// 课堂问卷,选择课程
+Route::view('/classsurvey/{classId}', 'survey');
+// 自动问卷
 Route::view('/autosurvey/{courseId}', 'autoSurvey');
 
 // 获取生成的 PDF
@@ -57,3 +58,8 @@ Route::get('/socialite/login/qq', 'SocialiteController@loginQQ');
 Route::view('/worlduc/login', 'worlducLogin');
 Route::get('/loginKeyCheck', "LoginController@loginKeyCheck");
 
+// 绑定学号
+Route::view('/bindsid', 'bindSid');
+
+// 加入班级
+Route::view('/joinclass/{classId}', 'joinClass');

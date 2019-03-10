@@ -33,6 +33,8 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers', 'middleware' => ['jw
     $api->post('/course', 'SpiderController@getCourseInfo');
     // 查看一个用户的所有课程
     $api->get('/user/course', 'CourseController@getAllCourseByUserId');
+    // 绑定一个用户的学号
+    $api->patch('/bindSid', "UserController@bindSid");
     // 获取 tag
     $api->get('/tag/{courseId}', 'TagController@listTags');
     // 增加 tag 
@@ -52,10 +54,6 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers', 'middleware' => ['jw
     // 查看一个问卷的数据
     $api->get('/survey/{id}', 'SurveyController@getSurvey');
 
-    // 填写问卷[入学, 期中, 期末]
-    $api->post('/surveyRecord/{courseId}', 'SurveyRecordController@addRecord');
-    // 检查一个用户是否填写过某个问卷
-    $api->get('/surveyRecord/check/{courseId}', 'SurveyRecordController@checkRecord');
     // 获取一个用户的所有填写记录
     $api->get('/surveyRecord', 'SurveyRecordController@getRecord');
     // 删除一条问卷填写记录
@@ -164,5 +162,11 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'], function ($api) {
     $api->get('/course/{courseId}', 'CourseController@getCourse');
     // 获取一门课程的所有 tag (详细)
     $api->get('/tag/detail/{courseId}', 'TagController@getTagsDetail');
+    // 填写问卷[入学, 期中, 期末]
+    $api->post('/surveyRecord/{courseId}', 'SurveyRecordController@addRecord');
+    // 检查一个用户是否填写过某个问卷
+    $api->get('/surveyRecord/check/{courseId}', 'SurveyRecordController@checkRecord');
+    // 加入班级
+    $api->post('/joinClass/{classId}', "ClassGroupController@joinClass");
 });
 

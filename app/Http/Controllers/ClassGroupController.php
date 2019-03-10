@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\DB\ClassGroup;
+use App\User;
+use Illuminate\Support\Facades\Hash;
 
 class ClassGroupController extends ApiController
 {
@@ -50,7 +52,11 @@ class ClassGroupController extends ApiController
         $uid = auth('api')->parseToken()->payload()->get('sub');
         $classId = $request->classId;
         $classGroup = ClassGroup::where('creater_id', $uid)->where('id', $classId)->first();
-        return self::setResponse($classGroup, 200, 0);
+        if ($classGroup) {
+            return self::setResponse($classGroup, 200, 0);
+        } else {
+            return self::setResponse(null, 404, -4005);
+        }
     }
 
     // 获取一个用户创建的所有班级
@@ -111,4 +117,43 @@ class ClassGroupController extends ApiController
         return self::setResponse($userList, 200, 0);
     }
 
+    // 加入一个班级
+    public function joinClass(Request $request) {
+        // TODO validate
+
+        $name = $request->name;
+        $sid = $request->sid;
+        $classId = $request->classId;
+
+        $classGroup = ClassGroup::find($classId);
+        if (!$classGroup) return self::setResponse(null, 404, -4005);
+
+        if (auth('api')->check()) {
+            $uid = auth('api')->parseToken()->payload()->get('sub');
+        } else {
+            if ($user = User::where("sid", $sid)->first()) {
+                $uid = $user->id;
+            } else {
+                if (User::find($sid)) {
+                    $uid = $sid;
+                } else {
+                    $uid = $sid;
+                    $user = new User();
+                    $user->email = $sid . "@guest.temp";
+                    $user->id = $sid;
+                    $user->sid = $sid;
+                    $user->avatar = 'http://www.worlduc.com/uploadImage/head/x0/default_1.jpg';
+                    $user->name = $name;
+                    $user->password = Hash::make("guestpass");
+                    $user->org_id = "0000";
+                    $user->org_avatar = 'http://www.worlduc.com/uploadImage/head/x0/default_1.jpg';
+                    $user->role_id = 5;
+                    $user->cookies = '';
+                    $user->save();
+                }
+            }
+        }
+        $classGroup->belongsToManyUsers()->syncWithoutDetaching($uid);
+        return self::setResponse(null, 200, 0);
+    }
 }

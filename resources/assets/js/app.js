@@ -24,7 +24,7 @@ Vue.component('worlduc-questionedit', require('./components/QuestionEdit.vue'));
 Vue.component('worlduc-questionList', require('./components/QuestionList.vue'));
 Vue.component('worlduc-option', require('./components/Option.vue'));
 Vue.component('worlduc-questionDetail', require('./components/QuestionDetail.vue'));
-Vue.component('worlduc-survey', require('./components/Survey.vue'));
+Vue.component('worlduc-survey', require('./components/ClassSurvey.vue'));
 Vue.component('worlduc-question', require('./components/Question.vue'));
 Vue.component('worlduc-customcourse', require('./components/CustomCourse.vue'));
 Vue.component('worlduc-video', require('./components/Index-Video.vue'));
@@ -45,6 +45,8 @@ Vue.component('worlduc-login', require('./components/WorlducLogin.vue'));
 Vue.component('worlduc-request', require('./components/Request.vue'));
 Vue.component('worlduc-questionadd', require('./components/QuestionAdd.vue'));
 Vue.component('worlduc-autosurvey', require('./components/AutoSurvey.vue'));
+Vue.component('worlduc-bindsid', require('./components/BindSid.vue'));
+Vue.component('worlduc-joinclass', require('./components/JoinClass.vue'));
 
 // element ui
 import ElementUI from 'element-ui';

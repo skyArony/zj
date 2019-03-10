@@ -1,67 +1,43 @@
 <template>
   <div class="container">
+    <el-dialog :title="dialogTilte"
+               :visible.sync="qrcodeVisible"
+               width="50%">
+      <div id="qrcode"
+           ref="qrcode">1. 选择课程生成课堂问卷二维码<br/>2. 填写时无需登录,通过学号鉴别身份</div>
+    </el-dialog>
     <div class="main">
       <div class="header">
-        <div id="qrcodeIcon"
-             @click="showQRcode"></div>
-        <div id="copyShareText"
-             :data-clipboard-text="shareText"
-             @click="copyText"></div>
-        <el-card v-show="qrcodeVisible"
-                 id="shareCard"
-                 :body-style="{ padding: '0px' }">
-          <div id="qrcode"
-               ref="qrcode"></div>
-          <div style="padding-top: 15px;">
-            <el-input id="shareText"
-                      type="textarea"
-                      :rows="3"
-                      size="mini"
-                      v-model="shareText">
-            </el-input>
-            <div class="bottom clearfix">
-              <el-button :data-clipboard-text="shareText"
-                         type="primary"
-                         size="mini"
-                         id="copyQRText"
-                         class="button"
-                         @click="copyText">复制</el-button>
-            </div>
-          </div>
-        </el-card>
         <img src="/storage/img/header.jpg" />
         <div class="header-content">
-          <div class="title">{{title}}</div>
-          <div class="desc">{{desc}}</div>
+          <div class="title">{{className}}</div>
+          <div class="desc">选择课程然后生成课堂问卷二维码</div>
         </div>
       </div>
       <div class="body">
-        <div v-if="!isComplete"
-             class="questions">
-          <worlduc-question v-for="item in questions"
-                            :key="item.id"
-                            :question="item"
-                            @setAnswer="setAnswerData"></worlduc-question>
-          <el-button type="primary"
-                     plain
-                     @click="submit"
-                     class="submit">提交</el-button>
+        <div class="content">
+          <el-checkbox class="checkBox box"
+                       v-model="needSid">填写学号</el-checkbox>
+          <el-select v-model="courseId"
+                     class="select"
+                     @change="selectCourse"
+                     placeholder="请选择课程">
+            <el-option v-for="item in courseList"
+                       :key="item.id"
+                       :label="item.name"
+                       :value="item.id">
+            </el-option>
+          </el-select>
+          <el-checkbox class="checkBox"
+                       v-model="needSid"
+                       disabled
+                       checked>填写学号</el-checkbox>
         </div>
-        <div v-else
-             class="complete">
-          <img src="/storage/img/complete.svg">
-          <h2>填写完成!</h2>
-          <div>
-            <el-button type="info"
-                       icon="el-icon-refresh"
-                       round
-                       @click="again">我想再填一次</el-button>
-            <el-button type="success"
-                       icon="el-icon-view"
-                       round
-                       @click="view">查看定制课程</el-button>
-          </div>
-        </div>
+        <el-button type="primary"
+                   plain
+                   @click="submit"
+                   :disabled="isOpen"
+                   class="submit">确定</el-button>
       </div>
       <div class="footer">教学定制化问卷系统 -
         <el-tooltip effect="dark"
@@ -80,137 +56,85 @@ import Clipboard from "clipboard/dist/clipboard"
 export default {
   data() {
     return {
-      title: "",
-      desc: "",
-      questions: [], // 问卷上的问题
-      answer: {},
-      id: "", // 问卷 id
-      isComplete: false, // 是否填写完问卷
-      customCourseId: "", // 填写完成的定制化课程 ID
-      shareText: "填写问卷『』,定制化『』课程大纲.",
-      qrcodeVisible: false // 是否显示分享框
+      MyAxios: axios.create({
+        headers: { "Content-Type": "application/json" }
+      }),
+      classId: "", // 班级 ID
+      courseList: [], // 所有课程
+      className: "", // 班级名
+      courseId: "", // 选择的课程
+      isOpen: true, // 是否可以确定
+      surveyUrl: "", // 课堂问卷路径 url
+      needSid: 1, // 是否需要填写 sid
+      qrcodeVisible: false, // 是否显示二维码框
+      show: "hidden", // dialog 偷偷显示一次,不然显示二维码时会有 bug
+      dialogTilte: "使用提示"
     }
   },
   methods: {
-    copyText() {
-      var clipboard = new Clipboard("#copyQRText")
-      var clipboard = new Clipboard("#copyShareText")
-      this.$notify({
-        title: "成功",
-        message: "成功复制到剪切板!",
-        type: "success",
-        position: "top-left"
-      })
+    // 初始化
+    init() {
+      this.classId = window.location.href.match(/.*\/classsurvey\/(\d+)/)[1]
+      if (!this.classId) location.href = "/404"
+      this.checkClass()
+      this.getCourse()
+      this.qrcodeVisible = true
     },
-    showQRcode(data) {
-      this.qrcodeVisible = !this.qrcodeVisible
-      if (this.$refs.qrcode.childNodes.length == 0) {
-        let qrcode = new QRCode("qrcode", {
-          width: 200,
-          height: 200
-        })
-        qrcode.makeCode(window.location.href)
-      }
-    },
-    setAnswerData(data) {
-      this.answer[data.id] = data
-    },
-    getSurvey() {
-      var that = this
-      let MyAxios = axios.create()
-      // 获取当前问卷的ID
-      this.id = window.location.href.match(/.*\/survey\/(\d+)/)[1]
-      // 获取问卷的数据
-      MyAxios.get("/api/survey/" + this.id)
+    // 检查是否有当前班级
+    checkClass() {
+      let that = this
+      this.MyAxios.get("/api/class/" + this.classId)
         .then(function(response) {
-          that.shareText =
-            "填写问卷「" +
-            response.data.data.title +
-            "」, 定制化「" +
-            response.data.data.course +
-            "」课程大纲.\n" +
-            window.location.href
-          that.title = response.data.data.title
-          that.desc = response.data.data.desc
-          that.questions = JSON.parse(response.data.data.questions)
+          that.className = response.data.data.className
         })
         .catch(function(error) {
-          if (error.response.status == 404) location.href = "/404"
+          if (error.response.data.errcode == -4007) alert("请先登录!")
+          else if (error.response.status == 404) location.href = "/404"
           else alert(error.response.data.errmsg)
         })
-      // 检查是否填写过当前问卷
-      MyAxios.get("/api/answerRecord/" + this.id)
-        .then(function(response) {
-          if (response.data.data) {
-            that.$notify({
-              title: "提示",
-              message: "你填写过本问卷,再次填写将覆盖之前记录!",
-              type: "info",
-              duration: "4000",
-              position: "top-left"
-            })
-          }
-        })
-        .catch(function(error) {
-          if (error.response.data.errcode == -4007) {
-            that.$notify({
-              title: "提示",
-              dangerouslyUseHTMLString: true,
-              message:
-                "你当前没有登录,请 <a href='/admin/login?redirectUrl=" +
-                window.location.href +
-                "'>登录</a> 后再填写,否则可能无法保存!",
-              type: "info",
-              duration: "6000",
-              position: "top-left"
-            })
-          } else alert(error.response.data.errmsg)
-        })
     },
-    submit() {
-      let addTags = []
-      let removeTags = []
-      for (let key in this.answer) {
-        addTags = addTags.concat(this.answer[key]["addTags"])
-        removeTags = removeTags.concat(this.answer[key]["removeTags"])
-      }
-      addTags = Array.from(new Set(addTags))
-      removeTags = Array.from(new Set(removeTags))
-      // 交集
-      let intersection = addTags.filter(v => removeTags.includes(v))
-      // 差集-结果
-      let res = addTags
-        .concat(intersection)
-        .filter(v => !addTags.includes(v) || !intersection.includes(v))
-
-      // 发送结果到后台
+    // 获取当前登陆用户的所有课程
+    getCourse() {
       let that = this
-      let MyAxios = axios.create({
-        headers: { "Content-Type": "application/json" }
-      })
-      MyAxios.post("/api/answerRecord/" + this.id, {
-        tags: res
-      })
+      this.MyAxios.get("/api/user/course")
         .then(function(response) {
-          // 显示结果或跳转;
-          that.customCourseId = response.data.data.id
-          that.isComplete = true
+          that.courseList = response.data.data
         })
         .catch(function(error) {
           if (error.response.data.errcode == -4007) alert("请先登录!")
           else alert(error.response.data.errmsg)
         })
     },
-    again() {
-      this.isComplete = false
+    // 监听选择课程
+    selectCourse(data) {
+      if (data) this.isOpen = false
+      else this.isOpen = true
     },
-    view() {
-      location.href = "/#/index/customCourse/" + this.customCourseId
+    // 确认选择,生成路径 url
+    submit() {
+      this.qrcodeVisible = true
+      this.dialogTilte = "扫面二维码进入课堂问卷"
+      let domain = window.location.href.match(/^(.*?)\/classsurvey\/.*?/)[1]
+      this.surveyUrl =
+        domain +
+        "/autosurvey/" +
+        this.courseId +
+        "?classId=" +
+        this.classId +
+        "&needSid=1"
+      if (this.$refs.qrcode.childNodes.length == 3) {
+        this.$refs.qrcode.innerHTML = ""
+        let qrcode = new QRCode("qrcode", {
+          width: 350,
+          height: 350
+        })
+        qrcode.makeCode(this.surveyUrl)
+      }
     }
   },
   mounted: function() {
-    // 获取问卷数据,检查是否填写过问卷
-    this.getSurvey()
+    // 初始化
+    this.init()
   }
 }
 </script>
@@ -236,6 +160,29 @@ export default {
 }
 #qrcode {
   width: 100%;
+  font-size: 20px;
+  display: flex;
+  justify-content: center;
+}
+.body {
+  display: flex;
+  flex-direction: column;
+}
+.content {
+  width: 80%;
+  display: flex;
+  justify-content: space-around;
+  align-items: baseline;
+  margin: 50px auto 0px auto;
+}
+.select {
+  width: 75%;
+}
+.checkBox {
+  margin-left: 20px;
+}
+.box {
+  visibility: hidden;
 }
 .bottom {
   margin-top: 10px;

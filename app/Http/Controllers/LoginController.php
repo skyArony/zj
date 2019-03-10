@@ -51,6 +51,7 @@ class LoginController extends ApiController
 
         if ($thirdStatus['code'] == 0) {
             // 校验通过，放行
+            if ($thirdStatus['isXTU']) $this->redirectUrl = "/bindsid";
             return $this->sendLoginResponse($request);
         } elseif ($thirdStatus['code'] == -4001) {
             // 用户改过密码，但是还是用旧密码在登录

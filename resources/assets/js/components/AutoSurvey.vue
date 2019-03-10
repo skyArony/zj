@@ -1,5 +1,31 @@
 <template>
   <div class="container">
+    <el-dialog title="填写姓名和学号"
+               :visible.sync="sidInputVisible"
+               :close-on-click-modal="false"
+               :close-on-press-escape="false"
+               :show-close="false"
+               width="300px">
+      <el-form :model="ruleForm"
+               :rules="rules"
+               label-position="top"
+               ref="ruleForm"
+               label-width="100px"
+               class="demo-ruleForm">
+        <el-form-item label="姓名"
+                      prop="name">
+          <el-input v-model="ruleForm.name"></el-input>
+        </el-form-item>
+        <el-form-item label="学号"
+                      prop="sid">
+          <el-input v-model.number="ruleForm.sid"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary"
+                     @click="submitForm('ruleForm')">确认</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
     <div class="main">
       <div class="header">
         <div id="qrcodeIcon"
@@ -51,7 +77,8 @@
         <div v-else
              class="complete">
           <img src="/storage/img/complete.svg">
-          <h2>填写完成，<font style="color:#F44336;font-size:40px;">{{totalScore}}</font> 分！</h2>
+          <h2>填写完成，
+            <font style="color:#F44336;font-size:40px;">{{totalScore}}</font> 分！</h2>
           <div>
             <el-button type="info"
                        icon="el-icon-refresh"
@@ -86,20 +113,41 @@ export default {
       }),
       isOpen: true, // 是否开放提交
       courseId: "", // 课程 ID
-      courseName: '', // 课程名
+      courseName: "", // 课程名
       // courseTeacher: '', // 课程教师
       questionList: [], // 当前课程所有问题
       surveyQuesList: [], // 显示在页面上的问卷题
       isComplete: false, // 是否填写完问卷
       qrcodeVisible: false, // 是否显示二维码分享框
-      desc: "填写问卷,定制课程大纲",   // 问卷简介
-      totalScore: 0 // 得分
+      desc: "填写问卷,定制课程大纲", // 问卷简介
+      totalScore: 0, // 得分
+      needSid: 0, // 是否需要填写学号
+      sidInputVisible: false, // 填学号 dialog 的显示和关闭
+      ruleForm: {
+        name: "", // 姓名
+        sid: "" // 学号
+      }, // 表单中的学号和姓名
+      rules: {
+        name: [{ required: true, message: "姓名必填", trigger: "blur" }],
+        sid: [
+          {
+            required: true,
+            message: "学号必填",
+            trigger: "blur"
+          },
+          {
+            type: "number",
+            message: "学号格式不正确(应该全部为数字)",
+            trigger: "blur"
+          }
+        ]
+      } // 表单规则
     }
   },
   computed: {
     // 分享文字内容
     shareText: function() {
-      return "填写问卷,定制化『" + this.courseName + "』课程大纲.";
+      return "填写问卷,定制化『" + this.courseName + "』课程大纲."
     },
     // 问卷标题
     title: function() {
@@ -111,46 +159,65 @@ export default {
     setAnswerData(data) {
       this.surveyQuesList[data.id].status = data.status
     },
+    // 确认填写学号和姓名
+    submitForm(formName) {
+      this.ruleForm.name = this.ruleForm.name.replace(/\s+/g, "")
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this.sidInputVisible = false
+          this.isFilled()
+          return true
+        } else {
+          return false
+        }
+      })
+    },
     // 提交
     submit() {
       // 检查填写状态
       for (let key in this.surveyQuesList) {
         if (this.surveyQuesList[key].status == null) {
           this.$notify({
-              title: "提示",
-              message: "存在题目没选择答案!",
-              type: "info",
-              duration: "2000",
-              position: "top-left"
+            title: "提示",
+            message: "存在题目没选择答案!",
+            type: "info",
+            duration: "2000",
+            position: "top-left"
           })
           return
         }
       }
       // 检查得分状态
       let score = {}
-      for(let key in this.surveyQuesList) {
-        if (!score.hasOwnProperty(this.surveyQuesList[key].tag_id)) score[this.surveyQuesList[key].tag_id] = 0
+      for (let key in this.surveyQuesList) {
+        if (!score.hasOwnProperty(this.surveyQuesList[key].tag_id))
+          score[this.surveyQuesList[key].tag_id] = 0
         if (this.surveyQuesList[key].status == true) {
-          score[this.surveyQuesList[key].tag_id] += parseInt(this.surveyQuesList[key].level)
+          score[this.surveyQuesList[key].tag_id] += parseInt(
+            this.surveyQuesList[key].level
+          )
         }
       }
       let resTag = [] // 需要学习的知识点 id
       let detail = {} // 得分详情
-      let totalScore = 0  // 总得分
-      let tagNum = 0  // 知识点个数
-      for(let key in score) {
+      let totalScore = 0 // 总得分
+      let tagNum = 0 // 知识点个数
+      for (let key in score) {
         if (score[key] < 5) resTag.push(key) // 阈值设置为 0.5
         detail[key] = score[key] * 10
         totalScore += score[key]
         tagNum++
       }
-      detail.totalScore = Math.round((totalScore / (tagNum * 10)) * 100)
+      detail.totalScore = Math.round(totalScore / (tagNum * 10) * 100)
       this.totalScore = detail.totalScore
       // 发送结果到后台
       let that = this
       this.MyAxios.post("/api/surveyRecord/" + this.courseId, {
         tags: resTag,
-        detail: detail
+        detail: detail,
+        sid: this.ruleForm.sid,
+        name: this.ruleForm.name,
+        isClass: this.needSid
       })
         .then(function(response) {
           that.isComplete = true
@@ -196,16 +263,13 @@ export default {
     // 生成随机问卷
     generateSurvey() {
       let surveyQuesList = {}
-      let quesTypeList = [
-        [1, 2, 3, 4],
-        [5, 2, 3],
-        [5, 4, 1]
-      ]
+      let quesTypeList = [[1, 2, 3, 4], [5, 2, 3], [5, 4, 1]]
       for (let key in this.questionList) {
         let quesType = quesTypeList[Math.round(Math.random() * 10) % 3]
         for (let index in quesType) {
           let questions = this.questionList[key][quesType[index]]
-          let question = questions[Math.round(Math.random() * 10) % questions.length]
+          let question =
+            questions[Math.round(Math.random() * 10) % questions.length]
           surveyQuesList[question.id] = question
         }
       }
@@ -231,7 +295,8 @@ export default {
         let level = this.questionList[key].level
         if (quesCount[tagId] >= 5) {
           if (!questionList.hasOwnProperty(tagId)) questionList[tagId] = {}
-          if (!questionList[tagId].hasOwnProperty(level)) questionList[tagId][level] = []
+          if (!questionList[tagId].hasOwnProperty(level))
+            questionList[tagId][level] = []
           this.questionList[key].status = null
           questionList[tagId][level].push(this.questionList[key])
         }
@@ -243,6 +308,10 @@ export default {
     // 获取课程 Id 和课程名
     getCourseId() {
       this.courseId = window.location.href.match(/.*?\/autosurvey#?\/(\d+)?/)[1]
+      let needSidMatch = window.location.href.match(
+        /.*?\/autosurvey#?\/\d+?\?.*?needSid=(1)?(0)?/
+      )
+      if (needSidMatch) this.needSid = needSidMatch[1]
       if (!this.courseId) location.href = "/404"
       // 获取课程信息
       let that = this
@@ -251,15 +320,24 @@ export default {
           that.courseName = response.data.data.name
         })
         .catch(function(error) {
-          alert(error.response.data.errmsg)
+          if (error.response.status == 404) location.href = "/404"
+          else alert(error.response.data.errmsg)
         })
     },
     // 检查是否填写过问卷
     isFilled() {
       let that = this
-      this.MyAxios.get("/api/surveyRecord/check/" + this.courseId)
+      this.MyAxios.get("/api/surveyRecord/check/" + this.courseId, {
+        params: {
+          sid: this.ruleForm.sid,
+          name: this.ruleForm.name,
+          isClass: this.needSid
+        }
+      })
         .then(function(response) {
-          if (response.data.data) {
+          if (response.data.data == -1) {
+            that.sidInputVisible = true
+          } else if (response.data.data) {
             that.$notify({
               title: "提示",
               message: "你填写过本问卷,再次填写将覆盖之前记录!",
@@ -316,7 +394,7 @@ export default {
     init() {
       // 获取课程 ID,不存在则跳转404
       this.getCourseId()
-      // 检查是否填写过问卷
+      // 检查是否填写过问卷,针对登陆用户身份的检测
       this.isFilled()
       // 获取当前课程的所有数据并自动组卷
       this.getCourseQusetion()

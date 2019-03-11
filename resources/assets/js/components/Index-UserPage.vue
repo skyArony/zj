@@ -77,7 +77,8 @@
           </div>
         </div>
       </div>
-      <div class="detail">
+      <div class="detail"
+           v-if="role == 4">
         <el-tabs v-model="activeName"
                  stretch
                  @tab-click="handleClick">
@@ -289,7 +290,8 @@ export default {
       resData: [],
       surveyRecordList: [],
       teamData: [],
-      isEdit: false
+      isEdit: false,
+      role: ""
     }
   },
   methods: {
@@ -309,11 +311,13 @@ export default {
         // ajax 修改 qq
         this.MyAxios.post("/api/user/bind/qq", {
           qq: this.userInfo.QQ
-        }).catch(function(error) {
-          alert(error.response.data.errmsg)
-        }).then(function() {
-          location.href = "/socialite/bind/qq"
         })
+          .catch(function(error) {
+            alert(error.response.data.errmsg)
+          })
+          .then(function() {
+            location.href = "/socialite/bind/qq"
+          })
       }
       this.isEdit = false
       this.$store.commit("setUserInfo", this.userInfo)
@@ -492,6 +496,12 @@ export default {
     taskSubmitFilter(value, row) {
       if (value == "submit") return row.isSubmit == true
       else if (value == "nosubmit") return row.isSubmit == false
+    },
+    roleDeal() {
+      let token = document.cookie.match(/token=(.*?); /)[1]
+      let yyyy = token.split(".")[1]
+      let arr = JSON.parse(window.atob(yyyy))
+      this.role = arr.role
     }
   },
   computed: {
@@ -501,6 +511,7 @@ export default {
   },
   mounted: function() {
     this.initTask()
+    this.roleDeal()
   },
   activated: function() {
     this.$emit("changePage", "me")

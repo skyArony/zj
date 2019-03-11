@@ -188,6 +188,9 @@
                                             <a href="@php echo route('voyager.dashboard')."/course-trees?courseId=".$data->id; @endphp" title="查看" class="btn btn-sm btn-warning pull-right edit">
                                                 <i class="voyager-eye"></i> <span class="hidden-xs hidden-sm">查看</span>
                                             </a>
+                                            <a target="_blank" href="@php echo "/autosurvey/".$data->id; @endphp"  class="btn btn-sm btn-primary pull-right edit" style="margin-right:5px">
+                                                <i class="voyager-eye"></i> <span class="hidden-xs hidden-sm">问卷</span>
+                                            </a>
                                         </td>
                                     </tr>
                                     @endforeach

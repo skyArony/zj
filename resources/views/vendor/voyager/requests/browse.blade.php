@@ -7,11 +7,16 @@
         <h1 class="page-title">
             <i class="{{ $dataType->icon }}"></i> {{ $dataType->display_name_plural }}
         </h1>
-        @can('add',app($dataType->model_name))
-            <a href="{{ route('voyager.'.$dataType->slug.'.create') }}" class="btn btn-success btn-add-new">
-                <i class="voyager-plus"></i> <span>{{ __('voyager::generic.add_new') }}</span>
-            </a>
-        @endcan
+        @php
+            $role = auth('api')->parseToken()->payload()->get('role');
+        @endphp
+        @if($role != 3)
+            @can('add',app($dataType->model_name))
+                <a href="{{ route('voyager.'.$dataType->slug.'.create') }}" class="btn btn-success btn-add-new">
+                    <i class="voyager-plus"></i> <span>{{ __('voyager::generic.add_new') }}</span>
+                </a>
+            @endcan
+        @endif
         @can('delete',app($dataType->model_name))
             @include('voyager::partials.bulk-delete')
         @endcan
@@ -91,22 +96,23 @@
                                     @php
                                         $uid = auth('api')->parseToken()->payload()->get('sub');
                                         $role = auth('api')->parseToken()->payload()->get('role');
-                                        if ($role == 3 || $role == 4) {
+                                        if ($role == 3) {
                                             for ($i = 0, $len = count($dataTypeContent); $i < $len; $i++) {
-                                                if ($dataTypeContent[$i]->creater_id != $uid) {
-                                                    unset($dataTypeContent[$i]);
-                                                }
-                                                if (isset($_GET['taskId'])) {
+                                                if ($role == 3) {
+                                                    $task = $dataTypeContent[$i]->belongsToTask;
+                                                    if ($task->creater_id != $uid) unset($dataTypeContent[$i]);
+                                                    if (isset($_GET['taskId']) && isset($dataTypeContent[$i])) {
+                                                        if($dataTypeContent[$i]->task_id != $_GET['taskId']) {
+                                                            unset($dataTypeContent[$i]);
+                                                        }  
+                                                    }
+                                                } else if ($role == 4) {
+                                                    if ($dataTypeContent[$i]->creater_id != $uid) unset($dataTypeContent[$i]);
+                                                } else if (isset($_GET['taskId'])) {
                                                     if($dataTypeContent[$i]->task_id != $_GET['taskId']) {
                                                         unset($dataTypeContent[$i]);
-                                                    }                                                    
+                                                    } 
                                                 }
-                                            }
-                                        } else if(isset($_GET['taskId'])) {
-                                            for ($i = 0, $len = count($dataTypeContent); $i < $len; $i++) {
-                                                if($dataTypeContent[$i]->task_id != $_GET['taskId']) {
-                                                    unset($dataTypeContent[$i]);
-                                                }  
                                             }
                                         }
                                     @endphp

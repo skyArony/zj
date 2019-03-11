@@ -136,6 +136,11 @@ export default {
         sid: user.id
       })
         .then(function(response) {
+          let isHas = false
+          for (let index in that.tableData) {
+            if (that.tableData[index].id == user.id) isHas = true
+          }
+          if (isHas) return 0
           that.tableData.push(user)
           that.tableData = Array.from(new Set(that.tableData))
         })

@@ -14,7 +14,8 @@
                  :src="data.teacher.avatar" />
             <div class="teacher-name">{{data.teacher.name}}</div>
           </div>
-          <el-button type="primary"
+          <el-button v-if="role == 4"
+                     type="primary"
                      class="button"
                      size="mini"
                      @click.stop="toAutoSurvey(data.id)"
@@ -60,13 +61,27 @@ export default {
   props: {
     data: Object
   },
+  data() {
+    return {
+      role: ""
+    }
+  },
   methods: {
     toCourse(courseId) {
       this.$router.push({ path: `/index/video/course/${courseId}` })
     },
     toAutoSurvey(courseId) {
       location.href = "/autosurvey/" + courseId
+    },
+    roleDeal() {
+      let token = document.cookie.match(/token=(.*?); /)[1]
+      let yyyy = token.split('.')[1]
+      let arr = JSON.parse(window.atob(yyyy))
+      this.role = arr.role
     }
+  },
+  mounted: function() {
+    this.roleDeal()
   }
 }
 </script>

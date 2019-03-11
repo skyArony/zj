@@ -16,7 +16,8 @@
         <div class="task-info-item submit-end-time">距课题截止:
           <span>{{taskData.submit_end_at}}</span>
         </div>
-        <el-popover placement="bottom"
+        <el-popover v-if="role == 4"
+                    placement="bottom"
                     trigger="hover">
           <el-table :data="teamData"
                     max-height="300">
@@ -96,7 +97,8 @@ export default {
       }),
       taskData: "",
       moreTask: "",
-      teamData: []
+      teamData: [],
+      role: ""
     }
   },
   methods: {
@@ -152,6 +154,12 @@ export default {
         .catch(function(error) {
           alert(error.response.data.errmsg)
         })
+    },
+    roleDeal() {
+      let token = document.cookie.match(/token=(.*?); /)[1]
+      let yyyy = token.split('.')[1]
+      let arr = JSON.parse(window.atob(yyyy))
+      this.role = arr.role
     }
   },
   // 同级页面的切换,在此进行数据的获取
@@ -164,6 +172,7 @@ export default {
     this.$emit("changePage", "task")
     this.taskData = ""
     this.init(this.$route.params.taskId)
+    this.roleDeal()
   }
 }
 </script>

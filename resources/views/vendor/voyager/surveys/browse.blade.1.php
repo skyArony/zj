@@ -87,6 +87,19 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <!-- 过滤 -->
+                                    @php
+                                        $uid = auth('api')->parseToken()->payload()->get('sub');
+                                        $role = auth('api')->parseToken()->payload()->get('role');
+                                        if ($role == 3) {
+                                            for ($i = 0, $len = count($dataTypeContent); $i < $len; $i++) {
+                                                    if ($dataTypeContent[$i]->creater_id != $uid) {
+                                                        unset($dataTypeContent[$i]);
+                                                    }
+                                                }
+                                        }
+                                    @endphp
+                                    <!-- /过滤 -->
                                     @foreach($dataTypeContent as $data)
                                     <tr>
                                         @can('delete',app($dataType->model_name))
@@ -184,7 +197,17 @@
                                             </td>
                                         @endforeach
                                         <td class="no-sort no-click" id="bread-actions">
+                                            <a href="/survey/@php echo $data->id;  @endphp" target="_blank" title="查看" class="btn btn-sm btn-warning pull-right edit">
+                                                <i class="voyager-eye"></i> <span class="hidden-xs hidden-sm">查看</span>
+                                            </a>
+                                            <a href="/admin/answer-records?surveyId=@php echo $data->id;  @endphp" title="查看记录" class="btn btn-sm btn-warning pull-right edit">
+                                                <i class="voyager-eye"></i> <span class="hidden-xs hidden-sm">查看记录</span>
+                                            </a>
                                             @foreach(Voyager::actions() as $action)
+                                                @php
+                                                    if ($action == 'TCG\Voyager\Actions\ViewAction')
+                                                        continue;
+                                                @endphp                                            
                                                 @include('voyager::bread.partials.actions', ['action' => $action])
                                             @endforeach
                                         </td>
@@ -245,7 +268,6 @@
 <link rel="stylesheet" href="{{ voyager_asset('lib/css/responsive.dataTables.min.css') }}">
 @endif
 @stop
-
 
 @section('javascript')
     <!-- DataTables -->

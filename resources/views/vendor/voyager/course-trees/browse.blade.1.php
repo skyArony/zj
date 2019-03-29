@@ -54,7 +54,7 @@
 
 @section('css')
 @if(!$dataType->server_side && config('dashboard.data_tables.responsive'))
-    <link rel="stylesheet" href="{{ voyager_asset('lib/css/responsive.dataTables.min.css') }}">
+<link rel="stylesheet" href="{{ voyager_asset('lib/css/responsive.dataTables.min.css') }}">
 @endif
 @stop
 
@@ -68,9 +68,9 @@
             @if (!$dataType->server_side)
                 var table = $('#dataTable').DataTable({!! json_encode(
                     array_merge([
-                        "order" => $orderColumn,
+                        "order" => [],
                         "language" => __('voyager::datatable'),
-                        "columnDefs" => [['targets' => -1, 'searchable' =>  false, 'orderable' => false]],
+                        "columnDefs" => [['searchable' =>  false, 'targets' => -1 ]],
                     ],
                     config('voyager.dashboard.data_tables', []))
                 , true) !!});
@@ -99,7 +99,6 @@
             $('#delete_modal').modal('show');
         });
     </script>
-    <!-- JS 控制 -->
     <script>
         !(function() {
             var courseId = $("#courseId").val()
@@ -180,5 +179,4 @@
             }
         })
     </script>
-    <!-- /JS 控制 -->    
 @stop

@@ -15,19 +15,5 @@
         <div id="app">
             <worlduc-questionadd></worlduc-questionadd>
         </div>
-
-        <!-- <div class="row">
-            <div class="col-md-3" style="height:200px;background-color:red;max-width:300px"> -->
-                
-                <!-- <div class="panel panel-bordered">
-                    <div class="pannel-body">
-                        <div id="app">
-                            <worlduc-questionadd></worlduc-questionadd>
-                        </div>
-                    </div>
-                </div> -->
-            <!-- </div>
-            <div class="col-md-9"  style="height:200px;background-color:blue;"></div>
-        </div> -->
     </div>
 @stop

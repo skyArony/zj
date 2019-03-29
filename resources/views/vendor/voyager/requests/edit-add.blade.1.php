@@ -53,20 +53,21 @@
                             @foreach($dataTypeRows as $row)
                                 <!-- GET THE DISPLAY OPTIONS -->
                                 @php
-                                    $display_options = isset($row->details->display) ? $row->details->display : NULL;
+                                    $options = json_decode($row->details);
+                                    $display_options = isset($options->display) ? $options->display : NULL;
                                 @endphp
-                                @if (isset($row->details->legend) && isset($row->details->legend->text))
-                                    <legend class="text-{{isset($row->details->legend->align) ? $row->details->legend->align : 'center'}}" style="background-color: {{isset($row->details->legend->bgcolor) ? $row->details->legend->bgcolor : '#f0f0f0'}};padding: 5px;">{{$row->details->legend->text}}</legend>
+                                @if ($options && isset($options->legend) && isset($options->legend->text))
+                                    <legend class="text-{{$options->legend->align or 'center'}}" style="background-color: {{$options->legend->bgcolor or '#f0f0f0'}};padding: 5px;">{{$options->legend->text}}</legend>
                                 @endif
-                                @if (isset($row->details->formfields_custom))
-                                    @include('voyager::formfields.custom.' . $row->details->formfields_custom)
+                                @if ($options && isset($options->formfields_custom))
+                                    @include('voyager::formfields.custom.' . $options->formfields_custom)
                                 @else
-                                    <div class="form-group @if($row->type == 'hidden') hidden @endif col-md-{{ isset($display_options->width) ? $display_options->width : 12 }}" @if(isset($display_options->id)){{ "id=$display_options->id" }}@endif>
+                                    <div class="form-group @if($row->type == 'hidden') hidden @endif col-md-{{ $display_options->width or 12 }}" @if(isset($display_options->id)){{ "id=$display_options->id" }}@endif>
                                         {{ $row->slugify }}
                                         <label for="name">{{ $row->display_name }}</label>
                                         @include('voyager::multilingual.input-hidden-bread-edit-add')
                                         @if($row->type == 'relationship')
-                                            @include('voyager::formfields.relationship', ['options' => $row->details])
+                                            @include('voyager::formfields.relationship')
                                         @else
                                             {!! app('voyager')->formField($row, $dataType, $dataTypeContent) !!}
                                         @endif
@@ -115,7 +116,8 @@
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">{{ __('voyager::generic.cancel') }}</button>
-                    <button type="button" class="btn btn-danger" id="confirm_delete">{{ __('voyager::generic.delete_confirm') }}</button>
+                    <button type="button" class="btn btn-danger" id="confirm_delete">{{ __('voyager::generic.delete_confirm') }}
+                    </button>
                 </div>
             </div>
         </div>
@@ -125,26 +127,8 @@
 
 @section('javascript')
     <script>
-        var params = {};
-        var $file;
-
-        function deleteHandler(tag, isMulti) {
-          return function() {
-            $file = $(this).siblings(tag);
-
-            params = {
-                slug:   '{{ $dataType->slug }}',
-                filename:  $file.data('file-name'),
-                id:     $file.data('id'),
-                field:  $file.parent().data('field-name'),
-                multi: isMulti,
-                _token: '{{ csrf_token() }}'
-            }
-
-            $('.confirm_delete_name').text(params.filename);
-            $('#confirm_delete_modal').modal('show');
-          };
-        }
+        var params = {}
+        var $image
 
         $('document').ready(function () {
             $('.toggleswitch').bootstrapToggle();
@@ -166,10 +150,21 @@
                 $(el).slugify();
             });
 
-            $('.form-group').on('click', '.remove-multi-image', deleteHandler('img', true));
-            $('.form-group').on('click', '.remove-single-image', deleteHandler('img', false));
-            $('.form-group').on('click', '.remove-multi-file', deleteHandler('a', true));
-            $('.form-group').on('click', '.remove-single-file', deleteHandler('a', false));
+            $('.form-group').on('click', '.remove-multi-image', function (e) {
+                e.preventDefault();
+                $image = $(this).siblings('img');
+
+                params = {
+                    slug:   '{{ $dataType->slug }}',
+                    image:  $image.data('image'),
+                    id:     $image.data('id'),
+                    field:  $image.parent().data('field-name'),
+                    _token: '{{ csrf_token() }}'
+                }
+
+                $('.confirm_delete_name').text($image.data('image'));
+                $('#confirm_delete_modal').modal('show');
+            });
 
             $('#confirm_delete').on('click', function(){
                 $.post('{{ route('voyager.media.remove') }}', params, function (response) {
@@ -179,9 +174,9 @@
                         && response.data.status == 200 ) {
 
                         toastr.success(response.data.message);
-                        $file.parent().fadeOut(300, function() { $(this).remove(); })
+                        $image.parent().fadeOut(300, function() { $(this).remove(); })
                     } else {
-                        toastr.error("Error removing file.");
+                        toastr.error("Error removing image.");
                     }
                 });
 
@@ -190,7 +185,6 @@
             $('[data-toggle="tooltip"]').tooltip();
         });
     </script>
-    <!-- JS 控制 -->
     <script>
         $(document).ready(function () {
             // select 的选项设置
@@ -235,7 +229,7 @@
                 // var type = window.location.href.match(/.*?research-results(?:\/\d)?\/(edit|create)/)[1]
                 if (teamId) {
                     $.ajax({
-                        url : '/api/task/submit',
+                        url : '/api/task/request',
                         data: {
                             teamId: teamId
                         },
@@ -263,5 +257,4 @@
             })
         }) 
     </script>
-    <!-- /JS 控制 -->
 @stop

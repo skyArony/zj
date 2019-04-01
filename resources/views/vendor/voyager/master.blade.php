@@ -125,7 +125,7 @@ if (starts_with(Auth::user()->avatar, 'http://') || starts_with(Auth::user()->av
 <script type="text/javascript" src="{{ voyager_asset('js/app.js') }}"></script>
 <script type="text/javascript" src="/js/moment-with-locales.js"></script>
 <script>
-    // moment.locale("zh-cn");
+    moment.locale("zh-cn");         // 设置日期选择器为中文
 </script>
 <script type="text/javascript" src="/js/bootstrap-datetimepicker.min.js"></script>
 

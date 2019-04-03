@@ -115,7 +115,9 @@ export default {
           that.teamData = teams
         })
         .catch(function(error) {
-          alert(error.response.data.errmsg)
+          if (error.response.data.errcode != -5000) {
+            alert(error.response.data.errmsg)
+          }
         })
       // 获取 task 详细数据
       this.MyAxios.get("/api/task/" + taskId)
@@ -157,10 +159,12 @@ export default {
         })
     },
     roleDeal() {
-      let yyy = document.cookie.match(/token=(\w+)\.(\w+)\.(\w+)/)[2]
-      let arr = JSON.parse(window.atob(yyy))
-      console.log(arr)
-      this.role = arr.role
+      let tokenPreg = document.cookie.match(/token=(\w+)\.(\w+)\.(\w+)/)
+      if (tokenPreg) {
+        let yyy = tokenPreg[2]
+        let arr = JSON.parse(window.atob(yyy))
+        this.role = arr.role
+      }
     }
   },
   // 同级页面的切换,在此进行数据的获取

@@ -11,11 +11,6 @@
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
-
-
 Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();
     // 覆盖了原先的登录，添加了自定义的本身认证
@@ -30,24 +25,23 @@ Route::group(['middleware' => 'admin.user'], function () {
     Route::view('/admin/teams/member/{teamId}', 'addTeamMember');
     // 班级添加成员
     Route::view('/admin/class/member/{classId}', 'addClassMember');
-    // 首页
-    Route::view('/', 'index');
     // 导出 PDF
     Route::view('pdfpage/{courseId}', 'pdf');
     // 导出简化版 PDF
     Route::view('pdfeasypage/{courseId}', 'pdfEasy');
 });
 
+
+// 首页
+Route::view('/', 'index');
+
+// 404
+Route::view("404", "404");
+
 // 课堂问卷,选择课程
 Route::view('/classsurvey/{classId}', 'survey');
 // 自动问卷
 Route::view('/autosurvey/{courseId}', 'autoSurvey');
-
-// 获取生成的 PDF
-Route::get('pdf/{courseId}', 'CustomCourseController@getPDF');
-
-// 404
-Route::view("404", "404");
 
 // QQ 登陆
 Route::get('/socialite/callback', 'SocialiteController@callback');

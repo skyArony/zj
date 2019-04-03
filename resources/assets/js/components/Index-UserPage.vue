@@ -1,5 +1,5 @@
 <template>
-  <div class="page">
+  <div class="page" v-if="userInfo.avatar">
     <div class="page-content">
       <div class="user">
         <img :src="userInfo.avatar"
@@ -332,7 +332,9 @@ export default {
           that.taskData = response.data.data
         })
         .catch(function(error) {
-          alert(error.response.data.errmsg)
+          if (error.response.data.errcode != -5000) {
+            alert(error.response.data.errmsg)
+          }
         })
     },
     toTask(taskId) {
@@ -498,9 +500,12 @@ export default {
       else if (value == "nosubmit") return row.isSubmit == false
     },
     roleDeal() {
-      let yyy = document.cookie.match(/token=(\w+)\.(\w+)\.(\w+)/)[2]
-      let arr = JSON.parse(window.atob(yyy))
-      this.role = arr.role
+      let tokenPreg = document.cookie.match(/token=(\w+)\.(\w+)\.(\w+)/)
+      if (tokenPreg) {
+        let yyy = tokenPreg[2]
+        let arr = JSON.parse(window.atob(yyy))
+        this.role = arr.role
+      }
     }
   },
   computed: {

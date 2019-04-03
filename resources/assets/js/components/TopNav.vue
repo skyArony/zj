@@ -47,7 +47,7 @@ export default {
           that.userImg = response.data.data.avatar
         })
         .catch(function(error) {
-          if (error.response.data.errcode == -4007) {
+          if (error.response.data.errcode == -5000) {
             that.userName = "游客"
             that.userImg = "/storage/img/nologin.jpg"
           } else alert(error.response.data.errmsg)

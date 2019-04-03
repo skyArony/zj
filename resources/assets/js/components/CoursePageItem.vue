@@ -74,9 +74,12 @@ export default {
       location.href = "/autosurvey/" + courseId
     },
     roleDeal() {
-      let yyy = document.cookie.match(/token=(\w+)\.(\w+)\.(\w+)/)[2]
-      let arr = JSON.parse(window.atob(yyy))
-      this.role = arr.role
+      let tokenPreg = document.cookie.match(/token=(\w+)\.(\w+)\.(\w+)/)
+      if (tokenPreg) {
+        let yyy = tokenPreg[2]
+        let arr = JSON.parse(window.atob(yyy))
+        this.role = arr.role
+      }
     }
   },
   mounted: function() {

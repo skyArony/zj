@@ -149,19 +149,6 @@ export default {
             else alert(error.response.data.errmsg)
           })
       }
-
-      // 3. 个人信息
-      MyAxios.get("/api/me")
-        .then(function(response) {
-          that.userName = response.data.data.name
-          that.userImg = response.data.data.avatar
-        })
-        .catch(function(error) {
-          if (error.response.data.errcode == -4007) {
-            that.userName = "游客"
-            that.userImg = "/storage/img/nologin.jpg"
-          } else alert(error.response.data.errmsg)
-        })
     },
     customCourseTreeDataDeal(sourceData) {
       let res = []

@@ -193,20 +193,16 @@
                                         <td class="no-sort no-click" id="bread-actions">
                                         <!-- 行为 -->
                                             @foreach(Voyager::actions() as $action)
-                                                @php
-                                                    if ($action == 'TCG\Voyager\Actions\ViewAction')
-                                                        continue;
-                                                @endphp                                            
                                                 @include('voyager::bread.partials.actions', ['action' => $action])
                                             @endforeach
-                                            <a target="_blank" href="@php echo "/#/index/task/".$data->id; @endphp" title="详情" class="btn btn-sm btn-warning pull-right edit">
-                                                <i class="voyager-eye"></i> <span class="hidden-xs hidden-sm">详情</span>
+                                            <a target="_blank" href="@php echo "/#/index/task/".$data->id; @endphp" title="查看" class="btn btn-sm btn-warning pull-right edit">
+                                                <i class="voyager-eye"></i> <span class="hidden-xs hidden-sm">查看</span>
                                             </a>
                                             <a href="/admin/research-results?taskId=@php echo $data->id;  @endphp" title="成果" class="btn btn-sm btn-warning pull-right edit">
                                                 <i class="voyager-eye"></i> <span class="hidden-xs hidden-sm">成果</span>
                                             </a>
-                                            <a href="/admin/requests?taskId=@php echo $data->id;  @endphp" title="申请" class="btn btn-sm btn-warning pull-right edit">
-                                                <i class="voyager-eye"></i> <span class="hidden-xs hidden-sm">申请</span>
+                                            <a href="/admin/requests?taskId=@php echo $data->id;  @endphp" title="申请书" class="btn btn-sm btn-warning pull-right edit">
+                                                <i class="voyager-eye"></i> <span class="hidden-xs hidden-sm">申请书</span>
                                             </a>
                                         <!-- /行为 -->
                                         </td>

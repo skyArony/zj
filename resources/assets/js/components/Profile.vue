@@ -6,7 +6,11 @@
                  round>身份: {{role}}</el-button>
       <el-button type="primary"
                  round
+                 @click="toIndex">主页</el-button>
+      <el-button type="primary"
+                 round
                  @click="toWorlduc">我的大学城</el-button>
+      
       <el-button type="info"
                  round
                  @click="mailToAdmin">反馈问题</el-button>
@@ -109,6 +113,9 @@ export default {
     toWorlduc() {
       location.href =
         "http://worlduc.com/SpaceShow/Index.aspx?uid=" + this.userId
+    },
+    toIndex() {
+      location.href = "/#/index/me"
     },
     mailToAdmin() {
       location.href = "mailto:sky.arony@qq.com"

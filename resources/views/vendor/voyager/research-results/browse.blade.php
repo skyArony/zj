@@ -91,23 +91,21 @@
                                     @php
                                         $uid = auth('api')->parseToken()->payload()->get('sub');
                                         $role = auth('api')->parseToken()->payload()->get('role');
-                                        if ($role == 3) {
-                                            for ($i = 0, $len = count($dataTypeContent); $i < $len; $i++) {
-                                                if ($role == 3) {
-                                                    $task = $dataTypeContent[$i]->belongsToTask;
-                                                    if ($task->creater_id != $uid) unset($dataTypeContent[$i]);
-                                                    if (isset($_GET['taskId']) && isset($dataTypeContent[$i])) {
-                                                        if($dataTypeContent[$i]->task_id != $_GET['taskId']) {
-                                                            unset($dataTypeContent[$i]);
-                                                        }  
-                                                    }
-                                                } else if ($role == 4) {
-                                                    if ($dataTypeContent[$i]->creater_id != $uid) unset($dataTypeContent[$i]);
-                                                } else if (isset($_GET['taskId'])) {
+                                        for ($i = 0, $len = count($dataTypeContent); $i < $len; $i++) {
+                                            if ($role == 3) {
+                                                $task = $dataTypeContent[$i]->belongsToTask;
+                                                if ($task->creater_id != $uid) unset($dataTypeContent[$i]);
+                                                if (isset($_GET['taskId']) && isset($dataTypeContent[$i])) {
                                                     if($dataTypeContent[$i]->task_id != $_GET['taskId']) {
                                                         unset($dataTypeContent[$i]);
                                                     }  
                                                 }
+                                            } else if ($role == 4) {
+                                                if ($dataTypeContent[$i]->creater_id != $uid) unset($dataTypeContent[$i]);
+                                            } else if (isset($_GET['taskId'])) {
+                                                if($dataTypeContent[$i]->task_id != $_GET['taskId']) {
+                                                    unset($dataTypeContent[$i]);
+                                                }  
                                             }
                                         }
                                     @endphp

@@ -12,6 +12,15 @@
         {{ __('voyager::generic.'.(!is_null($dataTypeContent->getKey()) ? 'edit' : 'add')).' '.$dataType->display_name_singular }}
     </h1>
     @include('voyager::multilingual.language-selector')
+    <!-- 权限检查 -->
+        @php
+            $role = auth('api')->parseToken()->payload()->get('role');
+            if (!is_null($dataTypeContent->getKey()) && ($role == 3 || $role == 4)) {
+                $creater_id = auth('api')->parseToken()->payload()->get('sub');
+                if ($creater_id != $dataTypeContent->creater_id) header("location:/admin/research-results/");
+            }
+        @endphp
+    <!-- /权限检查 -->
 @stop
 
 @section('content')

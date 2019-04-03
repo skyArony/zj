@@ -6,8 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 // 课题申请
 class Request extends Model
-{
-    //
+{   
     protected $table = 'requests';
 
     public function setCreaterIdAttribute($value)

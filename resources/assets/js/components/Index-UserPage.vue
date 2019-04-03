@@ -498,9 +498,8 @@ export default {
       else if (value == "nosubmit") return row.isSubmit == false
     },
     roleDeal() {
-      let token = document.cookie.match(/token=(.*?); /)[1]
-      let yyyy = token.split(".")[1]
-      let arr = JSON.parse(window.atob(yyyy))
+      let yyy = document.cookie.match(/token=(\w+)\.(\w+)\.(\w+)/)[2]
+      let arr = JSON.parse(window.atob(yyy))
       this.role = arr.role
     }
   },

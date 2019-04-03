@@ -149,6 +149,7 @@ export default {
         teamId: teamId
       })
         .then(function(response) {
+          alert("报名成功,请在「申请截止」时间之前,前往后台提交开题申请!")
           that.teamData[index].isSign = true
         })
         .catch(function(error) {
@@ -156,9 +157,9 @@ export default {
         })
     },
     roleDeal() {
-      let token = document.cookie.match(/token=(.*?); /)[1]
-      let yyyy = token.split('.')[1]
-      let arr = JSON.parse(window.atob(yyyy))
+      let yyy = document.cookie.match(/token=(\w+)\.(\w+)\.(\w+)/)[2]
+      let arr = JSON.parse(window.atob(yyy))
+      console.log(arr)
       this.role = arr.role
     }
   },

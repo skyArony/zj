@@ -124,8 +124,7 @@ export default {
   },
   mounted: function() {
     // 基础数据获取
-    let cookie = document.cookie
-    let yyy = cookie.match(/token=(.*?)\.(.*?)\.(.*?);?/)[2]
+    let yyy = document.cookie.match(/token=(\w+)\.(\w+)\.(\w+)/)[2]
     this.sub = JSON.parse(window.atob(yyy)).sub
     this.id = window.location.href.match(/.*\/requests\/(\d+)#?/)[1]
     this.init()

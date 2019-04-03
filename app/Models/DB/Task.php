@@ -3,15 +3,11 @@
 namespace App\Models\DB;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cookie;
 
 // 课题
 class Task extends Model
 {
-    use SoftDeletes;
-    
-    protected $dates = ['deleted_at'];
     protected $table = 'tasks';
     
     public function setCreaterIdAttribute($value)

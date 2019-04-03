@@ -21,7 +21,6 @@ class CreateTeamsTable extends Migration
             $table->string('avatar')->coment("队头像");
             $table->foreign('creater_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
-            $table->softDeletesTz();
         });
     }
 

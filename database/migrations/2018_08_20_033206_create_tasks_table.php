@@ -26,7 +26,6 @@ class CreateTasksTable extends Migration
             $table->timestamp('submit_end_at')->coment("成果提交终止时间");
             $table->foreign('creater_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
-            $table->softDeletesTz();
         });
     }
 

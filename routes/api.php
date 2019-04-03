@@ -47,25 +47,11 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers', 'middleware' => ['jw
     $api->get('/courseTree/{courseId}', 'CourseTreeController@getCourseTree');
     // 更新课程树 
     $api->put('/courseTree/{courseId}', 'CourseTreeController@setCourseTree');
-    // 新建问卷
-    $api->post('/survey', 'SurveyController@addSurvey');
-    // 修改问卷
-    $api->put('/survey', 'SurveyController@updateSurvey');
-    // 查看一个问卷的数据
-    $api->get('/survey/{id}', 'SurveyController@getSurvey');
 
     // 获取一个用户的所有填写记录
     $api->get('/surveyRecord', 'SurveyRecordController@getRecord');
     // 删除一条问卷填写记录
     $api->delete('/surveyRecord/{surveyId}', 'SurveyRecordController@deleteRecord');
-
-
-    // 检查一个用户是否填写过某一个问卷
-    $api->get('/answerRecord/{surveyId}', 'AnswerRecordController@checkRecord');
-    // 填写一个问卷,记录结果
-    $api->post('/answerRecord/{surveyId}', 'AnswerRecordController@addRecord');
-    // 删除一个问卷填写记录
-    $api->delete('/answerRecord/{surveyId}', 'AnswerRecordController@delete');
 
 
     // 获取一个定制化课程的数据
@@ -115,8 +101,6 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers', 'middleware' => ['jw
     // 获取一个用户参加的所有组的所有研究成果
     $api->get('/user/results', 'ResearchResultsController@getResults');
 
-    // 获取一个用户所有填写记录
-    $api->get('/user/ansrecs', 'UserController@getAnswerRecord');
 
 
     // 获取一个用户所有的团队

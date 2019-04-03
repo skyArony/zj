@@ -4,6 +4,7 @@ namespace App\Models\DB;
 
 use Illuminate\Database\Eloquent\Model;
 
+// QQ 绑定
 class QQ extends Model
 {
   protected $table = 'user_qq';

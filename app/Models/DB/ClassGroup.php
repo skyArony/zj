@@ -4,6 +4,7 @@ namespace App\Models\DB;
 
 use Illuminate\Database\Eloquent\Model;
 
+// 班级
 class ClassGroup extends Model
 {
     //

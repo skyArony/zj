@@ -19,7 +19,7 @@ window.Vue = require('vue');
 Vue.component('example-component', require('./components/ExampleComponent.vue'));
 Vue.component('worlduc-coursetree', require('./components/CourseTree.vue'));
 Vue.component('worlduc-coursetag', require('./components/CourseTag.vue'));
-Vue.component('worlduc-surveyedit', require('./components/SurveyEdit.vue'));
+// Vue.component('worlduc-surveyedit', require('./components/SurveyEdit.vue'));
 Vue.component('worlduc-questionedit', require('./components/QuestionEdit.vue'));
 Vue.component('worlduc-questionList', require('./components/QuestionList.vue'));
 Vue.component('worlduc-option', require('./components/Option.vue'));

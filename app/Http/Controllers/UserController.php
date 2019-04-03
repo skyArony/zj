@@ -49,24 +49,6 @@ class UserController extends ApiController
             return self::setResponse(null, 404, -4005);
         }
     }
-    
-    // 获取一个用户的问卷填写记录
-    public function getAnswerRecord() {
-        // TODO validate
-
-        // $uid = auth('api')->parseToken()->payload()->get('sub');
-        // $ansRecs = AnswerRecord::with('belongsToSurvey.belongsToCourse')->where('creater_id', $uid)->get();
-        // $ansRecs = $ansRecs->map(function ($item) {
-        //     $res = [];
-        //     $res['id'] = $item->id;
-        //     $res['survey'] = $item->belongsToSurvey->title;
-        //     $res['course'] = $item->belongsToSurvey->belongsToCourse->name;
-        //     $res['updated_at'] = date("Y-m-d H:i:s", strtotime($item->updated_at));
-        //     return $res;
-        // });
-        // return self::setResponse($ansRecs, 200, 0);
-        return self::setResponse(null, 200, 0);
-    }
 
     // 获取一个用户参与的所有团队
     public function getMyTeams() {

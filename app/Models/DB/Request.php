@@ -4,11 +4,11 @@ namespace App\Models\DB;
 
 use Illuminate\Database\Eloquent\Model;
 
+// 课题申请
 class Request extends Model
 {
     //
     protected $table = 'requests';
-    // protected $fillable = ['survey_id', 'desc', 'isMulti', 'option'];
 
     public function setCreaterIdAttribute($value)
     {

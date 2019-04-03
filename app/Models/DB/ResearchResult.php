@@ -5,6 +5,7 @@ namespace App\Models\DB;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cookie;
 
+// 研究成果
 class ResearchResult extends Model
 {
     protected $table = 'research_results';

@@ -134,6 +134,8 @@
             var regist_end_at = $('[name="regist_end_at"]').val()
             var request_end_at = $('[name="request_end_at"]').val()
             var submit_end_at = $('[name="submit_end_at"]').val()
+            title = title.replace(/\s/g, '');
+            desc = desc.replace(/\s/g, '');
             detail = detail.replace(/<br.*?>/g, '');
             detail = detail.replace(/&nbsp;/g, '');
             detail = detail.replace(/<p>\s*<\/p>/g, '');

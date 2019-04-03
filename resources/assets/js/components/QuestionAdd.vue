@@ -329,7 +329,7 @@ export default {
       let ques = this.edittingQuestion
       let that = this
       if (
-        ques.title != "" &&
+        ques.title.replace(/\s/g, '') != "" &&
         ques.options != {} &&
         (ques.type == "radio" || ques.type == "multi") &&
         ques.tagId != "" &&
@@ -450,13 +450,16 @@ export default {
     },
     // 添加一个新的选项
     newOptionInputConfirm() {
-      if (this.newOption) {
+      let newOption = this.newOption.replace(/\s/g, '')
+      if (newOption) {
         this.edittingQuestion.options[
           Math.random()
             .toString(36)
             .substr(2)
         ] = this.newOption
         this.newOption = ""
+      } else {
+        this.newOption = ''
       }
     },
     // 删除一个新的选项

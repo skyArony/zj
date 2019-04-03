@@ -12,7 +12,7 @@
     <link rel="shortcut icon" href="{{ voyager_asset('images/logo-icon.png') }}" type="image/x-icon">
 
     <!-- datatimepicker -->
-    <link rel="stylesheet" href="/css/bootstrap-datetimepicker.min.css">
+    <link href="https://cdn.bootcss.com/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
 
     <!-- App CSS -->
     <link rel="stylesheet" href="{{ voyager_asset('css/app.css') }}">
@@ -123,11 +123,12 @@ if (starts_with(Auth::user()->avatar, 'http://') || starts_with(Auth::user()->av
 <script src="{{ mix('js/app.js') }}"></script>
 
 <script type="text/javascript" src="{{ voyager_asset('js/app.js') }}"></script>
-<script type="text/javascript" src="/js/moment-with-locales.js"></script>
+<script src="https://cdn.bootcss.com/moment.js/2.24.0/moment.min.js"></script>
+<script src="https://cdn.bootcss.com/moment.js/2.24.0/locale/zh-cn.js"></script>
 <script>
     moment.locale("zh-cn");         // 设置日期选择器为中文
 </script>
-<script type="text/javascript" src="/js/bootstrap-datetimepicker.min.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
 
 
 <script>

@@ -81,7 +81,7 @@
                         </div><!-- panel-body -->
 
                         <div class="panel-footer">
-                            <button type="submit" class="btn btn-primary save">{{ __('voyager::generic.save') }}</button>
+                            <button type="submit" onclick="check(event);" class="btn btn-primary save">{{ __('voyager::generic.save') }}</button>
                         </div>
                     </form>
 
@@ -128,20 +128,12 @@
         // 表单内容检查
         function check(event) {
             // 空字段检查
-            var team_id = $('[name="team_id"]').val()
-            var task_id = $('[name="task_id"]').val()
-            var title = $('[name="title"]').val()
-            var desc = $('[name="desc"]').val()
-            var detail = $('#richtextdetail_ifr').contents().find("#tinymce").html()
-            team_id = team_id.replace(/\s/g, '');
-            task_id = task_id.replace(/\s/g, '');
-            title = title.replace(/\s/g, '');
-            desc = desc.replace(/\s/g, '');
-            detail = detail.replace(/<br.*?>/g, '');
-            detail = detail.replace(/&nbsp;/g, '');
-            detail = detail.replace(/<p>\s*<\/p>/g, '');
-            if (!team_id || !task_id || !title || !desc || !detail) {
-                alert("除附件外,其他字段都为必填,且不能为空白符!")
+            var team_name = $('[name="team_name"]').val()
+            var team_desc = $('[name="team_desc"]').val()
+            team_name = team_name.replace(/\s/g, '');
+            team_desc = team_desc.replace(/\s/g, '');
+            if (!team_name || !team_desc) {
+                alert("班级名必填,且不能为空白符!")
                 event.preventDefault();
             }
         }
@@ -212,72 +204,4 @@
             $('[data-toggle="tooltip"]').tooltip();
         });
     </script>
-    <!-- JS 控制 -->
-    <script>
-        $(document).ready(function () {
-            // select 的选项设置
-            $('select').attr("required", true);
-            // 对 select 的下拉选项进行过滤
-            $.ajax({
-                url : '/api/user/team',
-                dataType: 'json',
-                type : 'GET',
-                success: function(data) {
-                    if (data.errcode == 0) {
-                        var teamIds = [];
-                        var teams = data.data;
-                        for(var index in teams) {
-                            teamIds.push(teams[index].id + '')
-                        }
-                        var selectionsLength = $('select').eq(0).children().length
-                        while(selectionsLength--) {
-                            if (!teamIds.includes($('select').eq(0).children().eq(selectionsLength).val())) {
-                                $('select').eq(0).children().eq(selectionsLength).remove()
-                            }
-                        }
-                        // 手动触发 change
-                        $('select').eq(0).trigger('change')
-                    } else {
-                        alert(data.errmsg);
-                    }
-                },
-                error: function() {
-                    alert("发生了意外错误,请联系开发者:QQ1450872874");
-                }
-            });
-            // 监听第一个 selection 的 change
-            $('select').eq(0).on('change', function() {
-                var teamId = $('select').eq(0).val()
-                // var type = window.location.href.match(/.*?research-results(?:\/\d)?\/(edit|create)/)[1]
-                if (teamId) {
-                    $.ajax({
-                        url : '/api/task/submit',
-                        data: {
-                            teamId: teamId
-                        },
-                        dataType: 'json',
-                        type : 'GET',
-                        success: function(data) {
-                            if (data.errcode == 0) {
-                                var html = ''
-                                for (var index in data.data) {
-                                    html += '<option value=' + data.data[index].id + '>' + data.data[index].title + '</option>'
-                                }
-                                $('select').eq(1).html(html)
-                            } else {
-                                alert(data.errmsg);
-                            }
-                        },
-                        error: function() {
-                            alert("发生了意外错误,请联系开发者:QQ1450872874");
-                        }
-                    });    
-                } else {
-                    var html = ''
-                    $('select').eq(1).html(html)
-                }
-            })
-        }) 
-    </script>
-    <!-- /JS 控制 -->
 @stop

@@ -81,7 +81,7 @@
                         </div><!-- panel-body -->
 
                         <div class="panel-footer">
-                            <button type="submit" class="btn btn-primary save">{{ __('voyager::generic.save') }}</button>
+                            <button type="submit" onclick="check(event);" class="btn btn-primary save">{{ __('voyager::generic.save') }}</button>
                         </div>
                     </form>
 
@@ -124,6 +124,26 @@
 @stop
 
 @section('javascript')
+    <script>
+        // 表单内容检查
+        function check(event) {
+            // 空字段检查
+            var team_id = $('[name="team_id"]').val()
+            var task_id = $('[name="task_id"]').val()
+            var title = $('[name="title"]').val()
+            var detail = $('#richtextdetail_ifr').contents().find("#tinymce").html()
+            team_id = team_id.replace(/\s/g, '');
+            task_id = task_id.replace(/\s/g, '');
+            title = title.replace(/\s/g, '');
+            detail = detail.replace(/<br.*?>/g, '');
+            detail = detail.replace(/&nbsp;/g, '');
+            detail = detail.replace(/<p>\s*<\/p>/g, '');
+            if (!team_id || !task_id || !title || !detail) {
+                alert("除附件外,其他字段都为必填,且不能为空白符!")
+                event.preventDefault();
+            }
+        }
+    </script>
     <script>
         var params = {};
         var $file;
@@ -195,12 +215,6 @@
         $(document).ready(function () {
             // select 的选项设置
             $('select').attr("required", true);
-            $('.save').on('click', function() {
-                if ($('select')[0].value == '' || $('select')[1].value == '') {
-                    alert("研究团队和研究课程为必选项!");
-                    return false;
-                }
-            })
             // 对 select 的下拉选项进行过滤
             $.ajax({
                 url : '/api/user/team',

@@ -75,7 +75,7 @@ export default {
 
     // 增加一个 tag
     async handleInputConfirm() {
-      let inputValue = this.inputValue;
+      let inputValue = this.inputValue.replace(/\s/g, '')
       if (inputValue) {
         if (this.dynamicTags.indexOf(inputValue) == -1) {
           let response = await this.addTag(inputValue);
@@ -89,7 +89,9 @@ export default {
           }
         } else this.warning("重复的标签");
       } else {
+        this.inputValue = ''
         this.inputVisible = false;
+        this.warning("不能添加空白符目标")
       }
     },
 

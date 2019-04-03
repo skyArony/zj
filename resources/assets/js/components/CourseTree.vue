@@ -293,9 +293,13 @@ export default {
     },
     // 添加一个 claim
     claimsInputConfirm() {
-      if (this.claimsText) {
+      let claimsText = this.claimsText.replace(/\s/g, '')
+      if (claimsText) {
         this.claims.splice(0, 0, this.claimsText)
         this.claimsText = ""
+      } else {
+        this.claimsText = ''
+        this.warning("不能添加空白符 tag")
       }
     },
     // 保存 tag 和 claim 的修改

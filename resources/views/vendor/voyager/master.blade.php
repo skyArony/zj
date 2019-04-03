@@ -46,6 +46,14 @@
         }
     </style>
 
+    <!-- 修复注销框打开一次后打不开的问题 -->
+    <style>
+        .dropdown-menu {
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+    </style>
+
     @if(!empty(config('voyager.additional_css')))<!-- Additional CSS -->
         @foreach(config('voyager.additional_css') as $css)<link rel="stylesheet" type="text/css" href="{{ asset($css) }}">@endforeach
     @endif

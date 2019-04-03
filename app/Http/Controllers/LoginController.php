@@ -131,7 +131,7 @@ class LoginController extends ApiController
                 // 设置 JWT token
                 $customClaims = ['role' => $user->role_id];
                 $token = auth('api')->claims($customClaims)->tokenById($uid);
-                Cookie::queue('token', $token, null, null, null, false, true);
+                Cookie::queue('token', $token, 120, null, null, false, true);
                 // 进行登陆
                 if ($this->guard()->loginUsingId($uid)) return $this->sendLoginResponse($request);
                 else {

@@ -3,45 +3,150 @@
     <div class="panel panel-bordered">
       <div class="panel-body">
         <h1>使用介绍</h1>
-        <p>本系统为<b>「教育信息化课程定制系统 \ 科研组队系统」</b>，主要提供<b>「个性化课程定制」</b>和<b>「科研课题组队」</b>两大功能。</p>
-        <p>系统用户基于<a href="http://worlduc.com"><b> 世界大学城 </b></a>用户体系，使用世界大学城账户进行登陆即可使用，登陆后可<a  target="_blank" href="/#/index/me"><b> 在此 </b></a>进行 QQ 绑定，以后即可直接使用 QQ 登陆。</p>
-        <p><b>关于 QQ 绑定: </b> 绑定时先填写 QQ 作为联系方式，然后登陆 QQ 进行绑定，联系 QQ 和登陆绑定 QQ 可以不同。</p>
-        <p><b>关于用户角色: </b>「学生」，「教师」，「管理员」，「超级管理员」</p>
-        <h3>个性化课程定制</h3>
-        <p>教师操作</p>
+        <p>
+          本系统为
+          <strong>「教育信息化课程定制系统 \ 科研组队系统」</strong>，主要提供
+          <strong>「个性化课程定制」</strong>和
+          <strong>「科研课题组队」</strong>两大功能。
+        </p>
+        <p>&nbsp;</p>
+        <h3>如何注册和登陆</h3>
+        <p>
+          本系统用户基于
+          <a href="http://worlduc.com/">
+            <strong>世界大学城</strong>
+          </a>
+          用户体系，使用世界大学城账户进行登录即可使用，首次使用需要先在
+          <a href="http://zj.yfree.ccc/admin/login">
+            <strong>本系统登录</strong>
+          </a>
+          一次。
+        </p>
+        <p>首次登录成功后，以后可以使用以下三种方式任意一种再次登录系统：</p>
+        <ol>
+          <li>
+            <a href="http://zj.yfree.ccc/admin/login">
+              <strong>大学城账密登录</strong>
+            </a>
+          </li>
+          <li>
+            <a href="http://zj.yfree.ccc/admin/login">
+              <strong>QQ 登录</strong>
+            </a>
+            ：需先进行 QQ
+            <a href="http://zj.yfree.ccc/#/index/me">
+              <strong>绑定</strong>
+            </a>
+          </li>
+          <li>大学城登录后直接跳转：需在大学城先进行配置，配置方法看最下面附录</li>
+        </ol>
+        <p>&nbsp;</p>
+        <h3>具体功能介绍</h3>
+        <h4>个性化课程定制</h4>
+        <ol>
+          <li>教师从大学城同步课程</li>
+          <li>教师从大学城同步课程目录</li>
+          <li>教师添加题库题目，系统自动组卷</li>
+          <li>学生填写问卷，自动生成个性化课程大纲和学习计划，并支持导出 PDF</li>
+        </ol>
+        <h4>科研课题组队</h4>
+        <ol>
+          <li>教师发布课题</li>
+          <li>学生组建团队</li>
+          <li>队长报名</li>
+          <li>队长提交科研申请书</li>
+          <li>教师点评申请书，选择通过或驳回</li>
+          <li>申请书通过的团队提交科研成果</li>
+        </ol>
+        <p>&nbsp;</p>
+        <h3>附</h3>
+        <h4>如何在设置大学城直接跳转登陆？</h4>
+        <blockquote>
+          <p>设置大学城直接跳转登陆，需先在系统登录过一次。</p>
+        </blockquote>
+        <ol>
+          <li>
+            <p>
+              <a href="http://worlduc.com/SpaceManage/CustomMenu/TopMenu.aspx">在此</a>
+              添加一了栏顶部导航，
+              <strong>务必移动到第一项</strong>
+            </p>
+            <blockquote>
+              <p>名称：教育信息化系统</p>
+              <p>
+                链接：
+                <a href="http://zj.yfree.cc/worlduc/login"
+                   target="_blank"
+                   class="url">http://zj.yfree.cc/worlduc/login</a>
+              </p>
+            </blockquote>
+          </li>
+        </ol>
+        <p>
+          <img src="/storage/img/image-20190406170003255.png"
+               alt="image-20190406170003255"
+               referrerPolicy="no-referrer" />
+        </p>
+        <ol start="2">
+          <li>
+            <p>
+              <a href="http://worlduc.com/SpaceManage/Decoration/SetPage.aspx">在此</a>
+              装扮空间
+            </p>
+            <ul>
+              <li>选择下面的「高级设置」- 「空间代码」</li>
+              <li>粘贴如下代码，并保存</li>
+            </ul>
+          </li>
+        </ol>
+        <pre><code class='language-html' lang='html'>&lt;script type=&quot;text/javascript&quot;&gt;
+  var uid = jQuery(&#39;#Hid_UserID&#39;)[0].value;
+  jQuery(&#39;#U_Navigation &gt; ul &gt; li &gt; a&#39;)[0].href = &#39;http://zj.yfree.cc/worlduc/login?uid=&#39; + uid;
+&lt;/script&gt;
+</code></pre>
+        <p>
+          <img src="/storage/img/image-20190406170100977.png"
+               alt="image-20190406170100977"
+               referrerPolicy="no-referrer" />
+        </p>
+        <ol start="3">
+          <li>
+            <p>
+              然后在空间导航栏上点击 「
+              <a href="http://zj.yfree.cc/worlduc/login?uid=2708895">教育信息化系统</a>」即可
+            </p>
+            <p>
+              <img src="/storage/img/image-20190406170214779.png"
+                   alt="image-20190406170214779"
+                   referrerPolicy="no-referrer" />
+            </p>
+          </li>
+        </ol>
+        <p>&nbsp;</p>
+        <p>&nbsp;</p>
+        <h3>视频功能介绍</h3>
+        <h4>个性化课程定制</h4>
         <ul>
-          <li>同步<a href="http://worlduc.com/APP/OnlineCourse/index.aspx"><b> 世界大学城-空间慕课 </b></a>创建的课程</li>
-          <li>编辑课程目录，为每个章节设置 tag 和课程目标</li>
-          <li>创建课程问卷，编辑问卷问题，为每个问题设置对应的 tag </li>
-          <li>发布问卷</li>
+          <li>注册和登录</li>
+          <li>课程同步</li>
+          <li>题库和自动组卷</li>
+          <li>学习大纲生成和导出</li>
         </ul>
-        <p>学生操作</p>
+        <h4>科研课题组队</h4>
         <ul>
-          <li>填写问卷，得到定制化课程</li>
-          <li>查看定制化课程目录和视频，并且可以导出为 PDF</li>
-        </ul>
-        <h3>科研课题组队</h3>
-        <p>教师操作</p>
-        <ul>
-          <li>新建课题，填写课题详细信息</li>
           <li>发布课题</li>
+          <li>组建团队和报名</li>
+          <li>申请书提交和审核</li>
+          <li>科研成果提交和查看</li>
         </ul>
-        <p>学生操作</p>
-        <ul>
-          <li>组件团队</li>
-          <li>招募队员</li>
-          <li>队长在课题详细页下报名课题</li>
-          <li>团队共同研究，得到科研成果</li>
-          <li>由队长统一前往后台提交科研成果</li>
-        </ul>
-        <p>注: 一人也可组队，教师也可以创建团队或加入团队，学生也可以发布课题。</p>
+        <p>&nbsp;</p>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-export default {};
+export default {}
 </script>
 
 <style scoped>

@@ -26,9 +26,11 @@ Route::group(['middleware' => 'admin.user'], function () {
     // 班级添加成员
     Route::view('/admin/class/member/{classId}', 'addClassMember');
     // 导出 PDF
-    Route::view('pdfpage/{courseId}', 'pdf');
+    Route::view('/pdfpage/{courseId}', 'pdf');
     // 导出简化版 PDF
-    Route::view('pdfeasypage/{courseId}', 'pdfEasy');
+    Route::view('/pdfeasypage/{courseId}', 'pdfEasy');
+    // 图表数据显示
+    Route::view('/admin/chart', 'chart');
 });
 
 

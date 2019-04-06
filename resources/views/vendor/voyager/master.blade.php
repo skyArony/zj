@@ -52,6 +52,10 @@
             visibility: visible !important;
             opacity: 1 !important;
         }
+        .app-container .content-container .side-menu .navbar-header .navbar-brand img {
+            width: 40px;
+            height: 40px;
+        }
     </style>
 
     @if(!empty(config('voyager.additional_css')))<!-- Additional CSS -->

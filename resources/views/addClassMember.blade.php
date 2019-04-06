@@ -1,8 +1,8 @@
 @extends('voyager::master')
 
-@section('content')
+@section('page_title', "编辑班级成员")
 
-@section('page_title', "添加队员")
+@section('content')
 
 <h1 class="page-title">
     <i class="voyager-file-text"></i>

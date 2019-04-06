@@ -145,6 +145,9 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers', 'middleware' => ['jw
     $api->delete('/class/member', "ClassGroupController@removeStudent");
     // 班级-获取一个班级的所有成员
     $api->get('/class/member/{classId}', "ClassGroupController@getMemberList");
+
+    /* ********************** 表格-chart ********************** */
+    $api->get('/chart/surveyRecord', "ChartController@getSurveyRecord");
 });
 
 $api->version('v1', ['namespace' => 'App\Http\Controllers'], function ($api) {

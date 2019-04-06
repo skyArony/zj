@@ -47,6 +47,7 @@ Vue.component('worlduc-questionadd', require('./components/QuestionAdd.vue'));
 Vue.component('worlduc-autosurvey', require('./components/AutoSurvey.vue'));
 Vue.component('worlduc-bindsid', require('./components/BindSid.vue'));
 Vue.component('worlduc-joinclass', require('./components/JoinClass.vue'));
+Vue.component('worlduc-chart', require('./components/Chart.vue'));
 
 // element ui
 import ElementUI from 'element-ui';

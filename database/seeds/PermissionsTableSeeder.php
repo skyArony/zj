@@ -307,93 +307,13 @@ class PermissionsTableSeeder extends Seeder
             ),
             36 => 
             array (
-                'id' => 42,
-                'key' => 'browse_surveys',
-                'table_name' => 'surveys',
-                'created_at' => '2018-07-02 16:29:14',
-                'updated_at' => '2018-07-02 16:29:14',
-            ),
-            37 => 
-            array (
-                'id' => 43,
-                'key' => 'read_surveys',
-                'table_name' => 'surveys',
-                'created_at' => '2018-07-02 16:29:14',
-                'updated_at' => '2018-07-02 16:29:14',
-            ),
-            38 => 
-            array (
-                'id' => 44,
-                'key' => 'edit_surveys',
-                'table_name' => 'surveys',
-                'created_at' => '2018-07-02 16:29:14',
-                'updated_at' => '2018-07-02 16:29:14',
-            ),
-            39 => 
-            array (
-                'id' => 45,
-                'key' => 'add_surveys',
-                'table_name' => 'surveys',
-                'created_at' => '2018-07-02 16:29:14',
-                'updated_at' => '2018-07-02 16:29:14',
-            ),
-            40 => 
-            array (
-                'id' => 46,
-                'key' => 'delete_surveys',
-                'table_name' => 'surveys',
-                'created_at' => '2018-07-02 16:29:14',
-                'updated_at' => '2018-07-02 16:29:14',
-            ),
-            41 => 
-            array (
-                'id' => 47,
-                'key' => 'browse_answer_records',
-                'table_name' => 'answer_records',
-                'created_at' => '2018-07-26 10:58:15',
-                'updated_at' => '2018-07-26 10:58:15',
-            ),
-            42 => 
-            array (
-                'id' => 48,
-                'key' => 'read_answer_records',
-                'table_name' => 'answer_records',
-                'created_at' => '2018-07-26 10:58:15',
-                'updated_at' => '2018-07-26 10:58:15',
-            ),
-            43 => 
-            array (
-                'id' => 49,
-                'key' => 'edit_answer_records',
-                'table_name' => 'answer_records',
-                'created_at' => '2018-07-26 10:58:15',
-                'updated_at' => '2018-07-26 10:58:15',
-            ),
-            44 => 
-            array (
-                'id' => 50,
-                'key' => 'add_answer_records',
-                'table_name' => 'answer_records',
-                'created_at' => '2018-07-26 10:58:16',
-                'updated_at' => '2018-07-26 10:58:16',
-            ),
-            45 => 
-            array (
-                'id' => 51,
-                'key' => 'delete_answer_records',
-                'table_name' => 'answer_records',
-                'created_at' => '2018-07-26 10:58:16',
-                'updated_at' => '2018-07-26 10:58:16',
-            ),
-            46 => 
-            array (
                 'id' => 57,
                 'key' => 'browse_tasks',
                 'table_name' => 'tasks',
                 'created_at' => '2018-08-21 03:51:06',
                 'updated_at' => '2018-08-21 03:51:06',
             ),
-            47 => 
+            37 => 
             array (
                 'id' => 58,
                 'key' => 'read_tasks',
@@ -401,7 +321,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2018-08-21 03:51:06',
                 'updated_at' => '2018-08-21 03:51:06',
             ),
-            48 => 
+            38 => 
             array (
                 'id' => 59,
                 'key' => 'edit_tasks',
@@ -409,7 +329,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2018-08-21 03:51:06',
                 'updated_at' => '2018-08-21 03:51:06',
             ),
-            49 => 
+            39 => 
             array (
                 'id' => 60,
                 'key' => 'add_tasks',
@@ -417,7 +337,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2018-08-21 03:51:06',
                 'updated_at' => '2018-08-21 03:51:06',
             ),
-            50 => 
+            40 => 
             array (
                 'id' => 61,
                 'key' => 'delete_tasks',
@@ -425,7 +345,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2018-08-21 03:51:06',
                 'updated_at' => '2018-08-21 03:51:06',
             ),
-            51 => 
+            41 => 
             array (
                 'id' => 62,
                 'key' => 'browse_teams',
@@ -433,7 +353,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2018-08-21 08:26:14',
                 'updated_at' => '2018-08-21 08:26:14',
             ),
-            52 => 
+            42 => 
             array (
                 'id' => 63,
                 'key' => 'read_teams',
@@ -441,7 +361,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2018-08-21 08:26:14',
                 'updated_at' => '2018-08-21 08:26:14',
             ),
-            53 => 
+            43 => 
             array (
                 'id' => 64,
                 'key' => 'edit_teams',
@@ -449,7 +369,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2018-08-21 08:26:14',
                 'updated_at' => '2018-08-21 08:26:14',
             ),
-            54 => 
+            44 => 
             array (
                 'id' => 65,
                 'key' => 'add_teams',
@@ -457,7 +377,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2018-08-21 08:26:14',
                 'updated_at' => '2018-08-21 08:26:14',
             ),
-            55 => 
+            45 => 
             array (
                 'id' => 66,
                 'key' => 'delete_teams',
@@ -465,7 +385,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2018-08-21 08:26:14',
                 'updated_at' => '2018-08-21 08:26:14',
             ),
-            56 => 
+            46 => 
             array (
                 'id' => 67,
                 'key' => 'browse_research_results',
@@ -473,7 +393,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2018-08-21 08:38:07',
                 'updated_at' => '2018-08-21 08:38:07',
             ),
-            57 => 
+            47 => 
             array (
                 'id' => 68,
                 'key' => 'read_research_results',
@@ -481,7 +401,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2018-08-21 08:38:07',
                 'updated_at' => '2018-08-21 08:38:07',
             ),
-            58 => 
+            48 => 
             array (
                 'id' => 69,
                 'key' => 'edit_research_results',
@@ -489,7 +409,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2018-08-21 08:38:07',
                 'updated_at' => '2018-08-21 08:38:07',
             ),
-            59 => 
+            49 => 
             array (
                 'id' => 70,
                 'key' => 'add_research_results',
@@ -497,13 +417,133 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2018-08-21 08:38:07',
                 'updated_at' => '2018-08-21 08:38:07',
             ),
-            60 => 
+            50 => 
             array (
                 'id' => 71,
                 'key' => 'delete_research_results',
                 'table_name' => 'research_results',
                 'created_at' => '2018-08-21 08:38:07',
                 'updated_at' => '2018-08-21 08:38:07',
+            ),
+            51 => 
+            array (
+                'id' => 72,
+                'key' => 'browse_requests',
+                'table_name' => 'requests',
+                'created_at' => '2018-12-16 22:01:41',
+                'updated_at' => '2018-12-16 22:01:41',
+            ),
+            52 => 
+            array (
+                'id' => 73,
+                'key' => 'read_requests',
+                'table_name' => 'requests',
+                'created_at' => '2018-12-16 22:01:41',
+                'updated_at' => '2018-12-16 22:01:41',
+            ),
+            53 => 
+            array (
+                'id' => 74,
+                'key' => 'edit_requests',
+                'table_name' => 'requests',
+                'created_at' => '2018-12-16 22:01:41',
+                'updated_at' => '2018-12-16 22:01:41',
+            ),
+            54 => 
+            array (
+                'id' => 75,
+                'key' => 'add_requests',
+                'table_name' => 'requests',
+                'created_at' => '2018-12-16 22:01:41',
+                'updated_at' => '2018-12-16 22:01:41',
+            ),
+            55 => 
+            array (
+                'id' => 76,
+                'key' => 'delete_requests',
+                'table_name' => 'requests',
+                'created_at' => '2018-12-16 22:01:41',
+                'updated_at' => '2018-12-16 22:01:41',
+            ),
+            56 => 
+            array (
+                'id' => 77,
+                'key' => 'browse_questions',
+                'table_name' => 'questions',
+                'created_at' => '2019-01-01 16:48:51',
+                'updated_at' => '2019-01-01 16:48:51',
+            ),
+            57 => 
+            array (
+                'id' => 78,
+                'key' => 'read_questions',
+                'table_name' => 'questions',
+                'created_at' => '2019-01-01 16:48:51',
+                'updated_at' => '2019-01-01 16:48:51',
+            ),
+            58 => 
+            array (
+                'id' => 79,
+                'key' => 'edit_questions',
+                'table_name' => 'questions',
+                'created_at' => '2019-01-01 16:48:51',
+                'updated_at' => '2019-01-01 16:48:51',
+            ),
+            59 => 
+            array (
+                'id' => 80,
+                'key' => 'add_questions',
+                'table_name' => 'questions',
+                'created_at' => '2019-01-01 16:48:51',
+                'updated_at' => '2019-01-01 16:48:51',
+            ),
+            60 => 
+            array (
+                'id' => 81,
+                'key' => 'delete_questions',
+                'table_name' => 'questions',
+                'created_at' => '2019-01-01 16:48:51',
+                'updated_at' => '2019-01-01 16:48:51',
+            ),
+            61 => 
+            array (
+                'id' => 82,
+                'key' => 'browse_class',
+                'table_name' => 'class',
+                'created_at' => '2019-02-26 19:03:29',
+                'updated_at' => '2019-02-26 19:03:29',
+            ),
+            62 => 
+            array (
+                'id' => 83,
+                'key' => 'read_class',
+                'table_name' => 'class',
+                'created_at' => '2019-02-26 19:03:29',
+                'updated_at' => '2019-02-26 19:03:29',
+            ),
+            63 => 
+            array (
+                'id' => 84,
+                'key' => 'edit_class',
+                'table_name' => 'class',
+                'created_at' => '2019-02-26 19:03:29',
+                'updated_at' => '2019-02-26 19:03:29',
+            ),
+            64 => 
+            array (
+                'id' => 85,
+                'key' => 'add_class',
+                'table_name' => 'class',
+                'created_at' => '2019-02-26 19:03:29',
+                'updated_at' => '2019-02-26 19:03:29',
+            ),
+            65 => 
+            array (
+                'id' => 86,
+                'key' => 'delete_class',
+                'table_name' => 'class',
+                'created_at' => '2019-02-26 19:03:29',
+                'updated_at' => '2019-02-26 19:03:29',
             ),
         ));
         

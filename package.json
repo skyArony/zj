@@ -28,7 +28,6 @@
     "ajv": "^6.10.0",
     "clipboard": "^2.0.4",
     "element-ui": "^2.4.9",
-    "flv.js": "^1.5.0",
     "imagemin": "^5.3.1",
     "vue-router": "^3.0.2",
     "vue-slicksort": "^0.1.10",

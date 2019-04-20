@@ -54,8 +54,6 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers', 'middleware' => ['jw
     /* ********************** 课程树-courseTree ********************** */
     // 爬取课程树 
     $api->post('/courseTree/{courseId}', 'SpiderController@getCourseTree');
-    // 获取课程树
-    $api->get('/courseTree/{courseId}', 'CourseTreeController@getCourseTree');
     // 更新课程树 
     $api->put('/courseTree/{courseId}', 'CourseTreeController@setCourseTree');
 
@@ -181,5 +179,9 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'], function ($api) {
     /* ********************** 首页-课程 ********************** */
     // 获取系统中所有的课程
     $api->get('/course', 'CourseController@getAllCourse');
+
+    /* ********************** 课程树-courseTree ********************** */
+    // 获取课程树
+    $api->get('/courseTree/{courseId}', 'CourseTreeController@getCourseTree');
 });
 

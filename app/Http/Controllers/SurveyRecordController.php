@@ -29,7 +29,10 @@ class SurveyRecordController extends ApiController
                 $uid = auth('api')->parseToken()->payload()->get('sub');
             } elseif ($sid && $name) {
                 // 如果没登陆
-                if (User::find($sid)) {
+                $u = User::where("sid", $sid)->first();
+                if ($u) {
+                    $uid = $u->id;
+                } else if (User::find($sid)) {
                     $uid = $sid;
                 } else {
                     $uid = $sid;

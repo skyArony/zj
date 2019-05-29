@@ -198,6 +198,9 @@
                                             <a href="@php echo "/admin/class/member/".$data->id; @endphp" class="btn btn-sm btn-primary pull-right edit" style="margin-right:5px">
                                                 <i class="voyager-edit"></i> <span class="hidden-xs hidden-sm">编辑成员</span>
                                             </a>
+                                            <a target="_blank" href="@php echo "/classsurvey/".$data->id; @endphp" class="btn btn-sm btn-warning pull-right edit" style="margin-right:5px">
+                                                <i class="voyager-documentation"></i> <span class="hidden-xs hidden-sm">课堂问卷</span>
+                                            </a>
                                         <!-- /行为 -->
                                         </td>
                                     </tr>

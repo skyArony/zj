@@ -74,6 +74,6 @@ Vue.use(ElementUI);
 const app = new Vue({
     el: '#app',
     store,
-    router
-    // render: h => h(App)s
+    router,
+    // render: h => h(App)
 });

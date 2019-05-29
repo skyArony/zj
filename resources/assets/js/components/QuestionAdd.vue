@@ -281,7 +281,6 @@ export default {
           for (var index in that.tagsData) {
             that.tagsData[index].value = index
             that.tagsData[index].requirement = [0, 0, 0 ,0 ,0]
-            that.tagsData[index].status = false // 状态,用于生成 tip时的状态标识,防止出现闪一下的情况
           }
         })
         .catch(function(error) {
@@ -481,7 +480,6 @@ export default {
     },
     // 侧栏题目数要求提示
     tip(item) {
-      if (!item.status) return ''
       let count = 0
       let tip = ''
       for(let index in item.requirement) {

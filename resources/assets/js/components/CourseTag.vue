@@ -76,6 +76,7 @@ export default {
     // 增加一个 tag
     async handleInputConfirm() {
       let inputValue = this.inputValue.replace(/\s/g, '')
+      console.log(inputValue)
       if (inputValue) {
         if (this.dynamicTags.indexOf(inputValue) == -1) {
           let response = await this.addTag(inputValue);
@@ -91,7 +92,6 @@ export default {
       } else {
         this.inputValue = ''
         this.inputVisible = false;
-        this.warning("不能添加空白符目标")
       }
     },
 

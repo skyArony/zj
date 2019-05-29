@@ -20,7 +20,7 @@ class SocialiteController extends ApiController
 
     public function __construct()
     {
-        $this->middleware('jwt.auth', ['except' => 'loginQQ']);
+        $this->middleware('jwt.auth', ['except' => ['loginQQ', 'callback']]);
         $this->config = [
             'qq' => [
                 'client_id'     => env('client_id_qq'),
@@ -78,7 +78,7 @@ class SocialiteController extends ApiController
                 // 设置 JWT token
                 $customClaims = ['role' => $user->role_id];
                 $token = auth('api')->claims($customClaims)->tokenById($uid);
-                Cookie::queue('token', $token, 1440, null, null, false, true);
+                Cookie::queue('token', $token, 1440, null, null, false, false);
                 // 进行登录
                 if ($this->guard()->loginUsingId($uid)) return $this->sendLoginResponse($request);
                 else {

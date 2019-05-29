@@ -38,8 +38,6 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers', 'middleware' => ['jw
     $api->get('/customCourse/{courseId}', 'CustomCourseController@getCustomCourse');
     // 获取已经登录的用户信息
     $api->get('/me', 'LoginController@me');
-    // 获取大学城登陆校验的随机 key
-    $api->get('/loginKey', "LoginController@loginKey");
 
     
     /* ********************** 知识点-tag ********************** */
@@ -183,5 +181,9 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'], function ($api) {
     /* ********************** 课程树-courseTree ********************** */
     // 获取课程树
     $api->get('/courseTree/{courseId}', 'CourseTreeController@getCourseTree');
+
+    /* ********************** 登录 - login ********************** */
+    // 获取大学城登陆校验的随机 key
+    $api->get('/loginKey', "LoginController@loginKey");
 });
 

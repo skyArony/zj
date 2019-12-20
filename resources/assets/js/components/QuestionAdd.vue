@@ -3,14 +3,13 @@
     <div class="left el-col-6 panel panel-bordered">
       <el-row>
         <div class="input-title">课程 :</div>
-        <el-select v-model="courseId"
-                   placeholder="请选择"
-                   @change="selectCourse">
-          <el-option v-for="item in allUserCourse"
-                     :key="item.value"
-                     :label="item.label"
-                     :value="item.value">
-          </el-option>
+        <el-select v-model="courseId" placeholder="请选择" @change="selectCourse">
+          <el-option
+            v-for="item in allUserCourse"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          ></el-option>
         </el-select>
       </el-row>
       <el-row>
@@ -29,16 +28,14 @@
       </el-row>
       <el-row>
         <hr />
-        <div class="input-title">知识点 Tag :
-          <el-tooltip content="每个知识点每个难度至少要一个题，缺题的知识点不参与组卷，红色字体表示该难度尚需一个题"
-                      placement="top">
+        <div class="input-title">
+          知识点 Tag :
+          <el-tooltip content="每个知识点每个难度至少要一个题，缺题的知识点不参与组卷，红色字体表示该难度尚需一个题" placement="top">
             <i class="el-icon-question"></i>
           </el-tooltip>
         </div>
         <div class="tags">
-          <div v-for="(item, index) in tagsData"
-               :key="index"
-               class="tag-item">
+          <div v-for="(item, index) in tagsData" :key="index" class="tag-item">
             <div class="tag-content">
               <el-tag>{{item.label}}</el-tag>
             </div>
@@ -53,154 +50,154 @@
     </div>
     <div class="right el-col-17 panel panel-bordered">
       <div class="action">
-        <el-button type="primary"
-                   plain
-                   @click="addQues">新建</el-button>
+        <el-button type="primary" plain @click="addQues">新建</el-button>
         <!-- <el-button type="danger"
-                   plain>批量删除</el-button> -->
+        plain>批量删除</el-button>-->
       </div>
-      <el-table :data="questionsData.filter(data => !search || data.title.includes(search))"
-                style="width: 100%">
+      <el-table
+        :data="questionsData.filter(data => !search || data.title.includes(search))"
+        style="width: 100%"
+      >
         <!-- <el-table-column type="selection"
                          width="40">
-        </el-table-column> -->
-        <el-table-column prop="title"
-                         label="题干"
-                         :show-overflow-tooltip=true
-                         min-width="400px">
-        </el-table-column>
-        <el-table-column prop="type"
-                         label="类型"
-                         align="center"
-                         :filters="[{ text: '单选', value: 'radio' }, { text: '多选', value: 'multi' }]"
-                         :filter-method="filterType"
-                         :filter-multiple=false
-                         filter-placement="bottom-end">
+        </el-table-column>-->
+        <el-table-column prop="title" label="题干" :show-overflow-tooltip="true" min-width="400px"></el-table-column>
+        <el-table-column
+          prop="type"
+          label="类型"
+          align="center"
+          :filters="[{ text: '单选', value: 'radio' }, { text: '多选', value: 'multi' }]"
+          :filter-method="filterType"
+          :filter-multiple="false"
+          filter-placement="bottom-end"
+        >
           <template slot-scope="scope">
-            <el-tag :type="scope.row.type === 'radio' ? 'primary' : 'success'"
-                    disable-transitions>{{scope.row.type === 'radio' ? '单选' : '多选'}}</el-tag>
+            <el-tag
+              :type="scope.row.type === 'radio' ? 'primary' : 'success'"
+              disable-transitions
+            >{{scope.row.type === 'radio' ? '单选' : '多选'}}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="tag"
-                         label="知识点"
-                         align="center"
-                         :filters="filtersTagsData"
-                         :filter-method="filterTag"
-                         filter-placement="bottom-end">
+        <el-table-column
+          prop="tag"
+          label="知识点"
+          align="center"
+          :filters="filtersTagsData"
+          :filter-method="filterTag"
+          filter-placement="bottom-end"
+        ></el-table-column>
+        <el-table-column
+          prop="level"
+          align="center"
+          label="难度星数"
+          :filters="[{ text: '1', value: '1' }, { text: '2', value: '2' }, { text: '3', value: '3' }, { text: '4', value: '4' }, { text: '5', value: '5' }]"
+          :filter-method="filterLevel"
+          filter-placement="bottom-end"
+        >
+          <template slot-scope="scope">{{scope.row.level}}</template>
         </el-table-column>
-        <el-table-column prop="level"
-                         align="center"
-                         label="难度星数"
-                         :filters="[{ text: '1', value: '1' }, { text: '2', value: '2' }, { text: '3', value: '3' }, { text: '4', value: '4' }, { text: '5', value: '5' }]"
-                         :filter-method="filterLevel"
-                         filter-placement="bottom-end">
-          <template slot-scope="scope">
-            {{scope.row.level}}
-          </template>
-        </el-table-column>
-        <el-table-column prop="isLeader"
-                         label="操作"
-                         align="center"
-                         width="180px">
-          <template slot="header"
-                    slot-scope="scope">
-            <el-input v-model="search"
-                      size="mini"
-                      placeholder="输入关键字搜索" />
+        <el-table-column prop="isLeader" label="操作" align="center" width="180px">
+          <template slot="header" slot-scope="scope">
+            <el-input v-model="search" size="mini" placeholder="输入关键字搜索" />
           </template>
           <template slot-scope="scope">
             <div style="display:flex">
-              <el-button size="mini"
-                         type="primary"
-                         @click="updateQues(scope.row, scope.$index)">查看 / 编辑
-              </el-button>
-              <el-button size="mini"
-                         type="danger"
-                         @click="deleteQues(scope.row.id, scope.row.tagId, scope.row.level, scope.$index)">删除</el-button>
+              <el-button
+                size="mini"
+                type="primary"
+                @click="updateQues(scope.row, scope.$index)"
+              >查看 / 编辑</el-button>
+              <el-button
+                size="mini"
+                type="danger"
+                @click="deleteQues(scope.row.id, scope.row.tagId, scope.row.level, scope.$index)"
+              >删除</el-button>
             </div>
           </template>
         </el-table-column>
       </el-table>
     </div>
-    <el-dialog class="detail"
-               :title="dialogType == 'add' ? '新建问题' : '修改问题'"
-               :visible.sync="dialogVisible"
-               width="60%">
-      <el-input v-if="questionInputVisible"
-                placeholder="请输入问题"
-                size="small"
-                v-model="edittingQuestion.title"
-                ref="questionInput"
-                class="question-title"
-                @keyup.enter.native="handleQuestionTitleConfirm"
-                @blur="handleQuestionTitleConfirm">
-      </el-input>
-      <span v-else
-            @dblclick="editQuestionTitleInput"
-            class="question-title">{{edittingQuestion.title}}</span>
+    <el-dialog
+      class="detail"
+      :title="dialogType == 'add' ? '新建问题' : '修改问题'"
+      :visible.sync="dialogVisible"
+      width="60%"
+    >
+      <el-input
+        v-if="questionInputVisible"
+        placeholder="请输入问题"
+        size="small"
+        v-model="edittingQuestion.title"
+        ref="questionInput"
+        class="question-title"
+        @keyup.enter.native="handleQuestionTitleConfirm"
+        @blur="handleQuestionTitleConfirm"
+      ></el-input>
+      <span
+        v-else
+        @dblclick="editQuestionTitleInput"
+        class="question-title"
+      >{{edittingQuestion.title}}</span>
       <!-- <span >{{edittingQuestion.title}}</span> -->
       <div class="addNewOption">
-        <el-input class="option-input"
-                  size="mini"
-                  placeholder="添加选项, 按 Enter 确认"
-                  v-model="newOption"
-                  @keyup.enter.native="newOptionInputConfirm">
-        </el-input>
-        <el-tooltip content="确定前请先选择正确答案, 直接在选项上选择即可"
-                    placement="top">
+        <el-input
+          class="option-input"
+          size="mini"
+          placeholder="添加选项, 按 Enter 确认"
+          v-model="newOption"
+          @keyup.enter.native="newOptionInputConfirm"
+        ></el-input>
+        <el-tooltip content="确定前请先选择正确答案, 直接在选项上选择即可" placement="top">
           <i class="el-icon-question"></i>
         </el-tooltip>
       </div>
-      <el-checkbox-group v-if="edittingQuestion.type == 'multi'"
-                         class="options"
-                         v-model="edittingQuestion.answer">
-        <div class="option-item"
-             v-for="(value, key) in edittingQuestion.options"
-             :key="key">
-          <el-checkbox :label="key">
-            {{value}}</el-checkbox>
-          <i class="el-icon-close option-item-close"
-             @click="removeOption(key)"></i>
+      <el-checkbox-group
+        v-if="edittingQuestion.type == 'multi'"
+        class="options"
+        v-model="edittingQuestion.answer"
+      >
+        <div class="option-item" v-for="(value, key) in edittingQuestion.options" :key="key">
+          <el-checkbox :label="key">{{value}}</el-checkbox>
+          <i class="el-icon-close option-item-close" @click="removeOption(key)"></i>
         </div>
       </el-checkbox-group>
-      <el-radio-group v-else-if="edittingQuestion.type == 'radio'"
-                      v-model="edittingQuestion.answer"
-                      class="options">
-        <div class="option-item"
-             v-for="(value, key) in edittingQuestion.options"
-             :key="key">
-          <el-radio :label="key">
-            {{value}}</el-radio>
-          <i class="el-icon-close option-item-close"
-             @click="removeOption(key)"></i>
+      <el-radio-group
+        v-else-if="edittingQuestion.type == 'radio'"
+        v-model="edittingQuestion.answer"
+        class="options"
+      >
+        <div class="option-item" v-for="(value, key) in edittingQuestion.options" :key="key">
+          <el-radio :label="key">{{value}}</el-radio>
+          <i class="el-icon-close option-item-close" @click="removeOption(key)"></i>
         </div>
       </el-radio-group>
-      <span slot="footer"
-            class="dialog-footer">
+      <span slot="footer" class="dialog-footer">
         <div class="dialog-footer-left">
-          <el-select v-model="edittingQuestion.tagId"
-                     placeholder="请选择知识点"
-                     size="mini"
-                     class="selectTag">
-            <el-option v-for="item in tagsData"
-                       :key="item.value"
-                       :label="item.label"
-                       :value="item.value">
-            </el-option>
+          <el-select
+            v-model="edittingQuestion.tagId"
+            placeholder="请选择知识点"
+            size="mini"
+            class="selectTag"
+          >
+            <el-option
+              v-for="item in tagsData"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
           </el-select>
-          <el-radio-group v-model="edittingQuestion.type"
-                          size="mini"
-                          @change="changeType">
+          <el-radio-group v-model="edittingQuestion.type" size="mini" @change="changeType">
             <el-radio-button label="radio">单选</el-radio-button>
             <el-radio-button label="multi">多选</el-radio-button>
           </el-radio-group>
-          <el-rate class="question-level"
-                   v-model="edittingQuestion.level"></el-rate>
+          <el-rate class="question-level" v-model="edittingQuestion.level"></el-rate>
         </div>
         <div>
           <el-button @click="dialogVisible = false">取 消</el-button>
-          <el-button :type="dialogType == 'add' ? 'primary' : 'warning'"
-                     @click="ensureQues">{{dialogType == 'add' ? '确定' : '修改'}}</el-button>
+          <el-button
+            :type="dialogType == 'add' ? 'primary' : 'warning'"
+            @click="ensureQues"
+          >{{dialogType == 'add' ? '确定' : '修改'}}</el-button>
         </div>
       </span>
     </el-dialog>
@@ -213,26 +210,26 @@ export default {
   data() {
     return {
       MyAxios: axios.create({
-        headers: { "Content-Type": "application/json" }
+        headers: { 'Content-Type': 'application/json' }
       }),
-      courseId: "", // 用户当前选择的课程 ID
+      courseId: '', // 用户当前选择的课程 ID
       allUserCourse: [], // 用户所有的课程信息
       questionsData: [], // 该课程下的所有问题数据
       totalLevels: 0, // 该课程下的所有问题难度星数
       tagsData: {}, // 该课程下的所有 tag 的 id 和 value 对应数据
       questionInputVisible: false, // 编辑框的题目标题当前是否正在编辑
-      search: "", // 表格搜索框
+      search: '', // 表格搜索框
       dialogVisible: false, // 新建和编辑的 dialog 显示控制
-      newOption: "", // 要新添加的选项
-      dialogType: "add", // 当前 dialog 的状态
-      edittingRowIndex: "", // 当前编辑的行的索引
-      edittingQuesLevel: "", // 当前编辑的问题的星级难度
-      edittingQuesTag: "",  // 当前编辑的问题的知识点 tag的 ID
+      newOption: '', // 要新添加的选项
+      dialogType: 'add', // 当前 dialog 的状态
+      edittingRowIndex: '', // 当前编辑的行的索引
+      edittingQuesLevel: '', // 当前编辑的问题的星级难度
+      edittingQuesTag: '', // 当前编辑的问题的知识点 tag的 ID
       edittingQuestion: {
-        title: "-------- 双击编辑你的问题 --------",
+        title: '-------- 双击编辑你的问题 --------',
         options: {},
-        type: "radio",
-        tagId: "",
+        type: 'radio',
+        tagId: '',
         level: 0,
         answer: []
       } // 当前编辑的问题
@@ -241,10 +238,10 @@ export default {
   computed: {
     filtersTagsData: function() {
       let res = []
-      for(let index in this.tagsData) {
+      for (let index in this.tagsData) {
         res.push({
-          "text": this.tagsData[index].label,
-          "value": this.tagsData[index].value
+          text: this.tagsData[index].label,
+          value: this.tagsData[index].value
         })
       }
       return res
@@ -254,7 +251,7 @@ export default {
     // 初始化:获取用户的课程信息
     init() {
       var that = this
-      this.MyAxios.get("/api/user/course")
+      this.MyAxios.get('/api/user/course')
         .then(function(response) {
           for (var index in response.data.data) {
             that.allUserCourse.push({
@@ -275,28 +272,30 @@ export default {
       this.tagsData = {}
       // 获取课程的题目信息,一些通用计算处理
       var that = this
-      await this.MyAxios.get("/api/tag/detail/" + this.courseId)
+      await this.MyAxios.get('/api/tag/detail/' + this.courseId)
         .then(function(response) {
           that.tagsData = response.data.data
           for (var index in that.tagsData) {
             that.tagsData[index].value = index
-            that.tagsData[index].requirement = [0, 0, 0 ,0 ,0]
+            that.tagsData[index].requirement = [0, 0, 0, 0, 0]
           }
         })
         .catch(function(error) {
           alert(error.response.data.errmsg)
         })
-      this.MyAxios.get("/api/question/" + this.courseId)
+      this.MyAxios.get('/api/question/' + this.courseId)
         .then(function(response) {
           for (var index in response.data.data) {
             that.totalLevels += parseInt(response.data.data[index].level)
-            that.tagsData[response.data.data[index].tag_id].requirement[parseInt(response.data.data[index].level) - 1] += 1
+            that.tagsData[response.data.data[index].tag_id].requirement[
+              parseInt(response.data.data[index].level) - 1
+            ] += 1
             that.questionsData.push({
               level: parseInt(response.data.data[index].level),
               type: response.data.data[index].type,
               title: response.data.data[index].title,
               tag: that.tagsData[response.data.data[index].tag_id].label,
-              tagId: response.data.data[index].tag_id + "",
+              tagId: response.data.data[index].tag_id + '',
               id: response.data.data[index].id,
               options: JSON.parse(response.data.data[index].option),
               answer: JSON.parse(response.data.data[index].answer)
@@ -310,17 +309,17 @@ export default {
     },
     // 点击新建问题
     addQues() {
-      if (this.dialogType == "update") {
+      if (this.dialogType == 'update') {
         this.edittingQuestion = {
-          title: "-------- 双击编辑你的问题 --------",
+          title: '-------- 双击编辑你的问题 --------',
           options: {},
-          type: "radio",
-          tagId: "",
+          type: 'radio',
+          tagId: '',
           level: 0,
           answer: []
         }
       }
-      this.dialogType = "add"
+      this.dialogType = 'add'
       this.dialogVisible = true
     },
     // 确定新建/修改一个问题
@@ -328,12 +327,12 @@ export default {
       let ques = this.edittingQuestion
       let that = this
       if (
-        ques.title.replace(/\s/g, '') != "" &&
+        ques.title.replace(/\s/g, '') != '' &&
         ques.options != {} &&
-        (ques.type == "radio" || ques.type == "multi") &&
-        ques.tagId != "" &&
-        ques.level != "" &&
-        (ques.answer != "" && ques.answer != [])
+        (ques.type == 'radio' || ques.type == 'multi') &&
+        ques.tagId != '' &&
+        ques.level != '' &&
+        (ques.answer != '' && ques.answer != [])
       ) {
         let reuqestData = {
           title: ques.title,
@@ -343,8 +342,8 @@ export default {
           option: ques.options,
           answer: ques.answer
         }
-        if (this.dialogType == "add") {
-          this.MyAxios.post("/api/question/", reuqestData)
+        if (this.dialogType == 'add') {
+          this.MyAxios.post('/api/question/', reuqestData)
             .then(function(response) {
               that.questionsData.push({
                 level: parseInt(response.data.data.level),
@@ -357,13 +356,15 @@ export default {
                 answer: JSON.parse(response.data.data.answer)
               })
               that.totalLevels += parseInt(response.data.data.level)
-              that.tagsData[response.data.data.tag_id].requirement[parseInt(response.data.data.level) - 1] += 1
+              that.tagsData[response.data.data.tag_id].requirement[
+                parseInt(response.data.data.level) - 1
+              ] += 1
               that.dialogVisible = false
               that.edittingQuestion = {
-                title: "-------- 双击编辑你的问题 --------",
+                title: '-------- 双击编辑你的问题 --------',
                 options: {},
-                type: "radio",
-                tagId: "",
+                type: 'radio',
+                tagId: '',
                 level: 0,
                 answer: []
               }
@@ -372,7 +373,7 @@ export default {
               alert(error.response.data.errmsg)
             })
         } else {
-          this.MyAxios.put("/api/question/" + ques.id, reuqestData)
+          this.MyAxios.put('/api/question/' + ques.id, reuqestData)
             .then(function(response) {
               that.questionsData[that.edittingRowIndex] = {
                 level: parseInt(response.data.data.level),
@@ -388,8 +389,12 @@ export default {
               that.totalLevels -= that.edittingQuesLevel
               that.totalLevels += parseInt(response.data.data.level)
 
-              that.tagsData[response.data.data.tag_id].requirement[that.edittingQuesLevel - 1] -= 1
-              that.tagsData[response.data.data.tag_id].requirement[parseInt(response.data.data.level) - 1] += 1
+              that.tagsData[response.data.data.tag_id].requirement[
+                that.edittingQuesLevel - 1
+              ] -= 1
+              that.tagsData[response.data.data.tag_id].requirement[
+                parseInt(response.data.data.level) - 1
+              ] += 1
 
               that.dialogVisible = false
             })
@@ -399,10 +404,10 @@ export default {
         }
       } else {
         this.$notify({
-          title: "警告",
+          title: '警告',
           message:
-            "缺失参数！请确认：<strong><br/>题干<br/>知识点<br/>难度星级<br/>至少一个选项<br/>正确答案(直接在选项上选择)</strong>",
-          type: "warning",
+            '缺失参数！请确认：<strong><br/>题干<br/>知识点<br/>难度星级<br/>至少一个选项<br/>正确答案(直接在选项上选择)</strong>',
+          type: 'warning',
           dangerouslyUseHTMLString: true,
           duration: 10000
         })
@@ -411,25 +416,25 @@ export default {
     // 删除一个问题
     deleteQues(questionId, tagId, level, index) {
       let that = this
-      this.$confirm("确定要删除这个问题吗?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
+      this.$confirm('确定要删除这个问题吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
       }).then(() => {
-        this.MyAxios.delete("/api/question/" + questionId)
+        this.MyAxios.delete('/api/question/' + questionId)
           .then(function(response) {
             that.questionsData.splice(index, 1)
             that.totalLevels -= level
             that.tagsData[tagId].requirement[level - 1] -= 1
             that.$message({
-              type: "success",
-              message: "删除成功!"
+              type: 'success',
+              message: '删除成功!'
             })
           })
           .catch(function(error) {
             that.$message({
-              type: "info",
-              message: "删除失败了!" + error.response.data.errmsg
+              type: 'info',
+              message: '删除失败了!' + error.response.data.errmsg
             })
           })
       })
@@ -439,13 +444,13 @@ export default {
       this.edittingQuesLevel = ques.level
       this.edittingQuesTag = ques.tagId
       this.dialogVisible = true
-      this.dialogType = "update"
+      this.dialogType = 'update'
       this.edittingQuestion = JSON.parse(JSON.stringify(ques)) // 深拷贝
       this.edittingRowIndex = $index
     },
     // 修改问题的类型
     changeType(type) {
-      if (type == "multi") this.edittingQuestion.answer = []
+      if (type == 'multi') this.edittingQuestion.answer = []
     },
     // 添加一个新的选项
     newOptionInputConfirm() {
@@ -456,7 +461,7 @@ export default {
             .toString(36)
             .substr(2)
         ] = this.newOption
-        this.newOption = ""
+        this.newOption = ''
       } else {
         this.newOption = ''
       }
@@ -464,12 +469,14 @@ export default {
     // 删除一个新的选项
     removeOption(key) {
       this.$delete(this.edittingQuestion.options, key)
-      if (this.edittingQuestion.type == "multi") this.edittingQuestion.answer = []
-      else if (this.edittingQuestion.type == "radio") this.edittingQuestion.answer = ""
+      if (this.edittingQuestion.type == 'multi')
+        this.edittingQuestion.answer = []
+      else if (this.edittingQuestion.type == 'radio')
+        this.edittingQuestion.answer = ''
     },
     // 失焦或确定后修改题目标题
     handleQuestionTitleConfirm() {
-      if (this.edittingQuestion.title != "") this.questionInputVisible = false
+      if (this.edittingQuestion.title != '') this.questionInputVisible = false
     },
     // 开始编辑题目标题
     editQuestionTitleInput() {
@@ -482,15 +489,15 @@ export default {
     tip(item) {
       let count = 0
       let tip = ''
-      for(let index in item.requirement) {
+      for (let index in item.requirement) {
         if (item.requirement[index] != 0) count++
         else {
-          tip += (parseInt(index) + 1) + ", "
+          tip += parseInt(index) + 1 + ', '
         }
       }
       tip = tip.substr(0, tip.length - 2)
-      if (count == 5) return "OK"
-      else return tip  
+      if (count == 5) return 'OK'
+      else return tip
     },
     // 以下为表格过滤
     filterType(value, row) {

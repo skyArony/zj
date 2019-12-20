@@ -2,19 +2,15 @@
   <div class="question">
     <font>{{question.title}}</font>
     <div class="option">
-      <el-radio-group v-if="question.type == 'radio'"
-                      v-model="radio"
-                      @change="emitData">
-        <el-radio v-for="(value, key) in options"
-                  :key="key"
-                  :label="key">{{value}}</el-radio>
+      <el-radio-group v-if="question.type == 'radio'" v-model="radio" @change="emitData">
+        <el-radio v-for="(value, key) in options" :key="key" :label="key">{{value}}</el-radio>
       </el-radio-group>
-      <el-checkbox-group v-else-if="question.type == 'multi'"
-                         v-model="checkList"
-                         @change="emitData">
-        <el-checkbox v-for="(value, key) in options"
-                     :key="key"
-                     :label="key">{{value}}</el-checkbox>
+      <el-checkbox-group
+        v-else-if="question.type == 'multi'"
+        v-model="checkList"
+        @change="emitData"
+      >
+        <el-checkbox v-for="(value, key) in options" :key="key" :label="key">{{value}}</el-checkbox>
       </el-checkbox-group>
     </div>
   </div>
@@ -27,9 +23,9 @@ export default {
   },
   data() {
     return {
-      radio: "",
-      checkList: [],
-    };
+      radio: '',
+      checkList: []
+    }
   },
   computed: {
     options: function() {
@@ -37,17 +33,17 @@ export default {
     }
   },
   methods: {
-    emitData (data) {
+    emitData(data) {
       let answer = JSON.parse(this.question.answer)
       let res = false
-      if (typeof(data) == 'string') {
+      if (typeof data == 'string') {
         if (data == '') res = null
         else if (data == answer) res = true
         else res = false
       } else {
         res = this.arrayEquals(data, answer)
       }
-      this.$emit("setAnswer", {
+      this.$emit('setAnswer', {
         id: this.question.id,
         status: res
       })
@@ -58,21 +54,24 @@ export default {
       else {
         arr1.sort()
         arr2.sort()
-        for(let i = 0; i < arr1.length; i++) {
+        for (let i = 0; i < arr1.length; i++) {
           if (arr1[i] != arr2[i]) return false
         }
         return true
       }
     }
   }
-};
+}
 </script>
 
 <style scoped>
-.el-checkbox {
+.el-checkbox,
+.el-radio {
   margin-left: 0px;
   margin-right: 30px;
   margin-bottom: 5px;
+  white-space: normal;
+  display: flex;
 }
 .question {
   background-color: #fff;
@@ -89,8 +88,13 @@ export default {
   font-size: 18px;
 }
 .option {
-  padding: 15px 10px 10px 10px;;
+  padding: 15px 10px 10px 10px;
 }
 </style>
 
+<style>
+.el-radio__label {
+  line-height: 19px;
+}
+</style>
 

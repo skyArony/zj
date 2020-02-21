@@ -65,7 +65,7 @@
       </el-row>
       <hr />
       <h3>
-        <i class="voyager-tag"></i> 问卷记录
+        <i class="voyager-documentation"></i> 问卷记录
         <small>课程问卷的填写记录</small>
       </h3>
       <el-table :data="tableData" style="width: 100%">

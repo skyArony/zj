@@ -34,7 +34,7 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers', 'middleware' => ['jw
     $api->post('/course', 'SpiderController@getCourseInfo');
     // 查看一个用户的所有课程
     $api->get('/user/course', 'CourseController@getAllCourseByUserId');
-    // 获取一个定制化课程的数据
+    // 获取登陆用户定制化课程的数据
     $api->get('/customCourse/{courseId}', 'CustomCourseController@getCustomCourse');
     // 获取已经登录的用户信息
     $api->get('/me', 'LoginController@me');
@@ -61,6 +61,8 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers', 'middleware' => ['jw
     $api->get('/surveyRecord', 'SurveyRecordController@getRecord');
     // 删除一条问卷填写记录
     $api->delete('/surveyRecord/{surveyId}', 'SurveyRecordController@deleteRecord');
+    // 获取一门课程的所有填写记录
+    $api->get('/surveyRecord/courseId/{courseId}', 'SurveyRecordController@getRecordListByCourseId');
 
 
     /* ********************** 研究成果-ResearchResults ********************** */
@@ -185,5 +187,9 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'], function ($api) {
     /* ********************** 登录 - login ********************** */
     // 获取大学城登陆校验的随机 key
     $api->get('/loginKey', "LoginController@loginKey");
+
+    /* ********************** 问卷记录-surveyRecord ********************** */
+    // 
+    $api->get('/customCourse/recordId/{recordId}', 'CustomCourseController@getCustomCourseById');
 });
 

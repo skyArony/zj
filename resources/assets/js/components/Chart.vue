@@ -12,7 +12,8 @@
           range-separator="至"
           start-placeholder="开始日期"
           end-placeholder="结束日期"
-        ></el-date-picker>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        ></el-date-picker
+        >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <b>课程:&nbsp;</b>
         <el-select v-model="courseId" size="small" placeholder="请选择">
           <el-option
@@ -20,18 +21,71 @@
             :key="item.value"
             :label="item.label"
             :value="item.value"
-          ></el-option>
-        </el-select>&nbsp;&nbsp;&nbsp;
-        <el-button type="primary" size="small" @click="getSurveyRecord()">查询</el-button>
+          ></el-option> </el-select
+        >&nbsp;&nbsp;&nbsp;
+        <el-button type="primary" size="small" @click="getSurveyRecord()"
+          >查询</el-button
+        >
       </el-row>
       <hr />
       <h3>
-        <i class="voyager-documentation"></i> 问卷
-        <small>课程问卷的填写记录</small>
+        <i class="voyager-documentation"></i> 问卷统计
+        <small>课程问卷的填写统计</small>
       </h3>
       <div style="height:700px; width:100%;">
         <canvas id="surveyChart" style="height:700px; width:100%"></canvas>
       </div>
+    </div>
+    <div id="record" class="tab-pane fade in">
+      <el-row>
+        <b>时间段:&nbsp;</b>
+        <el-date-picker
+          v-model="timeRange"
+          size="small"
+          :editable="false"
+          value-format="timestamp"
+          type="daterange"
+          range-separator="至"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+        ></el-date-picker
+        >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <b>课程:&nbsp;</b>
+        <el-select v-model="courseId" size="small" placeholder="请选择">
+          <el-option
+            v-for="item in allUserCourse"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          ></el-option> </el-select
+        >&nbsp;&nbsp;&nbsp;
+        <el-button type="primary" size="small" @click="getRecordList()"
+          >查询</el-button
+        >
+      </el-row>
+      <hr />
+      <h3>
+        <i class="voyager-tag"></i> 问卷记录
+        <small>课程问卷的填写记录</small>
+      </h3>
+      <el-table :data="tableData" style="width: 100%">
+        <el-table-column type="index" width="50"> </el-table-column>
+        <el-table-column prop="user" label="填写者"> </el-table-column>
+        <el-table-column prop="userId" label="填写者 ID"> </el-table-column>
+        <el-table-column prop="sid" label="填写者学号"> </el-table-column>
+        <el-table-column prop="time" label="填写时间"> </el-table-column>
+        <el-table-column prop="action" label="操作">
+          <template slot-scope="scope">
+            <el-button
+              @click="showRecord(scope.row)"
+              type="primary"
+              size="small"
+            >
+              查看
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
     </div>
     <div id="tag" class="tab-pane fade in">
       <el-row>
@@ -45,7 +99,8 @@
           range-separator="至"
           start-placeholder="开始日期"
           end-placeholder="结束日期"
-        ></el-date-picker>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        ></el-date-picker
+        >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <b>课程:&nbsp;</b>
         <el-select v-model="courseId" size="small" placeholder="请选择">
           <el-option
@@ -53,9 +108,11 @@
             :key="item.value"
             :label="item.label"
             :value="item.value"
-          ></el-option>
-        </el-select>&nbsp;&nbsp;&nbsp;
-        <el-button type="primary" size="small" @click="getSurveyRecord()">查询</el-button>
+          ></el-option> </el-select
+        >&nbsp;&nbsp;&nbsp;
+        <el-button type="primary" size="small" @click="getSurveyRecord()"
+          >查询</el-button
+        >
       </el-row>
       <hr />
       <h3>
@@ -82,13 +139,31 @@ export default {
       courseId: '', // 课程 ID
       surveyRecords: '', // 请求到的数据
       allUserCourse: [], // 用户所有的课程信息
-      tagsData: [] // 获取到的当前课程的 tag 信息
+      tagsData: [], // 获取到的当前课程的 tag 信息
+      tableData: [] // 表格数据
     }
   },
   methods: {
     // 初始化
     init() {
       this.getUserAllCourse()
+    },
+    // 获取某一门课程的所有问卷记录
+    getRecordList() {
+      let that = this
+      this.MyAxios.get('/api/surveyRecord/courseId/' + this.courseId)
+        .then(function(response) {
+            for (var index in response.data.data) {
+            that.tableData.push({
+              time: response.data.data[index].created_at,
+              userId: response.data.data[index].creater_id,
+              sid: response.data.data[index].user.sid,
+              user: response.data.data[index].user.name,
+              recordId: response.data.data[index].id,
+              courseId: response.data.data[index].course_id,
+            })
+          }
+        })
     },
     // 获取用户所有的课程
     getUserAllCourse() {
@@ -104,6 +179,7 @@ export default {
           if (that.allUserCourse.length > 0) {
             that.courseId = that.allUserCourse[0].value
             that.getSurveyRecord()
+            that.getRecordList()
           }
         })
         .catch(function(error) {
@@ -211,7 +287,12 @@ export default {
     // 选择图表
     selectChart(index) {
       this.chartSelect = index
+    },
+    // 跳转填写记录
+    showRecord(row) {
+      window.open('/showCustomCourse/' + row.courseId + '/' + row.recordId)
     }
+
   },
   computed: {
     // 线形图 x 轴的内容

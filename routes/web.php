@@ -27,6 +27,8 @@ Route::group(['middleware' => 'admin.user'], function () {
     Route::view('/admin/class/member/{classId}', 'addClassMember');
     // 导出 PDF
     Route::view('/pdfpage/{courseId}', 'pdf');
+    // 教师查看学生计划
+    Route::view('/showCustomCourse/{courseId}/{recordId}', 'showCustomCourse');
     // 导出简化版 PDF
     Route::view('/pdfeasypage/{courseId}', 'pdfEasy');
     // 图表数据显示

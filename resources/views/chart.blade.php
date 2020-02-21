@@ -33,7 +33,8 @@
     <div class="page-content compass container-fluid">
 
         <ul class="nav nav-tabs">
-          <li class="active" id="survey-nav-tab"><a data-toggle="tab" href="#survey"><i class="voyager-documentation"></i> 问卷 </a></li>
+          <li class="active" id="survey-nav-tab"><a data-toggle="tab" href="#survey"><i class="voyager-documentation"></i> 问卷统计 </a></li>
+          <li id="record-nav-tab"><a data-toggle="tab" href="#record"><i class="voyager-documentation"></i> 问卷记录 </a></li>
           <li id="tag-nav-tab"><a data-toggle="tab" href="#tag"><i class="voyager-tag"></i> 知识点 </a></li>
         </ul>
 

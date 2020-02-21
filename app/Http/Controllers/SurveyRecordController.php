@@ -67,16 +67,6 @@ class SurveyRecordController extends ApiController
         }
     }
 
-    // // 查看一条记录-通过答卷 ID
-    // public function getRecord(Request $request) {
-    //     // TODO validata
-
-    //     if ($SurveyRecord = SurveyRecord::find($request->id)) 
-    //         return self::setResponse($SurveyRecord, 200, 0);
-    //     else 
-    //         return self::setResponse(null, 404, -4005);
-    // }
-
     // 检查是否填写过问卷
     public function checkRecord(Request $request) {
         // TODO validate
@@ -138,5 +128,21 @@ class SurveyRecordController extends ApiController
         } else {
             return self::setResponse(null, 200, 0);
         }
+    }
+
+    // 获取一门课程的所有填写记录
+    public function getRecordListByCourseId(Request $request) {
+        // TODO validate
+        
+        $courseId = $request->courseId;
+        $SurveyRecordList = SurveyRecord::where("course_id", $courseId)->get();
+        foreach($SurveyRecordList as $key => $SurveyRecord) {
+            $createrId = $SurveyRecord->creater_id;
+            $user = User::find($createrId);
+            $SurveyRecordList[$key]['user'] = $user;
+        }
+
+
+        return self::setResponse($SurveyRecordList, 200, 0); 
     }
 }

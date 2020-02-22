@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\DB\SurveyRecord;
 use App\Models\DB\Course;
+use App\Models\DB\ClassGroup;
 use App\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Cookie;
@@ -133,9 +134,23 @@ class SurveyRecordController extends ApiController
     // 获取一门课程的所有填写记录
     public function getRecordListByCourseId(Request $request) {
         // TODO validate
-        
+    
         $courseId = $request->courseId;
-        $SurveyRecordList = SurveyRecord::where("course_id", $courseId)->get();
+
+        $classId = $request->classId;
+
+
+        if ($classId) {
+            $classGroup = ClassGroup::where('id', $classId)->first();
+            $userList = $classGroup->belongsToManyUsers->map(function($item, $key) {
+                return $item->id;
+            });
+            $userList = $userList->toArray();
+            $SurveyRecordList = SurveyRecord::where("course_id", $courseId)->whereIn("creater_id", $userList)->get();
+        } else {
+            $SurveyRecordList = SurveyRecord::where("course_id", $courseId)->get();
+        }
+        
         foreach($SurveyRecordList as $key => $SurveyRecord) {
             $createrId = $SurveyRecord->creater_id;
             $user = User::find($createrId);

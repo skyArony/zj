@@ -59,6 +59,15 @@
             :value="item.value"
           ></el-option> </el-select
         >&nbsp;&nbsp;&nbsp;
+        <b>班级:&nbsp;</b>
+        <el-select v-model="classId" size="small" placeholder="请选择">
+          <el-option
+            v-for="item in classList"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          ></el-option> </el-select
+        >&nbsp;&nbsp;&nbsp;
         <el-button type="primary" size="small" @click="getRecordList()"
           >查询</el-button
         >
@@ -140,7 +149,9 @@ export default {
       surveyRecords: '', // 请求到的数据
       allUserCourse: [], // 用户所有的课程信息
       tagsData: [], // 获取到的当前课程的 tag 信息
-      tableData: [] // 表格数据
+      tableData: [], // 表格数据
+      classList: [],
+      classId : '' // 班级 ID
     }
   },
   methods: {
@@ -148,10 +159,35 @@ export default {
     init() {
       this.getUserAllCourse()
     },
+    // 获取用户所有的班级
+    getClassList() {
+      let that = this
+      this.MyAxios.get('/api/classList')
+        .then(function(response) {
+          console.log(response)
+          for (var index in response.data.data) {
+            that.classList.push({
+              value: response.data.data[index].id,
+              label: response.data.data[index].className,
+            })
+          
+          }
+          if (that.allUserCourse.length > 0) {
+            that.classId = that.classList[0].value
+            that.getSurveyRecord()
+            that.getRecordList()
+          }
+        })
+    },
     // 获取某一门课程的所有问卷记录
     getRecordList() {
+      this.tableData = []
       let that = this
-      this.MyAxios.get('/api/surveyRecord/courseId/' + this.courseId)
+      this.MyAxios.get('/api/surveyRecord/courseId/' + this.courseId, {
+          params: {
+            classId: this.classId,
+          }
+        })
         .then(function(response) {
             for (var index in response.data.data) {
             that.tableData.push({
@@ -178,8 +214,7 @@ export default {
           }
           if (that.allUserCourse.length > 0) {
             that.courseId = that.allUserCourse[0].value
-            that.getSurveyRecord()
-            that.getRecordList()
+            that.getClassList()
           }
         })
         .catch(function(error) {

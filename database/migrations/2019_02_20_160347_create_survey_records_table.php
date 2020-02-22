@@ -15,7 +15,7 @@ class CreateSurveyRecordsTable extends Migration
     {
         Schema::create('survey_records', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedinteger('creater_id')->comment("问卷填写者");
+            $table->unsignedBigInteger('creater_id')->comment("问卷填写者");
             $table->unsignedinteger('course_id')->comment("问卷所属课程");
             $table->json('tags')->comment("问卷填写结果 tag 的 id");
             $table->json('detail')->comment("问卷填写详情");

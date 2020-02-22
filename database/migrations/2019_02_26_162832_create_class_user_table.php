@@ -14,7 +14,7 @@ class CreateClassUserTable extends Migration
     public function up()
     {
         Schema::create('class_user', function (Blueprint $table) {
-            $table->unsignedinteger('user_id')->comment("用户 ID");
+            $table->unsignedBigInteger('user_id')->comment("用户 ID");
             $table->unsignedinteger('class_id')->comment("班级 ID");
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('class_id')->references('id')->on('class')->onDelete('cascade');

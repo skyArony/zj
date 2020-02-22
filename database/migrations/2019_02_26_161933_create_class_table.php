@@ -16,7 +16,7 @@ class CreateClassTable extends Migration
         // 
         Schema::create('class', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedinteger('creater_id')->comment("班级创建者");
+            $table->unsignedBigInteger('creater_id')->comment("班级创建者");
             $table->string('className')->comment("班级名");
             $table->foreign('creater_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();

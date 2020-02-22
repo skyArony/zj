@@ -16,7 +16,7 @@ class CreateSurveysTable extends Migration
         // Schema::create('surveys', function (Blueprint $table) {
         //     $table->increments('id');
         //     $table->unsignedinteger('course_id')->comment("所属课程ID");
-        //     $table->unsignedinteger('creater_id')->comment("创建者ID");
+        //     $table->unsignedBigInteger('creater_id')->comment("创建者ID");
         //     $table->string('title')->comment("问卷名");
         //     $table->string('desc')->comment("问卷介绍");
         //     $table->json('questions')->comment("所有问题");

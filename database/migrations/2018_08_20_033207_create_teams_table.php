@@ -15,7 +15,7 @@ class CreateTeamsTable extends Migration
     {
         Schema::create('teams', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedinteger('creater_id')->comment("创建者/队长");
+            $table->unsignedBigInteger('creater_id')->comment("创建者/队长");
             $table->string('team_name')->comment("队名");
             $table->string('team_desc')->comment("队简介");
             $table->string('avatar')->coment("队头像");

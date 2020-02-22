@@ -16,7 +16,7 @@ class CreateTasksTable extends Migration
     {
         Schema::create('tasks', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedinteger('creater_id')->comment("创建者");
+            $table->unsignedBigInteger('creater_id')->comment("创建者");
             $table->string('title')->comment("课程标题");
             $table->string('desc')->comment("课程简介");
             $table->text('detail')->comment("课程详情");

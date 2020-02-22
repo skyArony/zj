@@ -14,7 +14,7 @@ class CreateUserQqTable extends Migration
     public function up()
     {
         Schema::create('user_qq', function (Blueprint $table) {
-            $table->unsignedinteger('user_id')->unique();
+            $table->unsignedBigInteger('user_id')->unique();
             $table->string('qq_id');
             $table->JSON('user_info')->comment('用户 QQ 信息');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

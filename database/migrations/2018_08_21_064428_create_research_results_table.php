@@ -17,7 +17,7 @@ class CreateResearchResultsTable extends Migration
             $table->increments('id');
             $table->unsignedinteger('team_id')->comment("所属队伍");
             $table->unsignedinteger('task_id')->comment("所属课题");
-            $table->unsignedinteger('creater_id')->comment("创建者ID");
+            $table->unsignedBigInteger('creater_id')->comment("创建者ID");
             $table->string('title')->comment("成果标题");
             $table->string('desc')->comment("成果简介");
             $table->text('detail')->comment("成果详情");
